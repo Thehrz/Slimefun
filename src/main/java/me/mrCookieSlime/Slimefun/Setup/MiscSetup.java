@@ -46,12 +46,12 @@ public class MiscSetup {
         while (iterator.hasNext()) {
             SlimefunItem item = iterator.next();
             if (item == null) {
-                System.err.println("[远古工艺] Removed bugged Item ('NULL?')");
+                System.err.println("[Slimefun] Removed bugged Item ('NULL?')");
                 iterator.remove();
                 continue;
             }
             if (item.getItem() == null) {
-                System.err.println("[远古工艺] Removed bugged Item ('" + item.getID() + "')");
+                System.err.println("[Slimefun] Removed bugged Item ('" + item.getID() + "')");
                 iterator.remove();
             }
         }
@@ -184,9 +184,9 @@ public class MiscSetup {
             handler.run(pre, init, post);
         }
 
-        consoleCommandSender.sendMessage(color + "###################### - 远古工艺 - ######################");
+        consoleCommandSender.sendMessage(color + "###################### - Slimefun - ######################");
         consoleCommandSender.sendMessage(color + "        成功加载了 " + SlimefunItem.list().size() + " 个物品 (" + Research.list().size() + " 项研究)");
-        consoleCommandSender.sendMessage(color + "    ( " + SlimefunItem.vanilla + " 个物品来自原生远古工艺, " + (SlimefunItem.list().size() - SlimefunItem.vanilla) + " 个物品来自扩展 )");
+        consoleCommandSender.sendMessage(color + "    ( " + SlimefunItem.vanilla + " 个物品来自原生Slimefun, " + (SlimefunItem.list().size() - SlimefunItem.vanilla) + " 个物品来自扩展 )");
         consoleCommandSender.sendMessage(color + "##########################################################");
         SlimefunStartup.getItemCfg().save();
         SlimefunStartup.getResearchCfg().save();

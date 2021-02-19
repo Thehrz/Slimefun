@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.SkullItem;
 import me.mrCookieSlime.EmeraldEnchants.EmeraldEnchants;
@@ -29,14 +30,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-
-public class DamageListener
-        implements Listener {
+@TListener
+public class DamageListener implements Listener {
     private final SimpleDateFormat format;
 
-    public DamageListener(SlimefunStartup plugin) {
+    public DamageListener() {
         this.format = new SimpleDateFormat("(MMM d, yyyy @ hh:mm)");
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
@@ -97,8 +96,6 @@ public class DamageListener
                             }
                             break;
                     }
-
-
                 } else if (e.getEntity() instanceof org.bukkit.entity.Creeper) {
                     if (SlimefunStartup.chance(100, (Integer) Slimefun.getItemValue("SWORD_OF_BEHEADING", "chance.CREEPER"))) {
                         e.getDrops().add(new CustomItem(Material.SKULL_ITEM, 4));

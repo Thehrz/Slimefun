@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.CSCoreLib;
 import me.mrCookieSlime.Slimefun.Android.AndroidObject;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
@@ -21,13 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
-public class AndroidKillingListener
-        implements Listener {
-    public AndroidKillingListener(SlimefunStartup plugin) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class AndroidKillingListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(final EntityDeathEvent e) {
         if (e.getEntity().hasMetadata("android_killer")) {
@@ -54,14 +50,17 @@ public class AndroidKillingListener
                             break;
 
                         case WITHER_SKELETON:
-                            if (CSCoreLib.randomizer().nextInt(250) < 2)
+                            if (CSCoreLib.randomizer().nextInt(250) < 2) {
                                 items.add((new MaterialData(Material.SKULL_ITEM, (byte) 1)).toItemStack(1));
+                            }
+                            break;
 
+                        default:
                             break;
                     }
 
 
-                    obj.getAndroid().addItems(obj.getBlock(), items.toArray(new ItemStack[items.size()]));
+                    obj.getAndroid().addItems(obj.getBlock(), items.toArray(new ItemStack[0]));
                     ExperienceOrb exp = (ExperienceOrb) e.getEntity().getWorld().spawnEntity(e.getEntity().getLocation(), EntityType.EXPERIENCE_ORB);
                     exp.setExperience(1 + CSCoreLib.randomizer().nextInt(6));
                 }, 1L);

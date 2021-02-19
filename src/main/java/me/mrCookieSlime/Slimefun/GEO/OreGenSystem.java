@@ -19,7 +19,7 @@ public class OreGenSystem {
 
     public static void registerResource(OreGenResource resource) {
         map.put(resource.getName(), resource);
-        System.out.println("[远古工艺 - GEO] 正在注册矿物生成器: " + resource.getName());
+        System.out.println("[Slimefun - GEO] 正在注册矿物生成器: " + resource.getName());
 
         Config cfg = new Config("plugins/Slimefun/generators/" + resource.getName() + ".cfg");
         for (Biome biome : Biome.values()) {

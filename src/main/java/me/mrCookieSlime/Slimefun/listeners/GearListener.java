@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.JetBoots;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Jetpack;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -15,12 +16,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-public class GearListener
-        implements Listener {
-    public GearListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class GearListener implements Listener {
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent e) {
         if (e.isSneaking()) {

@@ -1,10 +1,10 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Setup.Messages;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
-import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.Variables;
 import me.mrCookieSlime.Slimefun.api.Backpacks;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
@@ -25,13 +25,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-
-public class BackpackListener
-        implements Listener {
-    public BackpackListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class BackpackListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Variables.enchanting.remove(e.getPlayer().getUniqueId());

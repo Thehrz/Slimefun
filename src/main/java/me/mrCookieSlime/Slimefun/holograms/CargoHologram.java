@@ -27,12 +27,12 @@ public class CargoHologram {
 
         for (Entity n : l.getChunk().getEntities()) {
             if (n instanceof ArmorStand &&
-                    n.getCustomName() != null && l.distanceSquared(n.getLocation()) < 0.4D) return (ArmorStand) n;
-
+                    n.getCustomName() != null && l.distanceSquared(n.getLocation()) < 0.4D) {
+                return (ArmorStand) n;
+            }
         }
 
-        ArmorStand hologram = ArmorStandFactory.createHidden(l);
-        return hologram;
+        return ArmorStandFactory.createHidden(l);
     }
 }
 

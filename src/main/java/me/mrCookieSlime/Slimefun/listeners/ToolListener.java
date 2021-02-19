@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.SkullItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Particles.FireworkShow;
@@ -34,12 +35,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ToolListener
-        implements Listener {
-    public ToolListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class ToolListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockRegister(BlockPlaceEvent e) {
         if (BlockStorage.hasBlockInfo(e.getBlock())) {
@@ -47,8 +44,9 @@ public class ToolListener
             return;
         }
         ItemStack item = e.getItemInHand();
-        if (item != null && item.getType() == Material.INK_SACK)
+        if (item != null && item.getType() == Material.INK_SACK) {
             return;
+        }
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
         if (sfItem != null && !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Interfaces.NotPlaceable)) {
             BlockStorage.addBlockInfo(e.getBlock(), "id", sfItem.getID(), true);

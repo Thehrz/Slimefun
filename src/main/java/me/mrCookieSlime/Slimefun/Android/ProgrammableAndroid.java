@@ -749,7 +749,7 @@ public abstract class ProgrammableAndroid
     private void exoticFarm(Block b, Block block) {
         ItemStack drop;
         this.farm(b, block);
-        if (SlimefunStartup.instance.isExoticGardenInstalled() && (drop = ExoticGarden.harvestPlant(block)) != null) {
+        if (SlimefunStartup.slimefunStartup.isExoticGardenInstalled() && (drop = ExoticGarden.harvestPlant(block)) != null) {
             if (this.fits(b, drop)) {
                 this.pushItems(b, drop);
                 block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, (Object) block.getType());
@@ -897,7 +897,7 @@ public abstract class ProgrammableAndroid
 
     private void openScriptDownloader(final Player p, final Block b, final int page) throws Exception {
         int target;
-        ChestMenu menu = new ChestMenu("远古工艺向导");
+        ChestMenu menu = new ChestMenu("Slimefun向导");
         menu.addMenuOpeningHandler(p14 -> p14.playSound(p14.getLocation(), Sound.BLOCK_NOTE_HAT, 0.7f, 0.7f));
         List<Config> scripts = this.getUploadedScripts();
         int index = 0;

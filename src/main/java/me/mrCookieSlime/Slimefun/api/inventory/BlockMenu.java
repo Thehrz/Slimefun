@@ -99,6 +99,7 @@ public class BlockMenu extends ChestMenu {
         return this.preset.canOpen(b, p);
     }
 
+    @Override
     public void replaceExistingItem(final int slot, final ItemStack item) {
         this.replaceExistingItem(slot, item, true);
     }
@@ -112,6 +113,7 @@ public class BlockMenu extends ChestMenu {
         ++this.changes;
     }
 
+    @Override
     public ChestMenu addMenuOpeningHandler(final ChestMenu.MenuOpeningHandler handler) {
         if (handler instanceof SaveHandler) {
             return super.addMenuOpeningHandler(new SaveHandler(this, ((SaveHandler) handler).handler));
@@ -134,6 +136,7 @@ public class BlockMenu extends ChestMenu {
             this.menu = menu;
         }
 
+        @Override
         public void onOpen(final Player p) {
             this.handler.onOpen(p);
             final BlockMenu menu = this.menu;

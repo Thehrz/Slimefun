@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Variable;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Player.PlayerInventory;
@@ -31,14 +32,14 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+@TListener
 public class AncientAltarListener implements Listener {
     final List<Block> altars;
     final Set<UUID> removed_items;
 
-    public AncientAltarListener(SlimefunStartup plugin) {
+    public AncientAltarListener() {
         this.altars = new ArrayList<>();
         this.removed_items = new HashSet<>();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public static ItemStack fixItemStack(ItemStack itemStack, String customName) {

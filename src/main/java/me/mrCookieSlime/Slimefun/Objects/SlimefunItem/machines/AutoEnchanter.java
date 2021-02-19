@@ -23,8 +23,7 @@ import org.bukkit.material.MaterialData;
 
 import java.util.*;
 
-public class AutoEnchanter
-        extends AContainer {
+public class AutoEnchanter extends AContainer {
     public static int max_emerald_enchantments = 2;
 
     public AutoEnchanter(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
@@ -134,8 +133,9 @@ public class AutoEnchanter
                 }
             }
             if (r != null) {
-                if (!fits(b, r.getOutput()))
+                if (!fits(b, r.getOutput())) {
                     return;
+                }
                 for (int slot : getInputSlots()) {
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                 }

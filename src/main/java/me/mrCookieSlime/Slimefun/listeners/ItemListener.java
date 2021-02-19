@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.CSCoreLib;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Variable;
 import me.mrCookieSlime.CSCoreLibPlugin.events.ItemUseEvent;
@@ -57,11 +58,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
+@TListener
 public class ItemListener implements Listener {
-    public ItemListener(final SlimefunStartup plugin) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
     private static boolean isContainer(final Block block) {
         if (block.getType().toString().endsWith("SHULKER_BOX")) {
             return true;
@@ -178,17 +176,7 @@ public class ItemListener implements Listener {
         }
         final Player p = e.getPlayer();
         ItemStack item = e.getItem();
-        if (SlimefunManager.isItemSimiliar(item, SlimefunGuide.getItem(BookDesign.BOOK), true)) {
-            if (this.checkMenuClick(e)) {
-                e.setCancelled(true);
-                return;
-            }
-            if (p.isSneaking()) {
-                SlimefunGuide.openSettings(p, item);
-            } else {
-                SlimefunGuide.openGuide(p, true);
-            }
-        } else if (SlimefunManager.isItemSimiliar(item, SlimefunGuide.getItem(BookDesign.CHEST), true)) {
+        if (SlimefunManager.isItemSimiliar(item, SlimefunGuide.getItem(BookDesign.CHEST), true)) {
             if (this.checkMenuClick(e)) {
                 e.setCancelled(true);
                 return;
@@ -207,24 +195,6 @@ public class ItemListener implements Listener {
                 SlimefunGuide.openSettings(p, item);
             } else {
                 p.chat("/sf cheat");
-            }
-        } else if (SlimefunManager.isItemSimiliar(item, SlimefunGuide.getDeprecatedItem(true), true)) {
-            item = SlimefunGuide.getItem(true);
-            p.getInventory().setItemInMainHand(item);
-            PlayerInventory.update(p);
-            if (p.isSneaking()) {
-                SlimefunGuide.openSettings(p, item);
-            } else {
-                SlimefunGuide.openGuide(p, true);
-            }
-        } else if (SlimefunManager.isItemSimiliar(item, SlimefunGuide.getDeprecatedItem(false), true)) {
-            item = SlimefunGuide.getItem(false);
-            p.getInventory().setItemInMainHand(item);
-            PlayerInventory.update(p);
-            if (p.isSneaking()) {
-                SlimefunGuide.openSettings(p, item);
-            } else {
-                SlimefunGuide.openGuide(p, false);
             }
         } else if (!SlimefunManager.isItemSimiliar(e.getPlayer().getInventory().getItemInMainHand(), SlimefunItems.DEBUG_FISH, true)) {
             if (!SlimefunManager.isItemSimiliar(e.getPlayer().getInventory().getItemInOffHand(), SlimefunItems.DEBUG_FISH, true)) {

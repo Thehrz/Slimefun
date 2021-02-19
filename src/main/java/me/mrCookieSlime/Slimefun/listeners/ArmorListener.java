@@ -1,9 +1,9 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
-import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -23,13 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-public class ArmorListener
-        implements Listener {
-    public ArmorListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-
+@TListener
+public class ArmorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player && !e.isCancelled()) {

@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class Pedestals {
             }
             ItemStack spawner = SlimefunItems.REPAIRED_SPAWNER.clone();
             ItemMeta im = spawner.getItemMeta();
-            im.setLore(Arrays.asList(catalyst.getItemMeta().getLore().get(0)));
+            im.setLore(Collections.singletonList(catalyst.getItemMeta().getLore().get(0)));
             spawner.setItemMeta(im);
             return spawner;
         }
@@ -78,10 +78,9 @@ public class Pedestals {
                     Iterator<ItemStack> iterator = copy.iterator();
                     boolean match = false;
 
-
                     while (iterator.hasNext()) {
-                        ItemStack altar_item = iterator.next();
-                        if (SlimefunManager.isItemSimiliar(altar_item, item, true)) {
+                        ItemStack altarItem = iterator.next();
+                        if (SlimefunManager.isItemSimiliar(altarItem, item, true)) {
                             match = true;
                             iterator.remove();
 

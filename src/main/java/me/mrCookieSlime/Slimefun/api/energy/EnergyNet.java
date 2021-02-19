@@ -78,10 +78,12 @@ public class EnergyNet extends Network {
         return energy_network;
     }
 
+    @Override
     public int getRange() {
         return 6;
     }
 
+    @Override
     public Network.Component classifyLocation(Location l) {
         if (this.regulator.equals(l)) return Network.Component.REGULATOR;
         switch (getComponent(l)) {
@@ -94,6 +96,7 @@ public class EnergyNet extends Network {
         return null;
     }
 
+    @Override
     public void locationClassificationChange(Location l, Network.Component from, Network.Component to) {
         if (from == Network.Component.TERMINUS) {
             this.input.remove(l);

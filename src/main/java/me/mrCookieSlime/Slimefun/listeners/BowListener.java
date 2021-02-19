@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.BowShootHandler;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.ItemHandler;
@@ -19,26 +20,28 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 
-public class BowListener
-        implements Listener {
-    public BowListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class BowListener implements Listener {
     @EventHandler
     public void onBowUse(EntityShootBowEvent e) {
-        if (!(e.getEntity() instanceof Player) || !(e.getProjectile() instanceof Arrow))
+        if (!(e.getEntity() instanceof Player) || !(e.getProjectile() instanceof Arrow)) {
             return;
-        if (SlimefunItem.getByItem(e.getBow()) != null)
+        }
+        if (SlimefunItem.getByItem(e.getBow()) != null) {
             Variables.arrows.put(e.getProjectile().getUniqueId(), e.getBow());
+        }
     }
 
     @EventHandler
     public void onArrowHit(ProjectileHitEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
-            if (!e.getEntity().isValid()) return;
+            if (!e.getEntity().isValid()) {
+                return;
+            }
             Variables.arrows.remove(e.getEntity().getUniqueId());
-            if (e.getEntity() instanceof Arrow) handleGrapplingHook((Arrow) e.getEntity());
+            if (e.getEntity() instanceof Arrow) {
+                handleGrapplingHook((Arrow) e.getEntity());
+            }
         }, 4L);
     }
 
@@ -104,8 +107,9 @@ public class BowListener
         if (e.getDamager() instanceof Arrow) {
             if (Variables.arrows.containsKey(e.getDamager().getUniqueId()) && e.getEntity() instanceof LivingEntity) {
                 for (ItemHandler handler : SlimefunItem.getHandlers("BowShootHandler")) {
-                    if (((BowShootHandler) handler).onHit(e, (LivingEntity) e.getEntity()))
+                    if (((BowShootHandler) handler).onHit(e, (LivingEntity) e.getEntity())) {
                         break;
+                    }
                 }
                 Variables.arrows.remove(e.getDamager().getUniqueId());
             }

@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Maps;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -16,9 +17,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.Arrays;
 
-
-public class TempFixListener
-        implements Listener {
+@TListener
+public class TempFixListener implements Listener {
     @EventHandler
     public void onPistonExtend(BlockPistonExtendEvent event) {
         for (Block block : event.getBlocks()) {
@@ -73,7 +73,7 @@ public class TempFixListener
             }
             if (Arrays.equals(blockMenu.getContents(), chestMenu.getContents())) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage("§a远古工艺 §7> §c有其他玩家打开界面时无法拆除机器！§8(若无其他玩家打开时仍无法拆除，请向机器内放入任意物品或清空再试)");
+                event.getPlayer().sendMessage("§aSlimefun §7> §c有其他玩家打开界面时无法拆除机器！§8(若无其他玩家打开时仍无法拆除，请向机器内放入任意物品或清空再试)");
                 return;
             }
         }
@@ -81,8 +81,9 @@ public class TempFixListener
 
     @EventHandler
     public void onPlaceNoPermSfItem(BlockPlaceEvent event) {
-        if (!Slimefun.hasUnlocked(event.getPlayer(), event.getPlayer().getInventory().getItemInOffHand(), true))
+        if (!Slimefun.hasUnlocked(event.getPlayer(), event.getPlayer().getInventory().getItemInOffHand(), true)) {
             event.setCancelled(true);
+        }
     }
 }
 

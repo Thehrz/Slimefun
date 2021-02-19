@@ -15,7 +15,9 @@ public class AltarRecipe {
         this.catalyst = input.get(4);
         this.input = new ArrayList<>();
         for (int i = 0; i < input.size(); i++) {
-            if (i != 4) this.input.add(input.get(i));
+            if (i != 4) {
+                this.input.add(input.get(i));
+            }
         }
         this.output = output;
 

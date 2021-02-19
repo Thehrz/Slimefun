@@ -49,8 +49,9 @@ public abstract class Network {
     }
 
     public static void handleAllNetworkLocationUpdate(Location l) {
-        for (Network n : getNetworksFromLocation(l, Network.class))
+        for (Network n : getNetworksFromLocation(l, Network.class)) {
             n.handleLocationUpdate(l);
+        }
     }
 
     public abstract int getRange();
@@ -80,10 +81,12 @@ public abstract class Network {
     }
 
     private Component getCurrentClassification(Location l) {
-        if (this.regulatorNodes.contains(l))
+        if (this.regulatorNodes.contains(l)) {
             return Component.REGULATOR;
-        if (this.connectorNodes.contains(l))
+        }
+        if (this.connectorNodes.contains(l)) {
             return Component.CONNECTOR;
+        }
         if (this.terminusNodes.contains(l)) {
             return Component.TERMINUS;
         }
@@ -98,7 +101,6 @@ public abstract class Network {
             Component classification = classifyLocation(l);
             if (classification != currentAssignment) {
                 if (currentAssignment == Component.REGULATOR || currentAssignment == Component.CONNECTOR) {
-
                     unregisterNetwork(this);
                     return;
                 }
@@ -119,15 +121,16 @@ public abstract class Network {
             steps++;
 
 
-            if (steps == 500)
+            if (steps == 500) {
                 break;
+            }
         }
     }
 
     private void discoverNeighbors(Location l, int xDiff, int yDiff, int zDiff) {
         for (int i = getRange() + 1; i > 0; i--) {
-            Location new_location = l.clone().add((i * xDiff), (i * yDiff), (i * zDiff));
-            addLocationToNetwork(new_location);
+            Location newLocation = l.clone().add((i * xDiff), (i * yDiff), (i * zDiff));
+            addLocationToNetwork(newLocation);
         }
     }
 
@@ -146,6 +149,7 @@ public abstract class Network {
                 try {
                     ParticleEffect.REDSTONE.display(l.clone().add(0.5D, 0.5D, 0.5D), 0.0F, 0.0F, 0.0F, 0.0F, 1);
                 } catch (Exception exception) {
+                    System.err.println("发送粒子异常 位于 " + l.getWorld() + " X:" + l.getX() + " Y:" + l.getY() + " Z:" + l.getZ());
                 }
             }
         });
@@ -154,7 +158,6 @@ public abstract class Network {
     public void tick() {
         discoverStep();
     }
-
 
     public enum Component {
         CONNECTOR,

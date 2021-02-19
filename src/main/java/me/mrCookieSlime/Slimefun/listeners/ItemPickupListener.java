@@ -1,19 +1,14 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
-import me.mrCookieSlime.Slimefun.SlimefunStartup;
+import io.izzel.taboolib.module.inject.TListener;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-
-public class ItemPickupListener
-        implements Listener {
-    public ItemPickupListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+@TListener
+public class ItemPickupListener implements Listener {
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
         if (e.getItem().hasMetadata("no_pickup")) {

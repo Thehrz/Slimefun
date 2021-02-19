@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.api.item_transport;
 
+import me.mrCookieSlime.CSCoreLibPlugin.general.Particles.MC_1_8.ParticleEffect;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -34,6 +35,7 @@ public class CargoNet extends Network {
     private final Set<Location> inputNodes;
     private final Set<Location> outputNodes;
     private final Set<Location> advancedOutputNodes;
+    private final Set<Location> cargoNodes;
 
     protected CargoNet(final Location l) {
         super(l);
@@ -41,6 +43,7 @@ public class CargoNet extends Network {
         this.outputNodes = new HashSet<>();
         this.advancedOutputNodes = new HashSet<>();
         this.terminals = new HashSet<>();
+        this.cargoNodes = new HashSet<>();
     }
 
     public static CargoNet getNetworkFromLocation(final Location l) {
@@ -56,7 +59,6 @@ public class CargoNet extends Network {
         return networkFromLocation;
     }
 
-    @Deprecated
     public static boolean isConnected(final Block b) {
         return getNetworkFromLocation(b.getLocation()) != null;
     }
@@ -107,8 +109,6 @@ public class CargoNet extends Network {
             case "CARGO_NODE_INPUT":
             case "CARGO_NODE_OUTPUT":
             case "CARGO_NODE_OUTPUT_ADVANCED":
-            case "CT_IMPORT_BUS":
-            case "CT_EXPORT_BUS":
             case "CHEST_TERMINAL": {
                 return Component.TERMINUS;
             }
@@ -125,18 +125,22 @@ public class CargoNet extends Network {
             this.outputNodes.remove(l);
             this.advancedOutputNodes.remove(l);
             this.terminals.remove(l);
+            this.cargoNodes.remove(l);
         }
         if (to == Component.TERMINUS) {
             switch (Objects.requireNonNull(BlockStorage.checkID(l))) {
                 case "CARGO_NODE_INPUT": {
+                    this.cargoNodes.add(l);
                     this.inputNodes.add(l);
                     break;
                 }
                 case "CARGO_NODE_OUTPUT": {
+                    this.cargoNodes.add(l);
                     this.outputNodes.add(l);
                     break;
                 }
                 case "CARGO_NODE_OUTPUT_ADVANCED": {
+                    this.cargoNodes.add(l);
                     this.advancedOutputNodes.add(l);
                     break;
                 }
@@ -158,7 +162,7 @@ public class CargoNet extends Network {
         }
         super.tick();
         if (this.connectorNodes.isEmpty() && this.terminusNodes.isEmpty()) {
-            CargoHologram.update(b, "&7状态: &4&l离线");
+            CargoHologram.update(b, "&7无货运节点");
             return;
         }
         CargoHologram.update(b, "&7状态: &a&l在线");
@@ -245,6 +249,26 @@ public class CargoNet extends Network {
                         final Inventory inv = ((InventoryHolder) inputTarget.getState()).getInventory();
                         inv.setItem(previousSlot, stack);
                     }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void display() {
+        SlimefunStartup.instance.getServer().getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
+            for (Location l : this.cargoNodes) {
+                try {
+                    ParticleEffect.REDSTONE.display(l.clone().add(0.5D, 0.5D, 0.5D), 0.0F, 0.0F, 0.0F, 0.0F, 1);
+                } catch (Exception exception) {
+                    System.err.println("发送粒子异常 位于 " + l.getWorld() + " X:" + l.getX() + " Y:" + l.getY() + " Z:" + l.getZ());
+                }
+            }
+            for (Location l : super.connectorNodes) {
+                try {
+                    ParticleEffect.REDSTONE.display(l.clone().add(0.5D, 0.5D, 0.5D), 0.0F, 0.0F, 0.0F, 0.0F, 1);
+                } catch (Exception exception) {
+                    System.err.println("发送粒子异常 位于 " + l.getWorld() + " X:" + l.getX() + " Y:" + l.getY() + " Z:" + l.getZ());
                 }
             }
         });

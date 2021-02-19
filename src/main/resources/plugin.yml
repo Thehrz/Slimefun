@@ -1,11 +1,15 @@
-name: Slimefun
-version: 4.1.15
+name: ${name}
+version: ${version}
 author: The Slimefun 4 Community
 description: Slimefun basically turns your entire Server into a FTB modpack without installing a single mod
 website: http://TheBusyBiscuit.github.io/
 
-main: me.mrCookieSlime.Slimefun.SlimefunStartup
-softdepend: [ CS-CoreLib, ClearLag, WorldEdit, PlotSquared, CoreProtect, Residence ]
+main: ${main}
+softdepend: [ CS-CoreLib, WorldEdit, PlotSquared, Residence ]
+
+lib-download: true
+lib-version: ${libVersion}
+loader-version: ${loaderVersion}
 
 commands:
   slimefun:

@@ -2,7 +2,6 @@ package me.mrCookieSlime.Slimefun.listeners;
 
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
-import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.Backpacks;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,12 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 
-public class CoolerListener
-        implements Listener {
-    public CoolerListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
+public class CoolerListener implements Listener {
     @EventHandler
     public void onStarve(FoodLevelChangeEvent e) {
         if (e.getFoodLevel() < ((Player) e.getEntity()).getFoodLevel()) {

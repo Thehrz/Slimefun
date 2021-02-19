@@ -26,7 +26,7 @@ public class AutoSavingTask
         }
 
         if (!worlds.isEmpty()) {
-            System.out.println("[远古工艺] 自动保存数据中... (距下一次自动保存: " + SlimefunStartup.getCfg().getInt("options.auto-save-delay-in-minutes") + "m)");
+            System.out.println("[Slimefun] 自动保存数据中... (距下一次自动保存: " + SlimefunStartup.getCfg().getInt("options.auto-save-delay-in-minutes") + "m)");
 
             for (BlockStorage storage : worlds)
                 storage.save(false);

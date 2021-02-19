@@ -25,7 +25,7 @@ public class RecipeType {
     public static final RecipeType OVEN = new RecipeType(new CustomItem(Material.FURNACE, "&b烤炉", 0, new String[]{"", "&a&o在烤炉里制作"}), "OVEN");
     public static final RecipeType MAGIC_WORKBENCH = new RecipeType(new CustomItem(Material.BOOKSHELF, "&6魔法合成台", 0, new String[]{"", "&a使用&e魔法合成台&a进行制作"}), "MAGIC_WORKBENCH");
     public static final RecipeType ORE_WASHER = new RecipeType(new CustomItem(Material.CAULDRON_ITEM, "&6洗矿机", 0, new String[]{"", "&a使用&e洗矿机&a进行制作"}), "ORE_WASHER");
-    public static final RecipeType ENHANCED_CRAFTING_TABLE = new RecipeType(new CustomItem(Material.WORKBENCH, "&e强化合成台", 0, new String[]{"", "&a远古工艺的基础合成台", "&a普通的合成台无法进行远古工艺制作"}), "ENHANCED_CRAFTING_TABLE");
+    public static final RecipeType ENHANCED_CRAFTING_TABLE = new RecipeType(new CustomItem(Material.WORKBENCH, "&e强化合成台", 0, new String[]{"", "&aSlimefun的基础合成台", "&a普通的合成台无法进行Slimefun制作"}), "ENHANCED_CRAFTING_TABLE");
     public static final RecipeType JUICER = new RecipeType(new CustomItem(Material.GLASS_BOTTLE, "&e榨汁机", 0, new String[]{"", "&a来点美味的果汁?"}), "JUICER");
     public static final RecipeType ANCIENT_ALTAR = new RecipeType(new CustomItem(Material.ENCHANTMENT_TABLE, "&4远古祭坛", 0, new String[]{"", "&d你必须通过使用远古祭坛", "&d执行神秘的远古魔法仪式", "&d才能合成出这个物品"}));
     public static final RecipeType HEATED_PRESSURE_CHAMBER = new RecipeType(new CustomItem(Material.STAINED_GLASS, "&c热压力室", 8, new String[]{"", "&a使用&e热压力室", "&a来制作这个物品"}), "HEATED_PRESSURE_CHAMBER");

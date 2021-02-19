@@ -27,8 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class WitherAssembler
-        extends SlimefunItem {
+public class WitherAssembler extends SlimefunItem {
     private static final int[] border = new int[]{0, 2, 3, 4, 5, 6, 8, 12, 14, 21, 23, 30, 32, 39, 40, 41};
     private static final int[] border_1 = new int[]{9, 10, 11, 18, 20, 27, 29, 36, 37, 38};
     private static final int[] border_2 = new int[]{15, 16, 17, 24, 26, 33, 35, 42, 43, 44};
@@ -38,11 +37,12 @@ public class WitherAssembler
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 WitherAssembler.this.constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
@@ -76,22 +76,27 @@ public class WitherAssembler
                 }
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return WitherAssembler.this.getInputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return WitherAssembler.this.getInputSlots();
+                }
                 return new int[0];
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    if (SlimefunManager.isItemSimiliar(item, new ItemStack(Material.SOUL_SAND), true))
+                    if (SlimefunManager.isItemSimiliar(item, new ItemStack(Material.SOUL_SAND), true)) {
                         return WitherAssembler.this.getSoulSandSlots();
+                    }
                     return WitherAssembler.this.getWitherSkullSlots();
                 }
                 return new int[0];

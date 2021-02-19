@@ -1,10 +1,10 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
+import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.AutonomousMachineHandler;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.AutonomousToolHandler;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.ItemHandler;
-import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,13 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 
-public class AutonomousToolsListener
-        implements Listener {
-    public AutonomousToolsListener(SlimefunStartup plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-
+@TListener
+public class AutonomousToolsListener implements Listener {
     @EventHandler
     public void onBlockDispensing(BlockDispenseEvent e) {
         Block dispenser = e.getBlock();

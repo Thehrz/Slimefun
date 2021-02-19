@@ -9,6 +9,7 @@ import me.mrCookieSlime.Slimefun.SlimefunGuide;
 public class GitHubSetup {
     public static void setup() {
         new GitHubConnector() {
+            @Override
             public void onSuccess(JsonElement element) {
                 SlimefunGuide.contributors.clear();
                 JsonArray array = element.getAsJsonArray();
@@ -21,7 +22,7 @@ public class GitHubSetup {
                     int commits = object.get("contributions").getAsInt();
                     String profile = object.get("html_url").getAsString();
 
-                    if (!name.equals("invalid-email-address")) {
+                    if (!"invalid-email-address".equals(name)) {
                         Contributor contributor = new Contributor(name, job, commits);
                         contributor.setProfile(profile);
                         SlimefunGuide.contributors.add(contributor);
@@ -31,6 +32,7 @@ public class GitHubSetup {
             }
 
 
+            @Override
             public void onFailure() {
                 SlimefunGuide.contributors.clear();
                 SlimefunGuide.contributors.add(new Contributor("TheBusyBiscuit", "&cAuthor", 3));
@@ -39,22 +41,26 @@ public class GitHubSetup {
             }
 
 
+            @Override
             public String getRepository() {
                 return "TheBusyBiscuit/Slimefun4";
             }
 
 
+            @Override
             public String getFileName() {
                 return "contributors";
             }
 
 
+            @Override
             public String getURLSuffix() {
                 return "/contributors";
             }
         };
 
         new GitHubConnector() {
+            @Override
             public void onSuccess(JsonElement element) {
                 JsonObject object = element.getAsJsonObject();
                 SlimefunGuide.issues = object.get("open_issues_count").getAsInt();
@@ -64,46 +70,55 @@ public class GitHubSetup {
             }
 
 
+            @Override
             public void onFailure() {
             }
 
 
+            @Override
             public String getRepository() {
                 return "TheBusyBiscuit/Slimefun4";
             }
 
 
+            @Override
             public String getFileName() {
                 return "repo";
             }
 
 
+            @Override
             public String getURLSuffix() {
                 return "";
             }
         };
 
         new GitHubConnector() {
+            @Override
             public void onSuccess(JsonElement element) {
                 JsonObject object = element.getAsJsonObject();
                 SlimefunGuide.code_bytes = object.get("Java").getAsInt();
             }
 
 
+            @Override
             public void onFailure() {
             }
 
 
+            @Override
             public String getRepository() {
                 return "TheBusyBiscuit/Slimefun4";
             }
 
 
+            @Override
             public String getFileName() {
                 return "languages";
             }
 
 
+            @Override
             public String getURLSuffix() {
                 return "/languages";
             }
