@@ -36,18 +36,32 @@ public class EnergyNet extends Network {
     }
 
     public static NetworkComponent getComponent(String id) {
-        if (machines_input.contains(id)) return NetworkComponent.SOURCE;
-        if (machines_storage.contains(id)) return NetworkComponent.DISTRIBUTOR;
-        if (machines_output.contains(id)) return NetworkComponent.CONSUMER;
+        if (machines_input.contains(id)) {
+            return NetworkComponent.SOURCE;
+        }
+        if (machines_storage.contains(id)) {
+            return NetworkComponent.DISTRIBUTOR;
+        }
+        if (machines_output.contains(id)) {
+            return NetworkComponent.CONSUMER;
+        }
         return NetworkComponent.NONE;
     }
 
     public static NetworkComponent getComponent(Location l) {
-        if (!BlockStorage.hasBlockInfo(l)) return NetworkComponent.NONE;
+        if (!BlockStorage.hasBlockInfo(l)) {
+            return NetworkComponent.NONE;
+        }
         String id = BlockStorage.checkID(l);
-        if (machines_input.contains(id)) return NetworkComponent.SOURCE;
-        if (machines_storage.contains(id)) return NetworkComponent.DISTRIBUTOR;
-        if (machines_output.contains(id)) return NetworkComponent.CONSUMER;
+        if (machines_input.contains(id)) {
+            return NetworkComponent.SOURCE;
+        }
+        if (machines_storage.contains(id)) {
+            return NetworkComponent.DISTRIBUTOR;
+        }
+        if (machines_output.contains(id)) {
+            return NetworkComponent.CONSUMER;
+        }
         return NetworkComponent.NONE;
     }
 
@@ -62,6 +76,8 @@ public class EnergyNet extends Network {
             case SOURCE:
                 machines_input.add(id);
                 break;
+            default:
+                break;
         }
     }
 
@@ -70,12 +86,12 @@ public class EnergyNet extends Network {
     }
 
     public static EnergyNet getNetworkFromLocationOrCreate(Location l) {
-        EnergyNet energy_network = getNetworkFromLocation(l);
-        if (energy_network == null) {
-            energy_network = new EnergyNet(l);
-            registerNetwork(energy_network);
+        EnergyNet energyNetwork = getNetworkFromLocation(l);
+        if (energyNetwork == null) {
+            energyNetwork = new EnergyNet(l);
+            registerNetwork(energyNetwork);
         }
-        return energy_network;
+        return energyNetwork;
     }
 
     @Override
@@ -85,15 +101,18 @@ public class EnergyNet extends Network {
 
     @Override
     public Network.Component classifyLocation(Location l) {
-        if (this.regulator.equals(l)) return Network.Component.REGULATOR;
+        if (this.regulator.equals(l)) {
+            return Component.REGULATOR;
+        }
         switch (getComponent(l)) {
             case DISTRIBUTOR:
                 return Network.Component.CONNECTOR;
             case CONSUMER:
             case SOURCE:
                 return Network.Component.TERMINUS;
+            default:
+                return null;
         }
-        return null;
     }
 
     @Override
@@ -104,7 +123,9 @@ public class EnergyNet extends Network {
         }
         switch (getComponent(l)) {
             case DISTRIBUTOR:
-                if (ChargableBlock.isCapacitor(l)) this.storage.add(l);
+                if (ChargableBlock.isCapacitor(l)) {
+                    this.storage.add(l);
+                }
                 break;
             case CONSUMER:
                 this.output.add(l);
@@ -112,12 +133,14 @@ public class EnergyNet extends Network {
             case SOURCE:
                 this.input.add(l);
                 break;
+            default:
+                break;
         }
     }
 
     public void tick(Block b) {
         if (!this.regulator.equals(b.getLocation())) {
-            EnergyHologram.update(b, "&4错误，多个能量核心相连！");
+            EnergyHologram.update(b, "&4多个能量核心相连！");
             return;
         }
         tick();
@@ -125,7 +148,7 @@ public class EnergyNet extends Network {
         double demand = 0.0D;
 
         if (this.connectorNodes.isEmpty() && this.terminusNodes.isEmpty()) {
-            EnergyHologram.update(b, "&4错误，未构成能量网络！");
+            EnergyHologram.update(b, "&4未构成能量网络！");
         } else {
 
             for (Location source : this.input) {

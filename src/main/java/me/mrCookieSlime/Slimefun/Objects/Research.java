@@ -86,14 +86,18 @@ public class Research {
     }
 
     public static String getTitle(Player p, List<Research> researched) {
-        int index = Math.round(Float.valueOf(String.valueOf(Math.round(researched.size() * 100.0F / list().size() * 100.0F) / 100.0F)) / 100.0F) * SlimefunStartup.getCfg().getStringList("research-ranks").size();
-        if (index > 0) index--;
+        int index = Math.round(Float.parseFloat(String.valueOf(Math.round(researched.size() * 100.0F / list().size() * 100.0F) / 100.0F)) / 100.0F) * SlimefunStartup.getCfg().getStringList("research-ranks").size();
+        if (index > 0) {
+            index--;
+        }
         return SlimefunStartup.getCfg().getStringList("research-ranks").get(index);
     }
 
     public static Research getByID(int id) {
         for (Research research : list) {
-            if (research.getID() == id) return research;
+            if (research.getID() == id) {
+                return research;
+            }
         }
         return null;
     }
@@ -181,8 +185,9 @@ public class Research {
                     cfg.setValue("researches." + research, Boolean.TRUE);
                     cfg.save();
                     Messages.local.sendTranslation(p, "messages.unlocked", true, new Variable("%research%", getName()));
-                    if (SlimefunStartup.getCfg().getBoolean("options.research-give-fireworks"))
+                    if (SlimefunStartup.getCfg().getBoolean("options.research-give-fireworks")) {
                         FireworkShow.launchRandom(p, 1);
+                    }
 
                 } else if (!researching.contains(p.getUniqueId())) {
                     researching.add(p.getUniqueId());

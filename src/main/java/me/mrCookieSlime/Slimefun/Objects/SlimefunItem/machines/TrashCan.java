@@ -62,6 +62,7 @@ public class TrashCan
     }
 
 
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
             public void uniqueTick() {

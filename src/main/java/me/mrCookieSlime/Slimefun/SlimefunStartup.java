@@ -376,7 +376,9 @@ public class SlimefunStartup extends Plugin {
                 ElectricDustWasher.legacy_dust_washer = config.getBoolean("options.legacy-dust-washer");
                 CSCoreLib.getLib().filterLog("([A-Za-z0-9_]{3,16}) issued server command: /sf elevator (.{0,})");
             });
-
+            for (SlimefunItem item : SlimefunItem.items) {
+                System.out.println(item.getItem());
+            }
         }
 
     }

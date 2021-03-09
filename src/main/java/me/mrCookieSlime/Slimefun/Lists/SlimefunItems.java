@@ -191,6 +191,7 @@ public class SlimefunItems {
     public static ItemStack NECROTIC_SKULL;
     public static ItemStack ESSENCE_OF_AFTERLIFE;
     public static ItemStack ELECTRO_MAGNET;
+    public static ItemStack COPPER_WIDE;
     public static ItemStack HEATING_COIL;
     public static ItemStack COOLING_UNIT;
     public static ItemStack ELECTRIC_MOTOR;
@@ -360,6 +361,7 @@ public class SlimefunItems {
     public static ItemStack AUTO_ANVIL_2;
     public static ItemStack BIO_REACTOR;
     public static ItemStack MULTIMETER;
+    public static ItemStack ENERGYCONNECTOR;
     public static ItemStack SMALL_CAPACITOR;
     public static ItemStack MEDIUM_CAPACITOR;
     public static ItemStack BIG_CAPACITOR;
@@ -1010,6 +1012,7 @@ public class SlimefunItems {
             SlimefunItems.COMBUSTION_REACTOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&c燃烧反应器", "", "&6高级发电机", "&8⇨ &e⚡ &7256 J 缓存", "&8⇨ &e⚡ &724 J/s");
             SlimefunItems.NUCLEAR_REACTOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&2核能反应器", "", "&r需要冷却!", "&8⇨ &b必须完全浸入水中", "&8⇨ &b必须配备反应器冷却单元", "", "&4终极发电机", "&8⇨ &e⚡ &716384 J 缓存", "&8⇨ &e⚡ &7500 J/s");
             SlimefunItems.NETHERSTAR_REACTOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&4&l下界之星发电机", "", "&f依赖下界之星运作", "&8⇨ &b必须完全浸入水中", "&8⇨ &b必须配备下界玄冰冷却单元", "", "&4终极发电机", "&8⇨ &e⚡ &732768 J 缓存", "&8⇨ &e⚡ &71024 J/s", "&8⇨ &4会使周围生物遭受凋零伤害");
+            SlimefunItems.ENERGYCONNECTOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTA4NWUwOTg3NTZiOTk1YjAwMjQxNjQ0MDg5YzU1YThmOWFjZGUzNWI5YTM3Nzg1ZDVlMDU3YTkyMzYxM2IifX19"), "§c能源连接器", "§7范围: §c6格", "", "§r用于连接机器与发电机", "§r可以连接到附近的能源网络");
             SlimefunItems.SMALL_CAPACITOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTBhN2ZiODM2NmU1YzdiZTAxM2YxYTYxMTNlOGU5ODI0MzBkMjQyZDI4ZGQxNTA3ZjU1MTQ4ODdlYTM5ZTI1YSJ9fX0="), "&a小型电容器", "", "&e基础电容", "&8⇨ &e⚡ &7128 J 容量");
             SlimefunItems.MEDIUM_CAPACITOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZkZTRhZGVmYjZjZGJkN2Y1MDg2MDc0NDE4ZDM1ZDU2ZmI4MjIyNWE4ZTM0NjMwZDY2N2U2OWI4ZGIyNjAxMiJ9fX0="), "&a中型电容器", "", "&6中型电容", "&8⇨ &e⚡ &7512 J 容量");
             SlimefunItems.BIG_CAPACITOR = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODRlNDkxNDM0N2VhZjU3M2Y4MWVjN2FkMGIyYjliMDdlOWY0NThhMDQ2ZWU0MDRkNzkwN2ZkNjQ1MWEwN2QzYyJ9fX0="), "&a大型电容器", "", "&a大型电容", "&8⇨ &e⚡ &71024 J 容量");
@@ -1088,6 +1091,7 @@ public class SlimefunItems {
             SlimefunItems.FREEZER = new CustomItem(new MaterialData(Material.STAINED_GLASS, (byte) 3), "&b制冷机", "", "&6高级机器", "&8⇨ &7速度: 1x", "&8⇨ &e⚡ &7256 J 缓存", "&8⇨ &e⚡ &718 J/s");
             SlimefunItems.FREEZER_2 = new CustomItem(new MaterialData(Material.STAINED_GLASS, (byte) 3), "&b制冷机 &7(&eII&7)", "", "&4终极机器", "&8⇨ &7速度: 2x", "&8⇨ &e⚡ &7256 J 缓存", "&8⇨ &e⚡ &730 J/s");
             SlimefunItems.BATTERY = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmUyZGRhNmVmNjE4NWQ0ZGQ2ZWE4Njg0ZTk3ZDM5YmE4YWIwMzdlMjVmNzVjZGVhNmJkMjlkZjhlYjM0ZWUifX19"), "&6电池");
+            SlimefunItems.COPPER_WIDE = new CustomItem(Material.STRING, "§6铜线", 0, new String[]{"", "§6电子配件中的重要组成部分"});
             SlimefunItems.HEATING_COIL = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2UzYmM0ODkzYmE0MWEzZjczZWUyODE3NGNkZjRmZWY2YjE0NWU0MWZlNmM4MmNiN2JlOGQ4ZTk3NzFhNSJ9fX0="), "&c加热线圈");
             SlimefunItems.COOLING_UNIT = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzU0YmFkODZjOTlkZjc4MGM4ODlhMTA5OGY3NzY0OGVhZDczODVjYzFkZGIwOTNkYTVhN2Q4YzRjMmFlNTRkIn19fQ=="), "&b冷却单元");
             SlimefunItems.POWER_CRYSTAL = new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTNjMWIwMzZiNmUwMzUxN2IyODVhODExYmQ4NWU3M2Y1YWJmZGFjYzFkZGY5MGRmZjk2MmUxODA5MzRlMyJ9fX0="), "&c&l能量水晶");

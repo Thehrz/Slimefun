@@ -176,6 +176,7 @@ public class WitherAssembler extends SlimefunItem {
     }
 
 
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
 

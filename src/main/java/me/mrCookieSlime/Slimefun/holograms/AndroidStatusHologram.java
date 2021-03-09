@@ -37,7 +37,9 @@ public class AndroidStatusHologram {
 
         for (Entity n : l.getChunk().getEntities()) {
             if (n instanceof ArmorStand &&
-                    n.getCustomName() == null && l.distanceSquared(n.getLocation()) < 0.4D) return (ArmorStand) n;
+                    n.getCustomName() == null && l.distanceSquared(n.getLocation()) < 0.4D) {
+                return (ArmorStand) n;
+            }
 
         }
 

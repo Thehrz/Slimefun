@@ -61,11 +61,13 @@ public class SlimefunMachine
     }
 
 
+    @Override
     public void create() {
         toMultiBlock().register();
     }
 
 
+    @Override
     public void install() {
         for (ItemStack i : getDisplayRecipes()) {
             SlimefunItem item = SlimefunItem.getByItem(i);

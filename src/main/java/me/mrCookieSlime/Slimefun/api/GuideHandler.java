@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-
 public abstract class GuideHandler {
     final URID urid = URID.nextURID(this, false);
 
@@ -37,8 +36,9 @@ public abstract class GuideHandler {
     public void run(Player p, boolean survival, boolean book) {
         getRunnable(book).run(p);
 
-        if (survival && trackHistory())
+        if (survival && trackHistory()) {
             SlimefunGuide.addToHistory(p, getURID());
+        }
     }
 }
 

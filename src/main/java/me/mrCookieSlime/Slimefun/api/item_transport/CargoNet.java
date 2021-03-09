@@ -7,7 +7,9 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.UniversalBlockMenu;
 import me.mrCookieSlime.Slimefun.api.network.Network;
 import me.mrCookieSlime.Slimefun.holograms.CargoHologram;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
@@ -83,7 +85,9 @@ public class CargoNet extends Network {
         try {
             freq = Integer.parseInt(BlockStorage.getLocationInfo(l).getString("frequency"));
         } catch (Exception ex) {
-            System.err.println("获取货运节点频道异常 位于 " + l.getWorld() + " X:" + l.getX() + " Y:" + l.getY() + " Z:" + l.getZ());
+            Bukkit.getLogger().info("获取货运节点频道异常 位于 " + l.getWorld() + " X:" + l.getX() + " Y:" + l.getY() + " Z:" + l.getZ());
+            l.getBlock().setType(Material.AIR);
+            BlockStorage.clearBlockInfo(l);
         }
         return freq;
     }

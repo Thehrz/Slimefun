@@ -206,6 +206,7 @@ public abstract class AReactor extends SlimefunItem {
     }
 
 
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new EnergyTicker() {
             final Set<Location> explode = new HashSet<>();

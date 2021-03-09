@@ -1,5 +1,7 @@
 package me.mrCookieSlime.Slimefun.Setup;
 
+import com.bekvon.bukkit.residence.api.ResidenceApi;
+import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import me.mrCookieSlime.CSCoreLibPlugin.CSCoreLib;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.CSCoreLibPlugin.events.ItemUseEvent;
@@ -1496,6 +1498,14 @@ public class SlimefunSetup {
                             for (int z = -1; z <= 1; ++z) {
                                 final Block b = e.getBlock().getRelative(x, y, z);
                                 if (b.getType() != Material.AIR && !StringUtils.equals(b.getType().toString(), explosiveblacklist) && CSCoreLib.getLib().getProtectionManager().canBuild(e.getPlayer().getUniqueId(), b) && ProtectionUtils.canBuild(e.getPlayer(), b)) {
+                                    if (SlimefunStartup.slimefunStartup.isResidenceInstalled()) {
+                                        ClaimedResidence res = ResidenceApi.getResidenceManager().getByLoc(b.getLocation());
+                                        if (res != null) {
+                                            if (res.getPermissions().playerHas(e.getPlayer(), "break", false)) {
+                                                return false;
+                                            }
+                                        }
+                                    }
                                     b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) b.getType());
                                     final SlimefunItem sfItem = BlockStorage.check(b);
                                     boolean allow = true;
@@ -1944,6 +1954,7 @@ public class SlimefunSetup {
         new EnhancedFurnace(20, 10, 3, SlimefunItems.CARBONADO_EDGED_FURNACE, "CARBONADO_EDGED_FURNACE", new ItemStack[]{SlimefunItems.CARBONADO, SlimefunItems.BASIC_CIRCUIT_BOARD, SlimefunItems.CARBONADO, SlimefunItems.HEATING_COIL, SlimefunItems.REINFORCED_FURNACE, SlimefunItems.HEATING_COIL, SlimefunItems.CARBONADO, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.CARBONADO}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.ELECTRO_MAGNET, "ELECTRO_MAGNET", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.NICKEL_INGOT, SlimefunItems.MAGNET, SlimefunItems.COBALT_INGOT, null, SlimefunItems.BATTERY, null, null, null, null}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.ELECTRIC_MOTOR, "ELECTRIC_MOTOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, SlimefunItems.ELECTRO_MAGNET, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
+        new SlimefunItem(Categories.TECH_MISC, SlimefunItems.COPPER_WIDE, "COPPER_WIDE", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, null, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, null, null}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.HEATING_COIL, "HEATING_COIL", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
         final String[] blockPlacerBlacklist = (Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).toArray(new String[((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).size()])) : new String[]{"STRUCTURE_BLOCK"};
         new SlimefunItem(Categories.MACHINES_1, SlimefunItems.BLOCK_PLACER, "BLOCK_PLACER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K, new ItemStack(Material.IRON_INGOT), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.IRON_INGOT), SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K}, new String[]{"unplaceable-blocks"}, new Object[]{Arrays.asList("STRUCTURE_BLOCK")}).register(true, new AutonomousMachineHandler() {
@@ -2170,6 +2181,7 @@ public class SlimefunSetup {
             }
         });
         new SlimefunItem(Categories.MISC, SlimefunItems.DUCT_TAPE, "DUCT_TAPE", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.ALUMINUM_DUST, SlimefunItems.ALUMINUM_DUST, SlimefunItems.ALUMINUM_DUST, new ItemStack(Material.SLIME_BALL), new ItemStack(Material.WOOL), new ItemStack(Material.SLIME_BALL), new ItemStack(Material.PAPER), new ItemStack(Material.PAPER), new ItemStack(Material.PAPER)}, new CustomItem(SlimefunItems.DUCT_TAPE, 2)).register(true);
+        new SlimefunItem(Categories.ELECTRICITY, SlimefunItems.ENERGYCONNECTOR, "ENERGYCONNECTOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.CARBON, SlimefunItems.COPPER_WIDE, SlimefunItems.CARBON, SlimefunItems.COPPER_WIDE, new ItemStack(Material.REDSTONE_BLOCK), SlimefunItems.COPPER_WIDE, SlimefunItems.CARBON, SlimefunItems.COPPER_WIDE, SlimefunItems.CARBON}).registerDistibutingCapacitor(true, 0);
         new SlimefunItem(Categories.ELECTRICITY, SlimefunItems.SMALL_CAPACITOR, "SMALL_CAPACITOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.DURALUMIN_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.DURALUMIN_INGOT, new ItemStack(Material.REDSTONE), SlimefunItems.SULFATE, new ItemStack(Material.REDSTONE), SlimefunItems.DURALUMIN_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.DURALUMIN_INGOT}).registerDistibutingCapacitor(true, 128);
         new SlimefunItem(Categories.ELECTRICITY, SlimefunItems.MEDIUM_CAPACITOR, "MEDIUM_CAPACITOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.BILLON_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.BILLON_INGOT, new ItemStack(Material.REDSTONE), SlimefunItems.SMALL_CAPACITOR, new ItemStack(Material.REDSTONE), SlimefunItems.BILLON_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.BILLON_INGOT}).registerDistibutingCapacitor(true, 512);
         new SlimefunItem(Categories.ELECTRICITY, SlimefunItems.BIG_CAPACITOR, "BIG_CAPACITOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.STEEL_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.STEEL_INGOT, new ItemStack(Material.REDSTONE), SlimefunItems.MEDIUM_CAPACITOR, new ItemStack(Material.REDSTONE), SlimefunItems.STEEL_INGOT, SlimefunItems.REDSTONE_ALLOY, SlimefunItems.STEEL_INGOT}).registerDistibutingCapacitor(true, 1024);

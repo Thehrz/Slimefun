@@ -158,12 +158,14 @@ public class Talisman
     }
 
 
+    @Override
     public void create() {
         EnderTalisman talisman = new EnderTalisman(this);
         talisman.register(true);
     }
 
 
+    @Override
     public void install() {
         EnderTalisman talisman = (EnderTalisman) SlimefunItem.getByItem(upgrade());
         Research research = Research.getByID(112);

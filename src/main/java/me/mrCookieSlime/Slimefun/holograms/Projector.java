@@ -25,8 +25,9 @@ public class Projector {
 
         for (Entity n : l.getChunk().getEntities()) {
             if (n instanceof ArmorStand &&
-                    n.getCustomName() != null && n.getCustomName().equals(nametag) && l.distanceSquared(n.getLocation()) < 0.4D)
+                    n.getCustomName() != null && n.getCustomName().equals(nametag) && l.distanceSquared(n.getLocation()) < 0.4D) {
                 return (ArmorStand) n;
+            }
 
         }
 

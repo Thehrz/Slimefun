@@ -21,6 +21,7 @@ public class Messages {
         local.setDefault("commands.versions", "Lists all installed Addons");
         local.setDefault("commands.open_guide", "Opens Slimefun's guide without using the book");
 
+        local.setDefault("messages.searchslimefunitem", "&ePlease type the name of the SlimefunItem you want to search in the Chat. &7(Color Codes supported!)");
         local.setDefault("messages.only-players", "&4This Command is only for Players");
         local.setDefault("messages.no-permission", "&4You do not have the required Permission to do this");
         local.setDefault("messages.usage", "&4Usage: &c%usage%");

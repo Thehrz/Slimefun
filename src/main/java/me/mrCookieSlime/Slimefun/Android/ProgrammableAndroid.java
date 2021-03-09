@@ -171,7 +171,9 @@ public abstract class ProgrammableAndroid
                             inv.replaceExistingItem(43, null);
                         }
                         for (int slot : ProgrammableAndroid.this.getOutputSlots()) {
-                            if (inv.getItemInSlot(slot) == null) continue;
+                            if (inv.getItemInSlot(slot) == null) {
+                                continue;
+                            }
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
@@ -205,7 +207,7 @@ public abstract class ProgrammableAndroid
         } catch (NullPointerException x) {
             return;
         }
-        if (BlockStorage.getLocationInfo(b.getLocation(), "paused").equals("false")) {
+        if ("false".equals(BlockStorage.getLocationInfo(b.getLocation(), "paused"))) {
             float fuel = Float.parseFloat(BlockStorage.getLocationInfo(b.getLocation(), "fuel"));
             if (fuel == 0.0f) {
                 ItemStack item = BlockStorage.getInventory(b).getItemInSlot(43);
@@ -391,8 +393,9 @@ public abstract class ProgrammableAndroid
                                 for (Entity n : AndroidStatusHologram.getNearbyEntities(b, 4.0 + (double) this.getTier())) {
                                     switch (BlockFace.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "rotation"))) {
                                         case NORTH: {
-                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() < (double) b.getZ()))
+                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() < (double) b.getZ())) {
                                                 break;
+                                            }
                                             if (n.hasMetadata("android_killer")) {
                                                 n.removeMetadata("android_killer", SlimefunStartup.instance);
                                             }
@@ -401,8 +404,9 @@ public abstract class ProgrammableAndroid
                                             break block4;
                                         }
                                         case EAST: {
-                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getX() > (double) b.getX()))
+                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getX() > (double) b.getX())) {
                                                 break;
+                                            }
                                             if (n.hasMetadata("android_killer")) {
                                                 n.removeMetadata("android_killer", SlimefunStartup.instance);
                                             }
@@ -411,8 +415,9 @@ public abstract class ProgrammableAndroid
                                             break block4;
                                         }
                                         case SOUTH: {
-                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() > (double) b.getZ()))
+                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() > (double) b.getZ())) {
                                                 break;
+                                            }
                                             if (n.hasMetadata("android_killer")) {
                                                 n.removeMetadata("android_killer", SlimefunStartup.instance);
                                             }
@@ -421,8 +426,9 @@ public abstract class ProgrammableAndroid
                                             break block4;
                                         }
                                         case WEST: {
-                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getX() < (double) b.getX()))
+                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getX() < (double) b.getX())) {
                                                 break;
+                                            }
                                             if (n.hasMetadata("android_killer")) {
                                                 n.removeMetadata("android_killer", SlimefunStartup.instance);
                                             }
@@ -486,11 +492,14 @@ public abstract class ProgrammableAndroid
                             case ATTACK_ANIMALS: {
                                 double damage = this.getTier() < 2 ? 20.0 : 4.0 * (double) this.getTier();
                                 for (Entity n : AndroidStatusHologram.getNearbyEntities(b, 4.0 + (double) this.getTier())) {
-                                    if (n instanceof Monster) continue;
+                                    if (n instanceof Monster) {
+                                        continue;
+                                    }
                                     switch (BlockFace.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "rotation"))) {
                                         case NORTH: {
-                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() < (double) b.getZ()))
+                                            if (!(n instanceof LivingEntity) || n instanceof ArmorStand || n instanceof Player || !(n.getLocation().getZ() < (double) b.getZ())) {
                                                 break;
+                                            }
                                             if (n.hasMetadata("android_killer")) {
                                                 n.removeMetadata("android_killer", SlimefunStartup.instance);
                                             }
@@ -851,10 +860,10 @@ public abstract class ProgrammableAndroid
                     for (String command : commands) {
                         if (i1 > 0) {
                             if (i1 == index) {
-                                builder.append(commands[i1] + "-");
-                                builder.append(commands[i1] + "-");
+                                builder.append(commands[i1]).append("-");
+                                builder.append(commands[i1]).append("-");
                             } else if (i1 < commands.length - 1) {
-                                builder.append(command + "-");
+                                builder.append(command).append("-");
                             }
                         }
                         ++i1;
@@ -897,14 +906,14 @@ public abstract class ProgrammableAndroid
 
     private void openScriptDownloader(final Player p, final Block b, final int page) throws Exception {
         int target;
-        ChestMenu menu = new ChestMenu("Slimefun向导");
+        ChestMenu menu = new ChestMenu("脚本下载器");
         menu.addMenuOpeningHandler(p14 -> p14.playSound(p14.getLocation(), Sound.BLOCK_NOTE_HAT, 0.7f, 0.7f));
         List<Config> scripts = this.getUploadedScripts();
         int index = 0;
         final int pages = scripts.size() / 45 + 1;
         for (int i = 45; i < 54; ++i) {
             menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), ""));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
         menu.addItem(46, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r⇦上一页", "", "&7(" + page + " / " + pages + ")"));
         menu.addMenuClickHandler(46, (arg0, arg1, arg2, arg3) -> {
@@ -1052,25 +1061,7 @@ public abstract class ProgrammableAndroid
     protected void openScriptComponentEditor(Player p, final Block b, String script, final int index) throws Exception {
         ChestMenu menu = new ChestMenu("&e脚本编辑器");
         final String[] commands = script.split("-");
-        menu.addItem(0, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(1, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(2, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(3, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(4, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(5, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(6, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(7, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(8, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(18, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(19, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(20, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(21, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(23, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(24, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(25, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(26, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
-        menu.addItem(9, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&r待命"), (p12, arg1, arg2, arg3) -> {
+        menu.addItem(0, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&r待命"), (p12, arg1, arg2, arg3) -> {
             int i = 0;
             StringBuilder builder = new StringBuilder("START-");
             for (String command : commands) {
@@ -1088,7 +1079,7 @@ public abstract class ProgrammableAndroid
             }
             return false;
         });
-        int i = 10;
+        int i = 1;
         for (final ScriptPart part : this.getAccessibleScriptParts()) {
             menu.addItem(i, part.toItemStack(), (p1, arg1, arg2, arg3) -> {
                 int i1 = 0;

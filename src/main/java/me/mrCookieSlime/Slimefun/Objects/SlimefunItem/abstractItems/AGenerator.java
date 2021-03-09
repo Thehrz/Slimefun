@@ -206,6 +206,7 @@ public abstract class AGenerator
     }
 
 
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new EnergyTicker() {
 

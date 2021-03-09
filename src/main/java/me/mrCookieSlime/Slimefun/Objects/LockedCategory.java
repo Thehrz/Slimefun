@@ -47,7 +47,9 @@ public class LockedCategory
             for (SlimefunItem item : category.getItems()) {
                 if (Slimefun.isEnabled(p, item.getItem(), false) && Slimefun.hasPermission(p, item, false) &&
                         item.getResearch() != null &&
-                        !item.getResearch().hasUnlocked(p)) return false;
+                        !item.getResearch().hasUnlocked(p)) {
+                    return false;
+                }
 
             }
         }

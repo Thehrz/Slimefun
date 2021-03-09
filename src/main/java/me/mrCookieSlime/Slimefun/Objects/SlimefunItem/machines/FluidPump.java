@@ -159,6 +159,7 @@ public class FluidPump
     }
 
 
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
             public void tick(Block b, SlimefunItem sf, Config data) {

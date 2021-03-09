@@ -15,15 +15,15 @@ import java.util.*;
 
 public class Slimefun {
     public static final List<GuideHandler> guide_handlers2 = new ArrayList<>();
-    public static final List<Category> current_categories = new ArrayList<>();
     private static final GPSNetwork gps = new GPSNetwork();
     public static Map<Integer, List<GuideHandler>> guide_handlers = new HashMap<>();
     public static boolean emeraldenchants = false;
 
     public static void registerGuideHandler(GuideHandler handler) {
         List<GuideHandler> handlers = new ArrayList<>();
-        if (guide_handlers.containsKey(handler.getTier()))
+        if (guide_handlers.containsKey(handler.getTier())) {
             handlers = guide_handlers.get(handler.getTier());
+        }
         handlers.add(handler);
         guide_handlers.put(handler.getTier(), handlers);
         guide_handlers2.add(handler);
@@ -70,11 +70,15 @@ public class Slimefun {
             return true;
         }
         if (isEnabled(p, item, message) && hasPermission(p, sfItem, message)) {
-            if (sfItem.getResearch() == null) return true;
-            if (sfItem.getResearch().hasUnlocked(p)) return true;
-
-            if (message && !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.VanillaItem))
+            if (sfItem.getResearch() == null) {
+                return true;
+            }
+            if (sfItem.getResearch().hasUnlocked(p)) {
+                return true;
+            }
+            if (message && !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.VanillaItem)) {
                 Messages.local.sendTranslation(p, "messages.not-researched", true);
+            }
             return false;
         }
 

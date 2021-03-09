@@ -6,7 +6,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.UniversalBlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.Inventory;
@@ -16,61 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CargoManager {
     private static final int[] SLOTS = new int[]{19, 20, 21, 28, 29, 30, 37, 38, 39};
-
-    public static ItemStack withdraw(Block node, BlockStorage storage, Block target, ItemStack template) {
-        if (storage.hasUniversalInventory(target)) {
-            UniversalBlockMenu menu = storage.getUniversalInventory(target);
-            for (int slot : menu.getPreset().getSlotsAccessedByItemTransport(menu, ItemTransportFlow.WITHDRAW, null)) {
-                ItemStack is = menu.getItemInSlot(slot);
-                if (SlimefunManager.isItemSimiliar(is, template, true, SlimefunManager.DataType.ALWAYS) && matchesFilter(node, is, -1)) {
-                    if (is.getAmount() > template.getAmount()) {
-                        menu.replaceExistingItem(slot, new CustomItem(is, is.getAmount() - template.getAmount()));
-                        return template;
-                    }
-
-                    menu.replaceExistingItem(slot, null);
-                    return is.clone();
-                }
-
-            }
-
-        } else if (storage.hasInventory(target.getLocation())) {
-            BlockMenu menu = BlockStorage.getInventory(target.getLocation());
-            for (int slot : menu.getPreset().getSlotsAccessedByItemTransport(menu, ItemTransportFlow.WITHDRAW, null)) {
-                ItemStack is = menu.getItemInSlot(slot);
-                if (SlimefunManager.isItemSimiliar(is, template, true, SlimefunManager.DataType.ALWAYS) && matchesFilter(node, is, -1)) {
-                    if (is.getAmount() > template.getAmount()) {
-                        menu.replaceExistingItem(slot, new CustomItem(is, is.getAmount() - template.getAmount()));
-                        return template;
-                    }
-
-                    menu.replaceExistingItem(slot, null);
-                    return is.clone();
-                }
-
-            }
-
-        } else if (target.getState() instanceof InventoryHolder) {
-            Inventory inv = ((InventoryHolder) target.getState()).getInventory();
-            for (int slot = 0; slot < (inv.getContents()).length; slot++) {
-                ItemStack is = inv.getContents()[slot];
-                if (SlimefunManager.isItemSimiliar(is, template, true, SlimefunManager.DataType.ALWAYS) && matchesFilter(node, is, -1)) {
-                    if (is.getAmount() > template.getAmount()) {
-                        inv.setItem(slot, ChestManipulator.trigger(target, slot, is, new CustomItem(is, is.getAmount() - template.getAmount())));
-                        return template;
-                    }
-
-                    inv.setItem(slot, ChestManipulator.trigger(target, slot, is, new CustomItem(is, is.getAmount() - template.getAmount())));
-                    return is.clone();
-                }
-            }
-        }
-
-        return null;
-    }
 
     public static ItemSlot withdraw(Block node, BlockStorage storage, Block target, int index) {
         if (storage.hasInventory(target.getLocation())) {

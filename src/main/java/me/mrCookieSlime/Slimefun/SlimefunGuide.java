@@ -32,7 +32,6 @@ import org.bukkit.material.MaterialData;
 
 import java.util.*;
 
-
 public class SlimefunGuide {
     private static final int category_size = 36;
     private static final int[] slots = new int[]{1, 3, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
@@ -49,10 +48,10 @@ public class SlimefunGuide {
     public static ItemStack getItem(BookDesign design) {
         switch (design) {
             case CHEAT_SHEET:
-                return new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&cSlimefun之书 &4(作弊面板)", "", "&4&l仅供管理员使用", "", "&e右键点击 &8⇨ &7浏览物品", "&eShift + 右键点击 &8⇨ &7打开界面设置菜单");
+                return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&cSlimefun之书 &4(作弊面板)", "", "&4&l仅供管理员使用", "", "&e右键点击 &8⇨ &7浏览物品", "&eShift + 右键点击 &8⇨ &7打开界面设置菜单");
 
             case CHEST:
-                return new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&eSlimefun之书 &7(箱子界面)", "", "&e右键点击 &8⇨ &7浏览物品", "&eShift + 右键点击 &8⇨ &7打开界面设置菜单");
+                return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&eSlimefun之书 &7(箱子界面)", "", "&e右键点击 &8⇨ &7浏览物品", "&eShift + 右键点击 &8⇨ &7打开界面设置菜单");
         }
         return null;
     }
@@ -62,7 +61,7 @@ public class SlimefunGuide {
     }
 
     public static ItemStack getDeprecatedItem(boolean book) {
-        return new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&eSlimefun之书 &8(右键点击打开)", book ? "" : "&2", "&7这是Slimefun的使用向导书", "&7书本虽已泛黄, 知识却历久弥新", "&7你可以在书中解锁物品", "&7查看机器搭建方法以及物品制作、合成方法");
+        return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&eSlimefun之书 &8(右键点击打开)", book ? "" : "&2", "&7这是Slimefun的使用向导书", "&7书本虽已泛黄, 知识却历久弥新", "&7你可以在书中解锁物品", "&7查看机器搭建方法以及物品制作、合成方法");
     }
 
     public static void openSettings(Player p, final ItemStack guide) {
@@ -72,26 +71,26 @@ public class SlimefunGuide {
         menu.addMenuOpeningHandler(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_HARP, 0.7F, 0.7F));
 
         for (int i : slots) {
-            menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
 
 
         if (SlimefunManager.isItemSimiliar(guide, getItem(BookDesign.CHEST), true)) {
             if (p.hasPermission("slimefun.cheat.items")) {
-                menu.addItem(19, new CustomItem(new MaterialData(Material.CHEST), "&7界面布局: &e箱子界面", "", "&a箱子界面", "&7作弊面板", "", "&e 点击 &8⇨ &7修改布局"));
+                menu.addItem(19, new CustomItem(new ItemStack(Material.CHEST), "&7界面布局: &e箱子界面", "", "&a箱子界面", "&7作弊面板", "", "&e 点击 &8⇨ &7修改布局"));
                 menu.addMenuClickHandler(19, (p17, arg1, arg2, arg3) -> {
                     p17.getInventory().setItemInMainHand(SlimefunGuide.getItem(BookDesign.CHEAT_SHEET));
                     SlimefunGuide.openSettings(p17, p17.getInventory().getItemInMainHand());
                     return false;
                 });
             } else {
-                menu.addItem(19, new CustomItem(new MaterialData(Material.CHEST), "&7界面布局: &e箱子界面"));
+                menu.addItem(19, new CustomItem(new ItemStack(Material.CHEST), "&7界面布局: &e箱子界面"));
                 menu.addMenuClickHandler(19, (player, arg1, arg2, arg3) -> false);
             }
 
         } else if (SlimefunManager.isItemSimiliar(guide, getItem(BookDesign.CHEAT_SHEET), true)) {
-            menu.addItem(19, new CustomItem(new MaterialData(Material.COMMAND), "&7界面布局: &e作弊面板", "", "&7箱子界面", "&a作弊面板", "", "&e 点击 &8⇨ &7修改布局"));
+            menu.addItem(19, new CustomItem(new ItemStack(Material.COMMAND), "&7界面布局: &e作弊面板", "", "&7箱子界面", "&a作弊面板", "", "&e 点击 &8⇨ &7修改布局"));
             menu.addMenuClickHandler(19, (p13, arg1, arg2, arg3) -> {
                 p13.getInventory().setItemInMainHand(SlimefunGuide.getItem(BookDesign.CHEST));
                 SlimefunGuide.openSettings(p13, p13.getInventory().getItemInMainHand());
@@ -99,18 +98,23 @@ public class SlimefunGuide {
             });
         }
 
-        menu.addItem(0, new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
+        menu.addItem(0, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
         menu.addMenuClickHandler(0, (arg0, arg1, arg2, arg3) -> {
             SlimefunGuide.openMainMenu(p, true, 1);
             return false;
         });
 
-        menu.addItem(2, new CustomItem(new MaterialData(Material.CHEST), "&a百宝箱"));
-        menu.addMenuClickHandler(2, (arg0, arg1, arg2, arg3) -> {
-            return false;
-        });
+        try {
+            menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzg3ZjZlNzFjYzUyMmM3ZjRmMTZkYTI5ODFjMWI5MmUyZDg1Y2EyM2NlNjA4MWVjNTY5OWI1YjBlMmE3In19fQ=="), "&a百宝箱"));
+            menu.addMenuClickHandler(2, (arg0, arg1, arg2, arg3) -> {
+                return false;
+            });
+        } catch (Exception e) {
+            System.err.println("SlimefunGuide 头颅异常");
+            e.printStackTrace();
+        }
 
-        menu.addItem(4, new CustomItem(new MaterialData(Material.BOOK_AND_QUILL), "&a版本信息", "", "&7版本: &a" + SlimefunStartup.instance.getDescription().getVersion(), "&7贡献者: &e" + contributors.size(), "", "&7⇨ 点击查看重置内容"));
+        menu.addItem(4, new CustomItem(new ItemStack(Material.BOOK_AND_QUILL), "&a版本信息", "", "&7版本: &a" + SlimefunStartup.instance.getDescription().getVersion(), "&7贡献者: &e" + contributors.size(), "", "&7⇨ 点击查看重置内容"));
         menu.addMenuClickHandler(4, (pl, slot, item, action) -> {
             SlimefunGuide.openCredits(pl, pl.getInventory().getItemInMainHand());
             return false;
@@ -118,7 +122,7 @@ public class SlimefunGuide {
 
 
         try {
-            menu.addItem(6, new CustomItem(new MaterialData(Material.REDSTONE_COMPARATOR), "&e源码", "", "&7代码行数: &6" + IntegerFormat.formatBigNumber(code_bytes), "&7上次更新时间: &a" + IntegerFormat.timeDelta(last_update) + " 之前", "&7Forks: &e" + forks, "&7Stars: &e" + stars, "", "&7&oSlimefun 4 是一个社区项目,", "&7&o源代码可以在GitHub上查看", "&7&o如果你想保持这个项目的活跃,", "&7&o请考虑为这个项目作贡献", "", "&7⇨ 点击前往GitHub"));
+            menu.addItem(6, new CustomItem(new ItemStack(Material.REDSTONE_COMPARATOR), "&e源码", "", "&7代码行数: &6" + IntegerFormat.formatBigNumber(code_bytes), "&7上次更新时间: &a" + IntegerFormat.timeDelta(last_update) + " 之前", "&7Forks: &e" + forks, "&7Stars: &e" + stars, "", "&7&oSlimefun 4 是一个社区项目,", "&7&o源代码可以在GitHub上查看", "&7&o如果你想保持这个项目的活跃,", "&7&o请考虑为这个项目作贡献", "", "&7⇨ 点击前往GitHub"));
             menu.addMenuClickHandler(6, (p12, arg1, arg2, arg3) -> {
                 p12.closeInventory();
                 p12.sendMessage("");
@@ -130,7 +134,7 @@ public class SlimefunGuide {
             e.printStackTrace();
         }
 
-        menu.addItem(8, new CustomItem(new MaterialData(Material.KNOWLEDGE_BOOK), "&3Slimefun4 WIKI", "", "&a⇨ 点击前往 Slimefun4 中文WIKI"));
+        menu.addItem(8, new CustomItem(new ItemStack(Material.KNOWLEDGE_BOOK), "&3Slimefun4 WIKI", "", "&a⇨ 点击前往 Slimefun4 中文WIKI"));
         menu.addMenuClickHandler(8, (p1, arg1, arg2, arg3) -> {
             p1.closeInventory();
             p1.sendMessage("");
@@ -151,7 +155,7 @@ public class SlimefunGuide {
 
         try {
             menu.addItem(9, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzUwM2NiN2VkODQ1ZTdhNTA3ZjU2OWFmYzY0N2M0N2FjNDgzNzcxNDY1YzlhNjc5YTU0NTk0Yzc2YWZiYSJ9fX0="), "&c修复机器人漏洞", "", "&a修复机器人主人离线后一系列问题", "&a解决于: 2020.10.1"));
-            menu.addItem(10, new CustomItem(new MaterialData(Material.BARRIER), "&c修复汉化错误", "", "&a修复少量汉化错误", "&a解决于: 2020.10.1"));
+            menu.addItem(10, new CustomItem(new ItemStack(Material.BARRIER), "&c修复汉化错误", "", "&a修复少量汉化错误", "&a解决于: 2020.10.1"));
             menu.addItem(11, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&c修复核电错误", "", "&a修复核电爆炸会连带能量调度器", "&a解决于: 2020.10.1"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,10 +163,10 @@ public class SlimefunGuide {
 
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
-                menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-                menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+                menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+                menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
             } else {
-                menu.addItem(4, new CustomItem(new MaterialData(Material.EMERALD), "&7⇦ 返回设置界面"));
+                menu.addItem(4, new CustomItem(new ItemStack(Material.EMERALD), "&7⇦ 返回设置界面"));
                 menu.addMenuClickHandler(4, (p1, arg1, arg2, arg3) -> {
                     SlimefunGuide.openSettings(p1, guide);
                     return false;
@@ -171,7 +175,7 @@ public class SlimefunGuide {
         }
 
         for (int j = 0; j < 9; j++) {
-            menu.addItem(36 + j, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
+            menu.addItem(36 + j, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
             menu.addMenuClickHandler(36 + j, (arg0, arg1, arg2, arg3) -> false);
         }
 
@@ -209,12 +213,12 @@ public class SlimefunGuide {
     public static void openMainMenu(final Player p, final boolean survival, final int selected_page) {
         clearHistory(p.getUniqueId());
 
-        ChestMenu menu = new ChestMenu("Slimefun向导");
+        ChestMenu menu = new ChestMenu("Slimefun4 向导");
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(player -> player.playSound(player.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 0.7F, 0.7F));
 
-        List<Category> categories = Slimefun.current_categories;
+        List<Category> categories = Category.list();
         List<GuideHandler> handlers = Slimefun.guide_handlers2;
 
         int index = 9;
@@ -224,24 +228,27 @@ public class SlimefunGuide {
             if (i == 1 || i == 7) {
                 continue;
             }
-            menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
 
-        menu.addItem(1, new CustomItem(new MaterialData(Material.REDSTONE_COMPARATOR), "§e设置 / 信息", "", "&7⇨ §b点击前往"));
+        menu.addItem(1, new CustomItem(new ItemStack(Material.REDSTONE_COMPARATOR), "§e设置 / 信息", "", "&7⇨ §b点击前往"));
         menu.addMenuClickHandler(1, (player, arg1, arg2, arg3) -> {
+
             openSettings(player, player.getInventory().getItemInMainHand());
             return false;
         });
 
-        menu.addItem(7, new CustomItem(new MaterialData(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
+        menu.addItem(7, new CustomItem(new ItemStack(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
         menu.addMenuClickHandler(7, (player, arg1, arg2, arg3) -> {
+            player.closeInventory();
+            SlimefunItem.searchSlimefunItem(player, survival);
             return false;
         });
 
         for (i = 45; i < 54; i++) {
-            menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
 
         int target = 36 * (selected_page - 1) - 1;
@@ -249,7 +256,6 @@ public class SlimefunGuide {
         while (target < categories.size() + handlers.size() - 1) {
             if (index >= 45) {
                 pages++;
-
                 break;
             }
             target++;
@@ -268,7 +274,6 @@ public class SlimefunGuide {
             for (SlimefunItem item : category.getItems()) {
                 if (Slimefun.isEnabled(p, item, false)) {
                     locked = false;
-
                     break;
                 }
             }
@@ -278,27 +283,27 @@ public class SlimefunGuide {
             if (!(category instanceof LockedCategory)) {
                 if (!(category instanceof SeasonCategory)) {
                     menu.addItem(index, category.getItem());
-                    menu.addMenuClickHandler(index, (p13, slot, item, action) -> {
-                        SlimefunGuide.openCategory(p13, category, survival, 1);
+                    menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
+                        SlimefunGuide.openCategory(player, category, survival, 1);
                         return false;
                     });
                     index++;
                     continue;
                 }
-                if (((SeasonCategory) category).isUnlocked()) {
+                if (((SeasonCategory) category).isUnlocked() || (!survival)) {
                     menu.addItem(index, category.getItem());
-                    menu.addMenuClickHandler(index, (p12, slot, item, action) -> {
-                        SlimefunGuide.openCategory(p12, category, survival, 1);
+                    menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
+                        SlimefunGuide.openCategory(player, category, survival, 1);
                         return false;
                     });
                     index++;
                 }
                 continue;
             }
-            if (((LockedCategory) category).hasUnlocked(p)) {
+            if (((LockedCategory) category).hasUnlocked(p) || (!survival)) {
                 menu.addItem(index, category.getItem());
-                menu.addMenuClickHandler(index, (p1, slot, item, action) -> {
-                    SlimefunGuide.openCategory(p1, category, survival, 1);
+                menu.addMenuClickHandler(index, (player, slot, item, action) -> {
+                    SlimefunGuide.openCategory(player, category, survival, 1);
                     return false;
                 });
                 index++;
@@ -312,7 +317,7 @@ public class SlimefunGuide {
             for (Category parent : ((LockedCategory) category).getParents()) {
                 parents.add(parent.getItem().getItemMeta().getDisplayName());
             }
-            menu.addItem(index, new CustomItem(Material.BARRIER, "&4未解锁 &7- &r" + category.getItem().getItemMeta().getDisplayName(), 0, parents.toArray(new String[parents.size()])));
+            menu.addItem(index, new CustomItem(Material.BARRIER, "&4未解锁 &7- &r" + category.getItem().getItemMeta().getDisplayName(), 0, parents.toArray(new String[0])));
             menu.addMenuClickHandler(index, (arg0, arg1, arg2, arg3) -> false);
             index++;
         }
@@ -320,7 +325,7 @@ public class SlimefunGuide {
 
         final int finalPages = pages;
 
-        menu.addItem(46, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
+        menu.addItem(46, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
         menu.addMenuClickHandler(46, (arg0, arg1, arg2, arg3) -> {
             int next = selected_page - 1;
             if (next < 1) {
@@ -332,11 +337,9 @@ public class SlimefunGuide {
             return false;
         });
 
-        menu.addItem(52, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
+        menu.addItem(52, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
         menu.addMenuClickHandler(52, (arg0, arg1, arg2, arg3) -> {
             int next = selected_page + 1;
-
-
             if (next > finalPages) {
                 next = 1;
             }
@@ -362,7 +365,7 @@ public class SlimefunGuide {
             return;
         }
 
-        ChestMenu menu = new ChestMenu("Slimefun向导");
+        ChestMenu menu = new ChestMenu("Slimefun4 向导");
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(p13 -> p13.playSound(p13.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 0.7F, 0.7F));
@@ -374,27 +377,29 @@ public class SlimefunGuide {
             if (i == 1 || i == 7) {
                 continue;
             }
-            menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
 
-        menu.addItem(1, new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
+        menu.addItem(1, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
         menu.addMenuClickHandler(1, (arg0, arg1, arg2, arg3) -> {
             SlimefunGuide.openMainMenu(p, survival, 1);
             return false;
         });
 
-        menu.addItem(7, new CustomItem(new MaterialData(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
+        menu.addItem(7, new CustomItem(new ItemStack(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
         menu.addMenuClickHandler(7, (player, arg1, arg2, arg3) -> {
+            player.closeInventory();
+            SlimefunItem.searchSlimefunItem(player, survival);
             return false;
         });
 
         for (i = 45; i < 54; i++) {
-            menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
         }
 
-        menu.addItem(46, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
+        menu.addItem(46, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
         menu.addMenuClickHandler(46, (arg0, arg1, arg2, arg3) -> {
             int next = selected_page - 1;
             if (next < 1) {
@@ -406,7 +411,7 @@ public class SlimefunGuide {
             return false;
         });
 
-        menu.addItem(52, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
+        menu.addItem(52, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
         menu.addMenuClickHandler(52, (arg0, arg1, arg2, arg3) -> {
             int next = selected_page + 1;
             if (next > pages) {
@@ -521,7 +526,7 @@ public class SlimefunGuide {
         ItemStack recipeOutput = item;
 
         //物品具体合成菜单
-        ChestMenu menu = new ChestMenu("Slimefun向导");
+        ChestMenu menu = new ChestMenu(item.getItemMeta().getDisplayName());
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(p120 -> p120.playSound(p120.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 0.7F, 0.7F));
@@ -545,7 +550,7 @@ public class SlimefunGuide {
             Recipe r = recipes.get(page);
 
             if (recipes.size() > page + 1) {
-                menu.addItem(1, new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&7下一页 ⇨", "", "&e&l! &r这个物品有多重合成方式"));
+                menu.addItem(1, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7下一页 ⇨", "", "&e&l! &r这个物品有多重合成方式"));
                 menu.addMenuClickHandler(1, (p119, slot, stack, action) -> {
                     SlimefunGuide.displayItem(p119, item, false, page + 1);
                     return false;
@@ -606,7 +611,7 @@ public class SlimefunGuide {
         }
 
         if (history.containsKey(p.getUniqueId()) && history.get(p.getUniqueId()).size() > 1) {
-            menu.addItem(0, new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&7⇦ 返回", "", "&r左键点击: &7返回上一页", "&rShift + 左键点击: &7返回主菜单"));
+            menu.addItem(0, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回", "", "&r左键点击: &7返回上一页", "&rShift + 左键点击: &7返回主菜单"));
             menu.addMenuClickHandler(0, (p118, slot, item118, action) -> {
                 if (action.isShiftClicked()) {
                     SlimefunGuide.openMainMenu(p118, true, 1);
@@ -626,7 +631,7 @@ public class SlimefunGuide {
             });
         } else {
 
-            menu.addItem(0, new CustomItem(new MaterialData(Material.ENCHANTED_BOOK), "&7⇦ 返回", "", "&r左键点击: &7返回主菜单"));
+            menu.addItem(0, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回", "", "&r左键点击: &7返回主菜单"));
             menu.addMenuClickHandler(0, (p117, slot, item117, action) -> {
                 SlimefunGuide.openMainMenu(p117, true, 1);
                 return false;
@@ -733,7 +738,7 @@ public class SlimefunGuide {
             if ((sfItem instanceof SlimefunMachine && ((SlimefunMachine) sfItem).getDisplayRecipes().size() > 0) || (sfItem instanceof SlimefunGadget && ((SlimefunGadget) sfItem).getRecipes().size() > 0)) {
                 for (int i = 27; i < 36; i++) {
                     menu.addItem(i, new CustomItem(Material.STAINED_GLASS_PANE, (SlimefunItem.getByItem(item) instanceof SlimefunMachine) ? "&7⇩ 合成需要在这个机器中进行 ⇩" : " ", 7));
-                    menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
+                    menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
                 }
 
                 List<ItemStack> recipes = (SlimefunItem.getByItem(item) instanceof SlimefunMachine) ? ((SlimefunMachine) SlimefunItem.getByItem(item)).getDisplayRecipes() : ((SlimefunGadget) SlimefunItem.getByItem(item)).getDisplayRecipes();

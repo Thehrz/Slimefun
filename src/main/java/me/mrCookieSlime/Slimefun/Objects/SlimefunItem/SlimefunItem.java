@@ -1,5 +1,8 @@
 package me.mrCookieSlime.Slimefun.Objects.SlimefunItem;
 
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.MenuHelper;
 import me.mrCookieSlime.Slimefun.AncientAltar.AltarRecipe;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
@@ -8,7 +11,9 @@ import me.mrCookieSlime.Slimefun.Objects.Research;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunBlockHandler;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.handlers.ItemHandler;
+import me.mrCookieSlime.Slimefun.Setup.Messages;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
+import me.mrCookieSlime.Slimefun.SlimefunGuide;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.URID.URID;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -19,13 +24,17 @@ import me.mrCookieSlime.Slimefun.api.energy.EnergyTicker;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
+import static io.izzel.taboolib.module.locale.TLocale.Translate.setUncolored;
 
 public class SlimefunItem {
     public static final Set<String> tickers = new HashSet<>();
@@ -59,6 +68,7 @@ public class SlimefunItem {
     private EnergyTicker energyTicker;
     private String[] keys = null;
     private Object[] values = null;
+    private static final int[] BORDER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 46, 47, 48, 49, 50, 51, 52, 53};
 
 
     public SlimefunItem(Category category, ItemStack item, String id, RecipeType recipeType, ItemStack[] recipe) {
@@ -127,23 +137,118 @@ public class SlimefunItem {
         return (SlimefunItem) URID.decode(map_id.get(name));
     }
 
+    public static void searchSlimefunItem(Player player, boolean survival) {
+        Messages.local.sendTranslation(player, "messages.searchslimefunitem", false);
+        MenuHelper.awaitChatInput(player, (p, message) -> {
+            if (message.length() > 10) {
+                p.sendMessage("§c你输入的字符串过长");
+                return false;
+            }
+            String searchMessage = setUncolored(message);
+            ArrayList<SlimefunItem> arraySearch = new ArrayList<>();
+            Pattern pattern = Pattern.compile(searchMessage, Pattern.CASE_INSENSITIVE);
+            for (SlimefunItem slimefunItem : items) {
+                if (slimefunItem.getItem().getItemMeta().getDisplayName() != null) {
+                    if (pattern.matcher(slimefunItem.getItem().getItemMeta().getDisplayName()).find()) {
+                        arraySearch.add(slimefunItem);
+                    }
+                }
+            }
+            openSearchMenu(p, arraySearch, searchMessage, survival, 1);
+            return false;
+        });
+    }
+
+    public static void openSearchMenu(Player player, ArrayList<SlimefunItem> searchList, String searchString, boolean survival, int selected_page) {
+        ChestMenu searchMenu = new ChestMenu("搜索: §3" + searchString);
+
+        int i = 0;
+
+        for (int slot : BORDER) {
+            searchMenu.addItem(slot, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+        }
+
+        searchMenu.addItem(1, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
+        searchMenu.addMenuClickHandler(1, (p, slot, itemStack, clickAction) -> {
+            SlimefunGuide.openMainMenu(p, survival, 1);
+            return false;
+        });
+
+        searchMenu.addItem(7, new CustomItem(new ItemStack(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
+        searchMenu.addMenuClickHandler(7, (p, slot, itemStack, clickAction) -> {
+            player.closeInventory();
+            SlimefunItem.searchSlimefunItem(player, survival);
+            return false;
+        });
+
+        int target = 36 * (selected_page - 1) - 1;
+
+
+//        searchMenu.addItem(46, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
+//        searchMenu.addMenuClickHandler(46, (p, slot, itemStack, clickAction) -> {
+//            int next = selected_page - 1;
+//            if (next < 1) {
+//                next = finalPages;
+//            }
+//            if (next != selected_page) {
+//                SlimefunGuide.openMainMenu(p, survival, next);
+//            }
+//            return false;
+//        });
+//
+//        searchMenu.addItem(52, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
+//        searchMenu.addMenuClickHandler(52, (p, slot, itemStack, clickAction) -> {
+//            int next = selected_page + 1;
+//            if (next > finalPages) {
+//                next = 1;
+//            }
+//            if (next != selected_page) {
+//                openSearchMenu(player, searchList, searchString, survival, next);
+//            }
+//            return false;
+//        });
+
+        for (SlimefunItem slimefunItem : searchList) {
+            searchMenu.addItem(i, new CustomItem(slimefunItem.getItem(), slimefunItem.getItem().getItemMeta().getDisplayName(), "", "⇨ " + slimefunItem.getCategory().getItem().getItemMeta().getDisplayName()));
+            searchMenu.addMenuClickHandler(i, (p, slot, itemStack, clickAction) -> {
+                SlimefunGuide.displayItem(p, slimefunItem.getItem(), true, 0);
+                return false;
+            });
+            i++;
+        }
+        searchMenu.open(player);
+    }
+
     public static SlimefunItem getByID(String id) {
         return (SlimefunItem) URID.decode(map_id.get(id));
     }
 
     public static SlimefunItem getByItem(ItemStack item) {
-        if (item == null) return null;
-        if (SlimefunManager.isItemSimiliar(item, SlimefunItems.BROKEN_SPAWNER, false)) return getByID("BROKEN_SPAWNER");
-        if (SlimefunManager.isItemSimiliar(item, SlimefunItems.REPAIRED_SPAWNER, false))
+        if (item == null) {
+            return null;
+        }
+        if (SlimefunManager.isItemSimiliar(item, SlimefunItems.BROKEN_SPAWNER, false)) {
+            return getByID("BROKEN_SPAWNER");
+        }
+        if (SlimefunManager.isItemSimiliar(item, SlimefunItems.REPAIRED_SPAWNER, false)) {
             return getByID("REINFORCED_SPAWNER");
+        }
         for (SlimefunItem sfi : items) {
-            if (sfi instanceof ChargableItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) return sfi;
-            if (sfi instanceof DamagableChargableItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false))
+            if (sfi instanceof ChargableItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) {
                 return sfi;
-            if (sfi instanceof ChargedItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) return sfi;
-            if (sfi instanceof SlimefunBackpack && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false))
+            }
+            if (sfi instanceof DamagableChargableItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) {
                 return sfi;
-            if (SlimefunManager.isItemSimiliar(item, sfi.getItem(), true)) return sfi;
+            }
+            if (sfi instanceof ChargedItem && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) {
+                return sfi;
+            }
+            if (sfi instanceof SlimefunBackpack && SlimefunManager.isItemSimiliar(item, sfi.getItem(), false)) {
+                return sfi;
+            }
+            if (SlimefunManager.isItemSimiliar(item, sfi.getItem(), true)) {
+                return sfi;
+            }
         }
         return null;
     }
@@ -167,7 +272,9 @@ public class SlimefunItem {
     }
 
     public static Set<ItemHandler> getHandlers(String codeid) {
-        if (handlers.containsKey(codeid)) return handlers.get(codeid);
+        if (handlers.containsKey(codeid)) {
+            return handlers.get(codeid);
+        }
         return new HashSet<>();
     }
 
@@ -191,7 +298,9 @@ public class SlimefunItem {
             for (SlimefunItem sfi : list()) {
                 ItemStack[] recipe = sfi.getRecipe();
                 for (int i = 0; i < 9; i++) {
-                    if (SlimefunManager.isItemSimiliar(recipe[i], old, true)) recipe[i] = stack;
+                    if (SlimefunManager.isItemSimiliar(recipe[i], old, true)) {
+                        recipe[i] = stack;
+                    }
                 }
                 sfi.setRecipe(recipe);
             }
@@ -352,10 +461,12 @@ public class SlimefunItem {
     public void register(boolean slimefun) {
         this.addon = !slimefun;
         try {
-            if (map_id.containsKey(this.id))
+            if (map_id.containsKey(this.id)) {
                 throw new IllegalArgumentException("ID \"" + this.id + "\" already exists");
-            if (this.recipe.length < 9)
+            }
+            if (this.recipe.length < 9) {
                 this.recipe = new ItemStack[]{null, null, null, null, null, null, null, null, null};
+            }
             all.add(this);
 
             SlimefunStartup.getItemCfg().setDefaultValue(this.id + ".enabled", Boolean.TRUE);
@@ -381,7 +492,9 @@ public class SlimefunItem {
                 return;
             }
             if (SlimefunStartup.getItemCfg().getBoolean(this.id + ".enabled")) {
-                if (!Category.list().contains(this.category)) this.category.register();
+                if (!Category.list().contains(this.category)) {
+                    this.category.register();
+                }
 
                 this.state = State.ENABLED;
 
@@ -391,7 +504,9 @@ public class SlimefunItem {
                 this.disenchantable = SlimefunStartup.getItemCfg().getBoolean(this.id + ".allow-disenchanting");
                 this.permission = SlimefunStartup.getItemCfg().getString(this.id + ".required-permission");
                 items.add(this);
-                if (slimefun) vanilla++;
+                if (slimefun) {
+                    vanilla++;
+                }
                 map_id.put(this.id, this.urid);
                 create();
                 for (ItemHandler handler : this.itemhandlers) {
@@ -400,8 +515,9 @@ public class SlimefunItem {
                     handlers.put(handler.toCodename(), handlerset);
                 }
 
-                if (SlimefunStartup.getCfg().getBoolean("options.print-out-loading"))
+                if (SlimefunStartup.getCfg().getBoolean("options.print-out-loading")) {
                     System.out.println("[Slimefun] Loaded Item \"" + this.id + "\"");
+                }
             } else if (this instanceof VanillaItem) {
                 this.state = State.VANILLA;
             } else {
@@ -415,31 +531,45 @@ public class SlimefunItem {
     }
 
     public void bindToResearch(Research r) {
-        if (r != null) r.getEffectedItems().add(this);
+        if (r != null) {
+            r.getEffectedItems().add(this);
+        }
         this.research = r;
     }
 
     public boolean isItem(ItemStack item) {
-        if (item == null) return false;
-        if (this instanceof ChargableItem && SlimefunManager.isItemSimiliar(item, this.item, false)) return true;
-        if (this instanceof DamagableChargableItem && SlimefunManager.isItemSimiliar(item, this.item, false))
+        if (item == null) {
+            return false;
+        }
+        if (this instanceof ChargableItem && SlimefunManager.isItemSimiliar(item, this.item, false)) {
             return true;
-        if (this instanceof ChargedItem && SlimefunManager.isItemSimiliar(item, this.item, false)) return true;
+        }
+        if (this instanceof DamagableChargableItem && SlimefunManager.isItemSimiliar(item, this.item, false)) {
+            return true;
+        }
+        if (this instanceof ChargedItem && SlimefunManager.isItemSimiliar(item, this.item, false)) {
+            return true;
+        }
         return SlimefunManager.isItemSimiliar(item, this.item, true);
     }
 
     public void load() {
         try {
-            if (!this.hidden) this.category.add(this);
+            if (!this.hidden) {
+                this.category.add(this);
+            }
             ItemStack output = this.item.clone();
-            if (this.recipeOutput != null) output = this.recipeOutput.clone();
+            if (this.recipeOutput != null) {
+                output = this.recipeOutput.clone();
+            }
 
             if (this.recipeType.toItem().isSimilar(RecipeType.MOB_DROP.toItem())) {
                 try {
                     EntityType entity = EntityType.valueOf(ChatColor.stripColor(this.recipe[4].getItemMeta().getDisplayName()).toUpperCase().replace(" ", "_"));
                     List<ItemStack> dropping = new ArrayList<>();
-                    if (SlimefunManager.drops.containsKey(entity))
+                    if (SlimefunManager.drops.containsKey(entity)) {
                         dropping = SlimefunManager.drops.get(entity);
+                    }
                     dropping.add(output);
                     SlimefunManager.drops.put(entity, dropping);
                 } catch (Exception exception) {
@@ -543,11 +673,7 @@ public class SlimefunItem {
 
     public enum State {
         ENABLED,
-
-
         DISABLED,
-
-
         VANILLA
     }
 }
