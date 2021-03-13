@@ -10,6 +10,7 @@ public abstract class EnergyTicker extends ItemHandler {
 
     public abstract boolean explode(Location paramLocation);
 
+    @Override
     public String toCodename() {
         return "EnergyTicker";
     }

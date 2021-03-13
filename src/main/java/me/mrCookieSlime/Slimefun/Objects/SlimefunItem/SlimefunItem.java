@@ -68,7 +68,7 @@ public class SlimefunItem {
     private EnergyTicker energyTicker;
     private String[] keys = null;
     private Object[] values = null;
-    private static final int[] BORDER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+    private static final int[] BORDER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 47, 48, 49, 50, 51, 52, 53};
 
 
     public SlimefunItem(Category category, ItemStack item, String id, RecipeType recipeType, ItemStack[] recipe) {
@@ -138,6 +138,11 @@ public class SlimefunItem {
     }
 
     public static void searchSlimefunItem(Player player, boolean survival) {
+        if (!player.hasPermission("slimefun.command.search")) {
+            Messages.local.sendTranslation(player, "messages.no-permission", true);
+            return;
+        }
+
         Messages.local.sendTranslation(player, "messages.searchslimefunitem", false);
         MenuHelper.awaitChatInput(player, (p, message) -> {
             if (message.length() > 10) {
@@ -162,10 +167,9 @@ public class SlimefunItem {
     public static void openSearchMenu(Player player, ArrayList<SlimefunItem> searchList, String searchString, boolean survival, int selected_page) {
         ChestMenu searchMenu = new ChestMenu("搜索: §3" + searchString);
 
-        int i = 0;
-
         for (int slot : BORDER) {
             searchMenu.addItem(slot, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+            searchMenu.addMenuClickHandler(slot, (p, i, itemStack, clickAction) -> false);
         }
 
         searchMenu.addItem(1, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
@@ -181,40 +185,40 @@ public class SlimefunItem {
             return false;
         });
 
-        int target = 36 * (selected_page - 1) - 1;
+        int finalPages = searchList.size() / 36 + ((searchList.size() % 36 >= 1) ? 1 : 0);
 
+        int start = 36 * (selected_page - 1);
+        int end = 35 * selected_page;
 
-//        searchMenu.addItem(46, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + pages + ")"));
-//        searchMenu.addMenuClickHandler(46, (p, slot, itemStack, clickAction) -> {
-//            int next = selected_page - 1;
-//            if (next < 1) {
-//                next = finalPages;
-//            }
-//            if (next != selected_page) {
-//                SlimefunGuide.openMainMenu(p, survival, next);
-//            }
-//            return false;
-//        });
-//
-//        searchMenu.addItem(52, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + pages + ")"));
-//        searchMenu.addMenuClickHandler(52, (p, slot, itemStack, clickAction) -> {
-//            int next = selected_page + 1;
-//            if (next > finalPages) {
-//                next = 1;
-//            }
-//            if (next != selected_page) {
-//                openSearchMenu(player, searchList, searchString, survival, next);
-//            }
-//            return false;
-//        });
+        searchMenu.addItem(46, (selected_page > 1) ?
+                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + finalPages + ")") :
+                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + finalPages + ")"));
+        searchMenu.addMenuClickHandler(46, (p, slot, itemStack, clickAction) -> {
+            int next = selected_page - 1;
+            if (next >= 1) {
+                openSearchMenu(p, searchList, searchString, survival, next);
+            }
+            return false;
+        });
 
-        for (SlimefunItem slimefunItem : searchList) {
+        searchMenu.addItem(52, (selected_page < finalPages) ?
+                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + finalPages + ")") :
+                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + finalPages + ")"));
+        searchMenu.addMenuClickHandler(52, (p, slot, itemStack, clickAction) -> {
+            int next = selected_page + 1;
+            if (next <= finalPages) {
+                openSearchMenu(p, searchList, searchString, survival, next);
+            }
+            return false;
+        });
+
+        for (int i = 9; start <= end && start < searchList.size(); i++, start++) {
+            SlimefunItem slimefunItem = searchList.get(start);
             searchMenu.addItem(i, new CustomItem(slimefunItem.getItem(), slimefunItem.getItem().getItemMeta().getDisplayName(), "", "⇨ " + slimefunItem.getCategory().getItem().getItemMeta().getDisplayName()));
             searchMenu.addMenuClickHandler(i, (p, slot, itemStack, clickAction) -> {
                 SlimefunGuide.displayItem(p, slimefunItem.getItem(), true, 0);
                 return false;
             });
-            i++;
         }
         searchMenu.open(player);
     }

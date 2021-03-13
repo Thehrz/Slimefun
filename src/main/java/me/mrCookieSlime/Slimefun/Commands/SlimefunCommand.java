@@ -18,6 +18,7 @@ import me.mrCookieSlime.Slimefun.SlimefunGuide;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
+import me.mrCookieSlime.Slimefun.api.item_transport.CargoNet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,12 +27,16 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +73,14 @@ public class SlimefunCommand implements CommandExecutor, Listener {
         arguments.add("/sf guide");
         tabs.add("guide");
         descriptions.add(Messages.local.getTranslation("commands.guide").get(0));
+
+        arguments.add("/sf search");
+        tabs.add("search");
+        descriptions.add(Messages.local.getTranslation("commands.search").get(0));
+
+        arguments.add("/sf cargotick");
+        tabs.add("cargotick");
+        descriptions.add(Messages.local.getTranslation("commands.cargo_tick").get(0));
 
         arguments.add("/sf stats");
         tabs.add("stats");
@@ -313,8 +326,35 @@ public class SlimefunCommand implements CommandExecutor, Listener {
                 } else {
                     Messages.local.sendTranslation(sender, "messages.usage", true, new Variable("%usage%", "/sf research <玩家名> <all/reset/Research>"));
                 }
+            } else if ("search".equalsIgnoreCase(args[0])) {
+                if (sender instanceof Player) {
+                    if (((Player) sender).isSleeping()) {
+                        sender.sendMessage("§c你不能在睡觉时使用这个命令");
+                        return true;
+                    }
+                    SlimefunItem.searchSlimefunItem((Player) sender, false);
+                } else {
+                    Messages.local.sendTranslation(sender, "messages.only-players", true);
+                }
+            } else if ("cargotick".equals(args[0])) {
+                if (args.length == 2) {
+                    if (sender.hasPermission("slimefun.command.cargo_tick") || sender instanceof org.bukkit.command.ConsoleCommandSender) {
+                        FileConfiguration data = YamlConfiguration.loadConfiguration(new File(SlimefunStartup.instance.getDataFolder(), "config.yml"));
+                        data.set("cargo.tick", Integer.parseInt(args[1]));
+                        try {
+                            data.save(new File(SlimefunStartup.instance.getDataFolder(), "config.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        CargoNet.setTick(Integer.parseInt(args[1]));
+                        sender.sendMessage("§a已设延迟为 " + args[1]);
+                    } else {
+                        Messages.local.sendTranslation(sender, "messages.no-permission", true);
+                    }
+                } else {
+                    Messages.local.sendTranslation(sender, "messages.usage", true, new Variable("%usage%", "/sf cargotick <设定的延迟>"));
+                }
             } else {
-
                 sendHelp(sender);
             }
         }

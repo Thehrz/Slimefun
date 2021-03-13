@@ -21,6 +21,8 @@ import java.util.*;
 public class CargoNet extends Network {
     public static final int[] TERMINAL_SLOTS;
     public static boolean EXTRA_CHANNELS;
+    private static int tick = SlimefunStartup.getCfg().getInt("cargo.tick");
+    private int num = 0;
     public static List<BlockFace> faces;
     public static Map<Location, Integer> round_robin;
     public static Set<ItemRequest> requests;
@@ -46,6 +48,10 @@ public class CargoNet extends Network {
         this.advancedOutputNodes = new HashSet<>();
         this.terminals = new HashSet<>();
         this.cargoNodes = new HashSet<>();
+    }
+
+    public static void setTick(int tick) {
+        CargoNet.tick = tick;
     }
 
     public static CargoNet getNetworkFromLocation(final Location l) {
@@ -160,6 +166,12 @@ public class CargoNet extends Network {
     }
 
     public void tick(final Block b) {
+        if (this.num < tick) {
+            this.num++;
+            return;
+        } else {
+            this.num = 0;
+        }
         if (!this.regulator.equals(b.getLocation())) {
             CargoHologram.update(b, "&4多个货运节点相连");
             return;

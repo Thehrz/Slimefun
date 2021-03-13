@@ -22,6 +22,8 @@ items:
   talismans: true
   coolers: true
   backpacks: true
+cargo:
+  tick: 4
 research-ranks:
   - Chicken
   - Cow

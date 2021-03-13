@@ -210,6 +210,7 @@ public abstract class AGenerator
     public void register(boolean slimefun) {
         addItemHandler(new EnergyTicker() {
 
+            @Override
             public double generateEnergy(Location l, SlimefunItem sf, Config data) {
                 if (AGenerator.this.isProcessing(l)) {
                     int timeleft = AGenerator.progress.get(l);
@@ -282,6 +283,7 @@ public abstract class AGenerator
             }
 
 
+            @Override
             public boolean explode(Location l) {
                 return false;
             }

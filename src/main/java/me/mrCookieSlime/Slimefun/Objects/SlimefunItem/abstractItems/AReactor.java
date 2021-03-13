@@ -212,6 +212,7 @@ public abstract class AReactor extends SlimefunItem {
             final Set<Location> explode = new HashSet<>();
 
 
+            @Override
             public double generateEnergy(final Location l, SlimefunItem sf, Config data) {
                 BlockMenu port = AReactor.this.getAccessPort(l);
 
@@ -339,6 +340,7 @@ public abstract class AReactor extends SlimefunItem {
             }
 
 
+            @Override
             public boolean explode(final Location l) {
                 boolean explosion = this.explode.contains(l);
                 if (explosion) {

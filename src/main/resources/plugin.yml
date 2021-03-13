@@ -44,6 +44,12 @@ permissions:
   slimefun.command.open_guide:
     description: Allows you to open the SF guide without the book
     default: op
+  slimefun.command.search:
+    description: Allows you to search SlimefunItems
+    default: op
+  slimefun.command.cargo_tick:
+    description: Allows you to set cargo tick
+    default: op
   slimefun.android.bypass:
     description: Allows you to edit other Players Androids
     default: op

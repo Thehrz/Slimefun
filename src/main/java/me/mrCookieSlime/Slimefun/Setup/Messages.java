@@ -16,6 +16,8 @@ public class Messages {
         local.setDefault("commands.give", "Give somebody some Slimefun Items");
         local.setDefault("commands.research.desc", "Unlock a Research for a Player");
         local.setDefault("commands.guide", "Gives yourself a Slimefun Guide");
+        local.setDefault("commands.search", "Search for SlimefunItems");
+        local.setDefault("commands.cargo_tick", "Set cargo tick");
         local.setDefault("commands.timings", "Lag-Info about your Server");
         local.setDefault("commands.teleporter", "See other Player's Waypoints");
         local.setDefault("commands.versions", "Lists all installed Addons");

@@ -8,6 +8,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Furnace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -80,6 +81,9 @@ public class CargoManager {
             Inventory inv = ((InventoryHolder) blockState).getInventory();
             for (int slot = 0; slot < (inv.getContents()).length; slot++) {
                 ItemStack is = inv.getContents()[slot];
+                if (slot > 1 && blockState instanceof Furnace) {
+                    return stack;
+                }
                 if (is == null) {
                     inv.setItem(slot, stack.clone());
                     return null;
