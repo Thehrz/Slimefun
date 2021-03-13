@@ -46,7 +46,6 @@ public class Files {
                 if (current.isDirectory()) {
                     delete(current);
                 } else {
-
                     current.delete();
                 }
             }
