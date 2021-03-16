@@ -2,8 +2,6 @@ package me.mrCookieSlime.Slimefun.Objects.SlimefunItem.machines;
 
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.InvUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
-import me.mrCookieSlime.EmeraldEnchants.EmeraldEnchants;
-import me.mrCookieSlime.EmeraldEnchants.ItemEnchantment;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -11,7 +9,6 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineHelper;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.Slimefun;
 import me.mrCookieSlime.Slimefun.api.energy.ChargableBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,7 +18,10 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class AutoDisenchanter
@@ -86,7 +86,6 @@ public class AutoDisenchanter
 
             MachineRecipe r = null;
             Map<Enchantment, Integer> enchantments = new HashMap<>();
-            Set<ItemEnchantment> enchantments2 = new HashSet<>();
 
             for (int slot : getInputSlots()) {
                 ItemStack target = BlockStorage.getInventory(b).getItemInSlot((slot == getInputSlots()[0]) ? getInputSlots()[1] : getInputSlots()[0]);
@@ -107,12 +106,7 @@ public class AutoDisenchanter
                         enchantments.put(e.getKey(), e.getValue());
                         amount++;
                     }
-                    if (Slimefun.isEmeraldEnchantsInstalled()) {
-                        for (ItemEnchantment enchantment : EmeraldEnchants.getInstance().getRegistry().getEnchantments(item)) {
-                            amount++;
-                            enchantments2.add(enchantment);
-                        }
-                    }
+
                     if (amount > 0) {
                         ItemStack newItem = item.clone();
                         newItem.setAmount(1);
@@ -126,10 +120,6 @@ public class AutoDisenchanter
                         }
                         book.setItemMeta(meta);
 
-                        for (ItemEnchantment e : enchantments2) {
-                            EmeraldEnchants.getInstance().getRegistry().applyEnchantment(book, e.getEnchantment(), e.getLevel());
-                            EmeraldEnchants.getInstance().getRegistry().applyEnchantment(newItem, e.getEnchantment(), 0);
-                        }
                         r = new MachineRecipe(100 * amount, new ItemStack[]{target, item}, new ItemStack[]{newItem, book});
 
                         break;
@@ -137,8 +127,9 @@ public class AutoDisenchanter
                 }
             }
             if (r != null) {
-                if (!fits(b, r.getOutput()))
+                if (!fits(b, r.getOutput())) {
                     return;
+                }
                 for (int slot : getInputSlots()) {
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                 }

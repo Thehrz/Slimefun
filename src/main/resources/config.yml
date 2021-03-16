@@ -14,6 +14,7 @@ options:
   research-give-fireworks: true
   legacy-ore-washer: false
   legacy-dust-washer: false
+  quantum-technology: true
 URID:
   info-delay: 3000
   custom-ticker-delay: 12

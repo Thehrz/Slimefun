@@ -18,6 +18,7 @@ import me.mrCookieSlime.Slimefun.GEO.Resources.NetherIceResource;
 import me.mrCookieSlime.Slimefun.GEO.Resources.OilResource;
 import me.mrCookieSlime.Slimefun.GPS.Elevator;
 import me.mrCookieSlime.Slimefun.GitHub.GitHubConnector;
+import me.mrCookieSlime.Slimefun.GitHub.GitHubSetup;
 import me.mrCookieSlime.Slimefun.Hashing.ItemHash;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Misc.BookDesign;
@@ -208,6 +209,9 @@ public class SlimefunStartup extends Plugin {
             MiscSetup.setupItemSettings();
             try {
                 SlimefunSetup.setupItems();
+                if (getCfg().getBoolean("options.quantum-technology")) {
+                    NarItemSetup.setupItems();
+                }
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -224,7 +228,7 @@ public class SlimefunStartup extends Plugin {
             System.out.println("[Slimefun] 加载世界生成器中...");
             OreGenSystem.registerResource(new OilResource());
             OreGenSystem.registerResource(new NetherIceResource());
-//            GitHubSetup.setup();
+            GitHubSetup.setup();
             new ArmorListener();
             new ItemListener();
             new BlockListener();

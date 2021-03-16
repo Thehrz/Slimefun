@@ -1,7 +1,5 @@
 package me.mrCookieSlime.Slimefun.Objects.SlimefunItem;
 
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.MenuHelper;
 import me.mrCookieSlime.Slimefun.AncientAltar.AltarRecipe;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -24,7 +22,6 @@ import me.mrCookieSlime.Slimefun.api.energy.EnergyTicker;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -68,8 +65,6 @@ public class SlimefunItem {
     private EnergyTicker energyTicker;
     private String[] keys = null;
     private Object[] values = null;
-    private static final int[] BORDER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 47, 48, 49, 50, 51, 52, 53};
-
 
     public SlimefunItem(Category category, ItemStack item, String id, RecipeType recipeType, ItemStack[] recipe) {
         this.item = item;
@@ -159,68 +154,9 @@ public class SlimefunItem {
                     }
                 }
             }
-            openSearchMenu(p, arraySearch, searchMessage, survival, 1);
+            SlimefunGuide.openSearchMenu(p, arraySearch, searchMessage, survival, 1);
             return false;
         });
-    }
-
-    public static void openSearchMenu(Player player, ArrayList<SlimefunItem> searchList, String searchString, boolean survival, int selected_page) {
-        ChestMenu searchMenu = new ChestMenu("搜索: §3" + searchString);
-
-        for (int slot : BORDER) {
-            searchMenu.addItem(slot, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
-            searchMenu.addMenuClickHandler(slot, (p, i, itemStack, clickAction) -> false);
-        }
-
-        searchMenu.addItem(1, new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&7⇦ 返回"));
-        searchMenu.addMenuClickHandler(1, (p, slot, itemStack, clickAction) -> {
-            SlimefunGuide.openMainMenu(p, survival, 1);
-            return false;
-        });
-
-        searchMenu.addItem(7, new CustomItem(new ItemStack(Material.NAME_TAG), "§7搜索...", "", "&7⇨ §b点击搜索物品"));
-        searchMenu.addMenuClickHandler(7, (p, slot, itemStack, clickAction) -> {
-            player.closeInventory();
-            SlimefunItem.searchSlimefunItem(player, survival);
-            return false;
-        });
-
-        int finalPages = searchList.size() / 36 + ((searchList.size() % 36 >= 1) ? 1 : 0);
-
-        int start = 36 * (selected_page - 1);
-        int end = 35 * selected_page;
-
-        searchMenu.addItem(46, (selected_page > 1) ?
-                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + finalPages + ")") :
-                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&r⇦ 上一页", "", "&7(" + selected_page + " / " + finalPages + ")"));
-        searchMenu.addMenuClickHandler(46, (p, slot, itemStack, clickAction) -> {
-            int next = selected_page - 1;
-            if (next >= 1) {
-                openSearchMenu(p, searchList, searchString, survival, next);
-            }
-            return false;
-        });
-
-        searchMenu.addItem(52, (selected_page < finalPages) ?
-                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + finalPages + ")") :
-                new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&r下一页 ⇨", "", "&7(" + selected_page + " / " + finalPages + ")"));
-        searchMenu.addMenuClickHandler(52, (p, slot, itemStack, clickAction) -> {
-            int next = selected_page + 1;
-            if (next <= finalPages) {
-                openSearchMenu(p, searchList, searchString, survival, next);
-            }
-            return false;
-        });
-
-        for (int i = 9; start <= end && start < searchList.size(); i++, start++) {
-            SlimefunItem slimefunItem = searchList.get(start);
-            searchMenu.addItem(i, new CustomItem(slimefunItem.getItem(), slimefunItem.getItem().getItemMeta().getDisplayName(), "", "⇨ " + slimefunItem.getCategory().getItem().getItemMeta().getDisplayName()));
-            searchMenu.addMenuClickHandler(i, (p, slot, itemStack, clickAction) -> {
-                SlimefunGuide.displayItem(p, slimefunItem.getItem(), true, 0);
-                return false;
-            });
-        }
-        searchMenu.open(player);
     }
 
     public static SlimefunItem getByID(String id) {
