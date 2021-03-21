@@ -99,7 +99,6 @@ public class SlimefunCommand implements CommandExecutor, Listener {
         descriptions.add(Messages.local.getTranslation("commands.open_guide").get(0));
     }
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {

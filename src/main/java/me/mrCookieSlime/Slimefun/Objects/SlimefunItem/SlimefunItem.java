@@ -31,8 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static io.izzel.taboolib.module.locale.TLocale.Translate.setUncolored;
-
 public class SlimefunItem {
     public static final Set<String> tickers = new HashSet<>();
     public static List<SlimefunItem> items = new ArrayList<>();
@@ -144,17 +142,19 @@ public class SlimefunItem {
                 p.sendMessage("§c你输入的字符串过长");
                 return false;
             }
-            String searchMessage = setUncolored(message);
+            String searchMessage = ChatColor.stripColor(message.replace('&', '§'));
             ArrayList<SlimefunItem> arraySearch = new ArrayList<>();
             Pattern pattern = Pattern.compile(searchMessage, Pattern.CASE_INSENSITIVE);
+            long startTime = System.currentTimeMillis();
             for (SlimefunItem slimefunItem : items) {
                 if (slimefunItem.getItem().getItemMeta().getDisplayName() != null) {
-                    if (pattern.matcher(slimefunItem.getItem().getItemMeta().getDisplayName()).find()) {
+                    if (pattern.matcher(ChatColor.stripColor(slimefunItem.getItem().getItemMeta().getDisplayName())).find()) {
                         arraySearch.add(slimefunItem);
                     }
                 }
             }
-            SlimefunGuide.openSearchMenu(p, arraySearch, searchMessage, survival, 1);
+            long time = System.currentTimeMillis() - startTime;
+            SlimefunGuide.openSearchMenu(p, arraySearch, searchMessage, survival, 1, time);
             return false;
         });
     }

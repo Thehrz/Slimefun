@@ -30,8 +30,9 @@ public abstract class GitHubConnector {
     public abstract String getRepository();
 
     public void pullFile() {
-        if (SlimefunStartup.getCfg().getBoolean("options.print-out-github-data-retrieving"))
+        if (SlimefunStartup.getCfg().getBoolean("options.print-out-github-data-retrieving")) {
             System.out.println("[Slimefun - GitHub] Retrieving '" + getFileName() + ".json' from GitHub...");
+        }
 
         try {
             URL website = new URL("https://api.github.com/repos/" + getRepository() + getURLSuffix());
@@ -47,9 +48,9 @@ public abstract class GitHubConnector {
             fos.close();
             parseData();
         } catch (IOException e) {
-            if (SlimefunStartup.getCfg().getBoolean("options.print-out-github-data-retrieving"))
+            if (SlimefunStartup.getCfg().getBoolean("options.print-out-github-data-retrieving")) {
                 System.err.println("[Slimefun - GitHub] ERROR - Could not connect to GitHub in time.");
-
+            }
             if (hasData()) {
                 parseData();
             } else {
@@ -77,16 +78,16 @@ public abstract class GitHubConnector {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(getFile()));
 
-            String full = "";
+            StringBuilder full = new StringBuilder();
 
             String line;
             while ((line = reader.readLine()) != null) {
-                full = full + line;
+                full.append(line);
             }
 
             reader.close();
 
-            JsonElement element = (new JsonParser()).parse(full);
+            JsonElement element = (new JsonParser()).parse(full.toString());
 
             onSuccess(element);
         } catch (IOException e) {

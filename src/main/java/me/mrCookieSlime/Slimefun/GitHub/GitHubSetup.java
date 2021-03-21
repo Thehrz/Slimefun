@@ -43,7 +43,7 @@ public class GitHubSetup {
 
             @Override
             public String getRepository() {
-                return "Thehrz/Slimefun";
+                return "Slimefun/Slimefun4";
             }
 
 
@@ -77,7 +77,7 @@ public class GitHubSetup {
 
             @Override
             public String getRepository() {
-                return "Thehrz/Slimefun";
+                return "Slimefun/Slimefun4";
             }
 
 
@@ -108,7 +108,7 @@ public class GitHubSetup {
 
             @Override
             public String getRepository() {
-                return "Thehrz/Slimefun";
+                return "Slimefun/Slimefun4";
             }
 
 
