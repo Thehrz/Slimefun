@@ -29,22 +29,27 @@ public abstract class ElectricGoldPan
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&6电力淘洗机";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_SPADE);
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     public abstract int getSpeed();
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);
@@ -102,6 +107,7 @@ public abstract class ElectricGoldPan
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "ELECTRIC_GOLD_PAN";
     }

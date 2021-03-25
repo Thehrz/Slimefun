@@ -29,14 +29,16 @@ public class AdvancedCargoOutputNode
         super(category, item, name, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(name, "&c输出节点") {
+            @Override
             public void init() {
                 AdvancedCargoOutputNode.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-type").equals("whitelist")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || "whitelist".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-type"))) {
                         menu.replaceExistingItem(15, new CustomItem(new MaterialData(Material.WOOL), "&7类型: &r白名单", "", "&e> 点击修改为黑名单"));
                         menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-type", "blacklist");
@@ -53,7 +55,7 @@ public class AdvancedCargoOutputNode
                         });
                     }
 
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability").equals("false")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-durability"))) {
                         menu.replaceExistingItem(16, new CustomItem(new MaterialData(Material.STONE_SWORD, (byte) 20), "&7需要匹配的 子ID/耐久值: &4✘", "", "&e> 点击修改需要匹配的耐久值"));
                         menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-durability", "true");
@@ -70,7 +72,7 @@ public class AdvancedCargoOutputNode
                         });
                     }
 
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore").equals("true")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore") == null || "true".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-lore"))) {
                         menu.replaceExistingItem(25, new CustomItem(new MaterialData(Material.EMPTY_MAP), "&7需要匹配的 说明(Lore): &2✔", "", "&e> 点击修改需要匹配的Lore"));
                         menu.addMenuClickHandler(25, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-lore", "false");
@@ -134,6 +136,7 @@ public class AdvancedCargoOutputNode
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
                 if (!open) {
@@ -143,12 +146,14 @@ public class AdvancedCargoOutputNode
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
                 BlockStorage.addBlockInfo(b, "index", "0");
@@ -159,6 +164,7 @@ public class AdvancedCargoOutputNode
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {

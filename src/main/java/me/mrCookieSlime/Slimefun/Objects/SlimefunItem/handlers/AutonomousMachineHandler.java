@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockDispenseEvent;
 
 public abstract class AutonomousMachineHandler
         extends ItemHandler {
+    @Override
     public String toCodename() {
         return "AutonomousMachineHandler";
     }

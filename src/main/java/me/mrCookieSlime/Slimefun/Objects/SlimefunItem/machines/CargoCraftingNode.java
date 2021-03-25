@@ -27,11 +27,13 @@ public class CargoCraftingNode
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, "&3合成输入接口") {
+            @Override
             public void init() {
                 CargoCraftingNode.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
                     menu.replaceExistingItem(41, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI1OTliZDk4NjY1OWI4Y2UyYzQ5ODg1MjVjOTRlMTlkZGQzOWZhZDA4YTM4Mjg0YTE5N2YxYjcwNjc1YWNjIn19fQ=="), "&b频段号", "", "&e> 点击 -1 频段号"));
@@ -60,6 +62,7 @@ public class CargoCraftingNode
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
                 if (!open) {
@@ -69,18 +72,21 @@ public class CargoCraftingNode
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
                 BlockStorage.addBlockInfo(b, "frequency", "0");
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {

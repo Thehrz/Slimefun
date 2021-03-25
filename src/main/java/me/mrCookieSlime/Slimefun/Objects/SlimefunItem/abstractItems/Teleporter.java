@@ -16,11 +16,13 @@ public abstract class Teleporter
         super(category, item, id, recipeType, recipe);
 
         SlimefunItem.registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 return true;
             }

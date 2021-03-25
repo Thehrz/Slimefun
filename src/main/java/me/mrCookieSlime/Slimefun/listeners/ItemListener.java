@@ -330,7 +330,7 @@ public class ItemListener implements Listener {
                     p.setFireTicks(0);
                 } else if (item.getType() == Material.POTION) {
                     final SlimefunItem sfItem = SlimefunItem.getByItem(item);
-                    if (sfItem != null && sfItem instanceof Juice) {
+                    if (sfItem instanceof Juice) {
                         if (!ReflectionUtils.getVersion().startsWith("v1_9_") && !ReflectionUtils.getVersion().startsWith("v1_10_")) {
                             for (final PotionEffect effect : ((PotionMeta) item.getItemMeta()).getCustomEffects()) {
                                 if (effect.getType().equals(PotionEffectType.SATURATION)) {
@@ -392,10 +392,10 @@ public class ItemListener implements Listener {
         } else if (e.getEntity() instanceof Wither) {
             final SlimefunItem item = BlockStorage.check(e.getBlock());
             if (item != null) {
-                if (item.getID().equals("WITHER_PROOF_OBSIDIAN")) {
+                if ("WITHER_PROOF_OBSIDIAN".equals(item.getID())) {
                     e.setCancelled(true);
                 }
-                if (item.getID().equals("WITHER_PROOF_GLASS")) {
+                if ("WITHER_PROOF_GLASS".equals(item.getID())) {
                     e.setCancelled(true);
                 }
             }

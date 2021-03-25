@@ -36,26 +36,31 @@ public class ReactorAccessPort
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 ReactorAccessPort.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return ReactorAccessPort.this.getInputSlots();
                 return ReactorAccessPort.getOutputSlots();
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
                     if (SlimefunManager.isItemSimiliar(item, SlimefunItems.REACTOR_COOLANT_CELL, true))
@@ -67,10 +72,12 @@ public class ReactorAccessPort
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {

@@ -29,6 +29,7 @@ public class JetBootsTask
     }
 
 
+    @Override
     public void run() {
         if (Bukkit.getPlayer(this.uuid) == null) {
             Bukkit.getScheduler().cancelTask(this.id);
@@ -40,7 +41,7 @@ public class JetBootsTask
             Player p = Bukkit.getPlayer(this.uuid);
             float cost = 0.075F;
             float charge = ItemEnergy.getStoredEnergy(p.getInventory().getBoots());
-            double accuracy = Double.valueOf((new DecimalFormat("##.##")).format(this.speed - 0.7D).replace(",", "."));
+            double accuracy = Double.parseDouble((new DecimalFormat("##.##")).format(this.speed - 0.7D).replace(",", "."));
             if (charge >= cost) {
                 p.getInventory().setBoots(ItemEnergy.chargeItem(p.getInventory().getBoots(), -cost));
                 PlayerInventory.update(p);

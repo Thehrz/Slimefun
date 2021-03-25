@@ -48,21 +48,25 @@ public abstract class AContainer
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 AContainer.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return AContainer.this.getInputSlots();
                 return AContainer.this.getOutputSlots();
@@ -70,10 +74,12 @@ public abstract class AContainer
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -103,21 +109,25 @@ public abstract class AContainer
         super(category, item, id, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 AContainer.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return AContainer.this.getInputSlots();
                 return AContainer.this.getOutputSlots();
@@ -125,10 +135,12 @@ public abstract class AContainer
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -174,11 +186,13 @@ public abstract class AContainer
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
 
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -253,15 +267,18 @@ public abstract class AContainer
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 AContainer.this.tick(b);
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return false;
             }
@@ -273,7 +290,7 @@ public abstract class AContainer
 
     protected void tick(Block b) {
         if (isProcessing(b)) {
-            int timeleft = progress.get(b).intValue();
+            int timeleft = progress.get(b);
             if (timeleft > 0) {
                 ItemStack item = getProgressBar().clone();
                 item.setDurability(MachineHelper.getDurability(item, timeleft, processing.get(b).getTicks()));

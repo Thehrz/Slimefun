@@ -13,6 +13,7 @@ public class RecipeSorter
     }
 
 
+    @Override
     public int compare(Integer slot1, Integer slot2) {
         return this.menu.getItemInSlot(slot1).getAmount() - this.menu.getItemInSlot(slot2).getAmount();
     }

@@ -47,7 +47,7 @@ public class MachineHelper {
             progress.append(":");
         }
 
-        progress.append(" - " + percentage + "%");
+        progress.append(" - ").append(percentage).append("%");
         return ChatColor.translateAlternateColorCodes('&', progress.toString());
     }
 
@@ -77,7 +77,7 @@ public class MachineHelper {
             progress.append(":");
         }
 
-        progress.append(" - " + percentage + "%");
+        progress.append(" - ").append(percentage).append("%");
         return ChatColor.translateAlternateColorCodes('&', progress.toString());
     }
 

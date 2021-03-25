@@ -27,6 +27,7 @@ public class MultiBlockInteractEvent
         return handlers;
     }
 
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
@@ -44,11 +45,13 @@ public class MultiBlockInteractEvent
     }
 
 
+    @Override
     public boolean isCancelled() {
         return this.cancelled;
     }
 
 
+    @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }

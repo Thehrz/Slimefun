@@ -26,23 +26,25 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AutomatedCraftingChamber extends SlimefunItem {
-    private static final int[] border;
-    private static final int[] border_in;
-    private static final int[] border_out;
+    private static final int[] BORDER;
+    private static final int[] BORDER_IN;
+    private static final int[] BORDER_OUT;
     public static Map<String, ItemStack> recipes;
 
     static {
-        border = new int[]{0, 1, 3, 4, 5, 7, 8, 13, 14, 15, 16, 17, 50, 51, 52, 53};
-        border_in = new int[]{9, 10, 11, 12, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
-        border_out = new int[]{23, 24, 25, 26, 32, 35, 41, 42, 43, 44};
-        AutomatedCraftingChamber.recipes = new HashMap<String, ItemStack>();
+        BORDER = new int[]{0, 1, 3, 4, 5, 7, 8, 13, 14, 15, 16, 17, 50, 51, 52, 53};
+        BORDER_IN = new int[]{9, 10, 11, 12, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
+        BORDER_OUT = new int[]{23, 24, 25, 26, 32, 35, 41, 42, 43, 44};
+        AutomatedCraftingChamber.recipes = new HashMap<>();
     }
 
     public AutomatedCraftingChamber(final Category category, final ItemStack item, final String name, final RecipeType recipeType, final ItemStack[] recipe) {
@@ -55,16 +57,16 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
 
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
-                if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
-                    menu.replaceExistingItem(6, (ItemStack) new CustomItem(new MaterialData(Material.SULPHUR), "&7启动状态: &4✘", new String[]{"", "&e> 点击激活这个机器"}));
-                    menu.addMenuClickHandler(6, (ChestMenu.MenuClickHandler) (p, arg1, arg2, arg3) -> {
+                if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
+                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.SULPHUR), "&7启动状态: &4✘", new String[]{"", "&e> 点击激活这个机器"}));
+                    menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "true");
                         newInstance(menu, b);
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(6, (ItemStack) new CustomItem(new MaterialData(Material.REDSTONE), "&7启动状态: &2✔", new String[]{"", "&e> 点击停止这个机器"}));
-                    menu.addMenuClickHandler(6, (ChestMenu.MenuClickHandler) (p, arg1, arg2, arg3) -> {
+                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.REDSTONE), "&7启动状态: &2✔", new String[]{"", "&e> 点击停止这个机器"}));
+                    menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "false");
                         newInstance(menu, b);
                         return false;
@@ -87,14 +89,14 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) {
                     return AutomatedCraftingChamber.this.getOutputSlots();
                 }
-                final List<Integer> slots = new ArrayList<Integer>();
+                final List<Integer> slots = new ArrayList<>();
                 for (final int slot : AutomatedCraftingChamber.this.getInputSlots()) {
                     if (menu.getItemInSlot(slot) != null) {
                         slots.add(slot);
                     }
                 }
-                Collections.sort(slots, new RecipeSorter(menu));
-                return ArrayUtils.toPrimitive((Integer[]) slots.toArray(new Integer[slots.size()]));
+                slots.sort(new RecipeSorter(menu));
+                return ArrayUtils.toPrimitive(slots.toArray(new Integer[0]));
             }
         };
         SlimefunItem.registerBlockHandler(name, new SlimefunBlockHandler() {
@@ -126,27 +128,29 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void constructMenu(final BlockMenuPreset preset) {
-        for (final int i : AutomatedCraftingChamber.border) {
-            preset.addItem(i, (ItemStack) new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " ", new String[0]), (ChestMenu.MenuClickHandler) (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.BORDER) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.border_in) {
-            preset.addItem(i, (ItemStack) new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " ", new String[0]), (ChestMenu.MenuClickHandler) (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.BORDER_IN) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.border_out) {
-            preset.addItem(i, (ItemStack) new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " ", new String[0]), (ChestMenu.MenuClickHandler) (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.BORDER_OUT) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
         }
         for (final int i : this.getOutputSlots()) {
-            preset.addMenuClickHandler(i, (ChestMenu.MenuClickHandler) new ChestMenu.AdvancedMenuClickHandler() {
+            preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return false;
                 }
 
+                @Override
                 public boolean onClick(final InventoryClickEvent e, final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR;
                 }
             });
         }
-        preset.addItem(2, (ItemStack) new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", new String[]{"", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"}), (ChestMenu.MenuClickHandler) (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(2, new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", new String[]{"", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"}), (arg0, arg1, arg2, arg3) -> false);
     }
 
     public abstract int getEnergyConsumption();
@@ -161,9 +165,9 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
 
     private Inventory inject(final Block b) {
         final int size = BlockStorage.getInventory(b).toInventory().getSize();
-        final Inventory inv = Bukkit.createInventory((InventoryHolder) null, size);
+        final Inventory inv = Bukkit.createInventory(null, size);
         for (int i = 0; i < size; ++i) {
-            inv.setItem(i, (ItemStack) new CustomItem(Material.COMMAND, " &4ALL YOUR PLACEHOLDERS ARE BELONG TO US", 0));
+            inv.setItem(i, new CustomItem(Material.COMMAND, " &4ALL YOUR PLACEHOLDERS ARE BELONG TO US", 0));
         }
         for (final int slot : this.getOutputSlots()) {
             inv.setItem(slot, BlockStorage.getInventory(b).getItemInSlot(slot));
@@ -204,7 +208,7 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void tick(final Block b) {
-        if (BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
+        if ("false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
             return;
         }
         if (ChargableBlock.getCharge(b) < this.getEnergyConsumption()) {
@@ -221,7 +225,7 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
             if (item != null && item.getAmount() == 1) {
                 return;
             }
-            builder.append(CustomItemSerializer.serialize(item, new CustomItemSerializer.ItemFlag[]{CustomItemSerializer.ItemFlag.DATA, CustomItemSerializer.ItemFlag.ITEMMETA_DISPLAY_NAME, CustomItemSerializer.ItemFlag.ITEMMETA_LORE, CustomItemSerializer.ItemFlag.MATERIAL}));
+            builder.append(CustomItemSerializer.serialize(item, CustomItemSerializer.ItemFlag.DATA, CustomItemSerializer.ItemFlag.ITEMMETA_DISPLAY_NAME, CustomItemSerializer.ItemFlag.ITEMMETA_LORE, CustomItemSerializer.ItemFlag.MATERIAL));
             ++i;
         }
         final String input = builder.toString();

@@ -68,10 +68,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class SlimefunSetup {
     public static boolean legacy_ore_washer;
@@ -80,7 +77,7 @@ public class SlimefunSetup {
         SlimefunSetup.legacy_ore_washer = false;
     }
 
-    public static void setupItems() throws Exception {
+    public static void setupItems() {
         new SlimefunItem(Categories.WEAPONS, SlimefunItems.GRANDMAS_WALKING_STICK, "GRANDMAS_WALKING_STICK", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, new ItemStack(Material.LOG), null, null, new ItemStack(Material.LOG), null, null, new ItemStack(Material.LOG), null}).register(true);
         new SlimefunItem(Categories.WEAPONS, SlimefunItems.GRANDMAS_WALKING_STICK, "GRANDMAS_WALKING_STICK2", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, new ItemStack(Material.LOG_2), null, null, new ItemStack(Material.LOG_2), null, null, new ItemStack(Material.LOG_2), null}, true).register(true);
         new SlimefunItem(Categories.WEAPONS, SlimefunItems.GRANDPAS_WALKING_STICK, "GRANDPAS_WALKING_STICK", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{new ItemStack(Material.LEATHER), new ItemStack(Material.LOG), new ItemStack(Material.LEATHER), null, new ItemStack(Material.LOG), null, null, new ItemStack(Material.LOG), null}).register(true);
@@ -106,22 +103,22 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
-                                    if (!(SlimefunItem.getByItem(inputs.get(i)[j]) instanceof SlimefunBackpack)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
+                                    if (!(SlimefunItem.getByItem(input[j]) instanceof SlimefunBackpack)) {
                                         craft = false;
                                         break;
                                     }
-                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], false)) {
+                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], false)) {
                                         craft = false;
                                         break;
                                     }
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     final Inventory inv2 = Bukkit.createInventory(null, 9, "test");
                                     for (int k = 0; k < inv.getContents().length; ++k) {
@@ -150,7 +147,7 @@ public class SlimefunSetup {
                                                     }
                                                 }
                                             }
-                                            if (id.equals("")) {
+                                            if ("".equals(id)) {
                                                 for (int line2 = 0; line2 < adding.getItemMeta().getLore().size(); ++line2) {
                                                     if (adding.getItemMeta().getLore().get(line2).equals(ChatColor.translateAlternateColorCodes('&', "&7ID: <ID>"))) {
                                                         final ItemMeta im = adding.getItemMeta();
@@ -255,31 +252,34 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
                                     craft = false;
                                     break;
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     if (InvUtils.fits(inv, adding)) {
-                                        for (final ItemStack removing : inputs.get(i)) {
+                                        for (final ItemStack removing : input) {
                                             if (removing != null) {
                                                 inv.removeItem(removing);
                                             }
                                         }
                                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 2.0f);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 2.0f);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0f, 1.0f);
                                                                 inv.addItem(adding);
@@ -353,12 +353,15 @@ public class SlimefunSetup {
                                         inv.removeItem(removing);
                                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 p.getWorld().playSound(p.getLocation(), Sound.BLOCK_PISTON_CONTRACT, 1.0f, 2.0f);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1.0f, 2.0f);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0f, 1.0f);
                                                                 inv.addItem(adding);
@@ -481,9 +484,9 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
-                            for (final ItemStack converting : inputs.get(i)) {
+                            for (final ItemStack converting : input) {
                                 if (converting != null) {
                                     for (int j = 0; j < inv.getContents().length; ++j) {
                                         if (j == inv.getContents().length - 1 && !SlimefunManager.isItemSimiliar(converting, inv.getContents()[j], true, SlimefunManager.DataType.ALWAYS)) {
@@ -497,10 +500,10 @@ public class SlimefunSetup {
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     if (InvUtils.fits(inv, adding)) {
-                                        for (final ItemStack removing : inputs.get(i)) {
+                                        for (final ItemStack removing : input) {
                                             if (removing != null) {
                                                 inv.removeItem(removing);
                                             }
@@ -577,18 +580,21 @@ public class SlimefunSetup {
                                         p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                         p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 p.getWorld().playSound(b.getLocation(), Sound.ENTITY_TNT_PRIMED, 1.0f, 1.0f);
                                                 p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                 p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                 p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         p.getWorld().playSound(b.getLocation(), Sound.ENTITY_TNT_PRIMED, 1.0f, 1.0f);
                                                         p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                         p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                         p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
                                                                 p.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.SMOKE, 4);
@@ -721,22 +727,22 @@ public class SlimefunSetup {
                         }
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
-                                    if (!(SlimefunItem.getByItem(inputs.get(i)[j]) instanceof SlimefunBackpack)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
+                                    if (!(SlimefunItem.getByItem(input[j]) instanceof SlimefunBackpack)) {
                                         craft = false;
                                         break;
                                     }
-                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], false)) {
+                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], false)) {
                                         craft = false;
                                         break;
                                     }
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     final Inventory inv2 = Bukkit.createInventory(null, 9, "test");
                                     for (int k = 0; k < inv.getContents().length; ++k) {
@@ -765,7 +771,7 @@ public class SlimefunSetup {
                                                     }
                                                 }
                                             }
-                                            if (id.equals("")) {
+                                            if ("".equals(id)) {
                                                 for (int line2 = 0; line2 < adding.getItemMeta().getLore().size(); ++line2) {
                                                     if (adding.getItemMeta().getLore().get(line2).equals(ChatColor.translateAlternateColorCodes('&', "&7ID: <ID>"))) {
                                                         final ItemMeta im = adding.getItemMeta();
@@ -802,16 +808,19 @@ public class SlimefunSetup {
                                         p.getWorld().playEffect(b.getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
                                         p.getWorld().playEffect(b.getLocation(), Effect.ENDER_SIGNAL, 1);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 p.getWorld().playSound(b.getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
                                                 p.getWorld().playEffect(b.getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
                                                 p.getWorld().playEffect(b.getLocation(), Effect.ENDER_SIGNAL, 1);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         p.getWorld().playSound(b.getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
                                                         p.getWorld().playEffect(b.getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
                                                         p.getWorld().playEffect(b.getLocation(), Effect.ENDER_SIGNAL, 1);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 p.getWorld().playEffect(b.getLocation(), Effect.MOBSPAWNER_FLAMES, 1);
                                                                 p.getWorld().playEffect(b.getLocation(), Effect.ENDER_SIGNAL, 1);
@@ -1236,18 +1245,23 @@ public class SlimefunSetup {
                             if (InvUtils.fits(inv, adding)) {
                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                    @Override
                                     public void run() {
                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                    @Override
                                                                     public void run() {
                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                                         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0f, 1.0f);
@@ -1323,15 +1337,19 @@ public class SlimefunSetup {
                             if (InvUtils.fits(inv, adding)) {
                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                    @Override
                                     public void run() {
                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                            @Override
                                             public void run() {
                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                    @Override
                                                     public void run() {
                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                            @Override
                                                             public void run() {
                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) ore);
                                                                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0f, 1.0f);
@@ -1362,7 +1380,7 @@ public class SlimefunSetup {
             public boolean onRightClick(final ItemUseEvent e, final Player p, final ItemStack item) {
                 if (e.getClickedBlock() != null) {
                     final SlimefunItem machine = BlockStorage.check(e.getClickedBlock());
-                    if (machine != null && machine.getID().equals("COMPOSTER")) {
+                    if (machine != null && "COMPOSTER".equals(machine.getID())) {
                         if (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), e.getClickedBlock(), true)) {
                             final ItemStack input = p.getInventory().getItemInMainHand();
                             final Block b = e.getClickedBlock();
@@ -1373,6 +1391,7 @@ public class SlimefunSetup {
                                     p.getInventory().removeItem(removing);
                                     final ItemStack adding = RecipeType.getRecipeOutput(machine, convert);
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                        @Override
                                         public void run() {
                                             if (input.getType().isBlock()) {
                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1380,6 +1399,7 @@ public class SlimefunSetup {
                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                             }
                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                @Override
                                                 public void run() {
                                                     if (input.getType().isBlock()) {
                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1387,6 +1407,7 @@ public class SlimefunSetup {
                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                     }
                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                        @Override
                                                         public void run() {
                                                             if (input.getType().isBlock()) {
                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1394,6 +1415,7 @@ public class SlimefunSetup {
                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                             }
                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                @Override
                                                                 public void run() {
                                                                     if (input.getType().isBlock()) {
                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1401,6 +1423,7 @@ public class SlimefunSetup {
                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                     }
                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                        @Override
                                                                         public void run() {
                                                                             if (input.getType().isBlock()) {
                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1408,6 +1431,7 @@ public class SlimefunSetup {
                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                             }
                                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                @Override
                                                                                 public void run() {
                                                                                     if (input.getType().isBlock()) {
                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1415,6 +1439,7 @@ public class SlimefunSetup {
                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                                     }
                                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                        @Override
                                                                                         public void run() {
                                                                                             if (input.getType().isBlock()) {
                                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1422,6 +1447,7 @@ public class SlimefunSetup {
                                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                                             }
                                                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                                @Override
                                                                                                 public void run() {
                                                                                                     if (input.getType().isBlock()) {
                                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1429,6 +1455,7 @@ public class SlimefunSetup {
                                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                                                     }
                                                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                                        @Override
                                                                                                         public void run() {
                                                                                                             if (input.getType().isBlock()) {
                                                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1436,6 +1463,7 @@ public class SlimefunSetup {
                                                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                                                             }
                                                                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                                                @Override
                                                                                                                 public void run() {
                                                                                                                     if (input.getType().isBlock()) {
                                                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1443,6 +1471,7 @@ public class SlimefunSetup {
                                                                                                                         b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) Material.HAY_BLOCK);
                                                                                                                     }
                                                                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                                                        @Override
                                                                                                                         public void run() {
                                                                                                                             if (input.getType().isBlock()) {
                                                                                                                                 b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, (Object) input.getType());
@@ -1486,7 +1515,7 @@ public class SlimefunSetup {
             }
         });
         new SlimefunItem(Categories.MAGIC_ARMOR, SlimefunItems.FARMER_SHOES, "FARMER_SHOES", RecipeType.ARMOR_FORGE, new ItemStack[]{null, null, null, new ItemStack(Material.HAY_BLOCK), null, new ItemStack(Material.HAY_BLOCK), new ItemStack(Material.HAY_BLOCK), null, new ItemStack(Material.HAY_BLOCK)}).register(true);
-        final String[] explosiveblacklist = (Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).toArray(new String[((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).size()])) : new String[]{"BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING"};
+        final String[] explosiveblacklist = (Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).toArray(new String[0])) : new String[]{"BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING"};
         new SlimefunItem(Categories.TOOLS, SlimefunItems.EXPLOSIVE_PICKAXE, "EXPLOSIVE_PICKAXE", RecipeType.MAGIC_WORKBENCH, new ItemStack[]{new ItemStack(Material.TNT), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.TNT), null, SlimefunItems.FERROSILICON, null, null, SlimefunItems.FERROSILICON, null}, new String[]{"unbreakable-blocks"}, new Object[]{Arrays.asList("BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING")}).register(true, new BlockBreakHandler() {
             @Override
             public boolean onBlockBreak(final BlockBreakEvent e, final ItemStack item, final int fortune, final List<ItemStack> drops) {
@@ -1557,21 +1586,27 @@ public class SlimefunSetup {
                 if (input != null && input.getType() == Material.GRAVEL) {
                     PlayerInventory.consumeItemInHand(p);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                        @Override
                         public void run() {
                             b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                @Override
                                 public void run() {
                                     b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                        @Override
                                         public void run() {
                                             b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                @Override
                                                 public void run() {
                                                     b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                        @Override
                                                         public void run() {
                                                             b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                @Override
                                                                 public void run() {
                                                                     b.getWorld().playEffect(b.getRelative(BlockFace.DOWN).getLocation(), Effect.STEP_SOUND, (Object) Material.GRAVEL);
                                                                     if (drop != null) {
@@ -1654,7 +1689,7 @@ public class SlimefunSetup {
             public boolean onRightClick(final ItemUseEvent e, final Player p, final ItemStack item) {
                 if (e.getClickedBlock() != null) {
                     final SlimefunItem machine = BlockStorage.check(e.getClickedBlock());
-                    if (machine != null && machine.getID().equals("CRUCIBLE")) {
+                    if (machine != null && "CRUCIBLE".equals(machine.getID())) {
                         if (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), e.getClickedBlock(), true)) {
                             final ItemStack input = p.getInventory().getItemInMainHand();
                             final Block block = e.getClickedBlock().getRelative(BlockFace.UP);
@@ -1665,6 +1700,7 @@ public class SlimefunSetup {
                                     removing.setAmount(convert.getAmount());
                                     p.getInventory().removeItem(removing);
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                        @Override
                                         public void run() {
                                             if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                 block.setType(Material.LAVA);
@@ -1676,6 +1712,7 @@ public class SlimefunSetup {
                                                 block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                             }
                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                @Override
                                                 public void run() {
                                                     if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                         block.setType(Material.LAVA);
@@ -1687,6 +1724,7 @@ public class SlimefunSetup {
                                                         block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                     }
                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                        @Override
                                                         public void run() {
                                                             if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                 block.setType(Material.LAVA);
@@ -1698,6 +1736,7 @@ public class SlimefunSetup {
                                                                 block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                             }
                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                @Override
                                                                 public void run() {
                                                                     if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                         block.setType(Material.LAVA);
@@ -1709,6 +1748,7 @@ public class SlimefunSetup {
                                                                         block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                                     }
                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                        @Override
                                                                         public void run() {
                                                                             if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                                 block.setType(Material.LAVA);
@@ -1720,6 +1760,7 @@ public class SlimefunSetup {
                                                                                 block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                                             }
                                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                @Override
                                                                                 public void run() {
                                                                                     if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                                         block.setType(Material.LAVA);
@@ -1731,6 +1772,7 @@ public class SlimefunSetup {
                                                                                         block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                                                     }
                                                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                        @Override
                                                                                         public void run() {
                                                                                             if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                                                 block.setType(Material.LAVA);
@@ -1742,6 +1784,7 @@ public class SlimefunSetup {
                                                                                                 block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0f, 1.0f);
                                                                                             }
                                                                                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                                                                                @Override
                                                                                                 public void run() {
                                                                                                     if (input.getType() == Material.COBBLESTONE || input.getType() == Material.HARD_CLAY) {
                                                                                                         block.setType(Material.STATIONARY_LAVA);
@@ -1956,11 +1999,11 @@ public class SlimefunSetup {
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.ELECTRIC_MOTOR, "ELECTRIC_MOTOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, SlimefunItems.ELECTRO_MAGNET, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.COPPER_WIDE, "COPPER_WIDE", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, null, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, null, null}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.HEATING_COIL, "HEATING_COIL", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
-        final String[] blockPlacerBlacklist = (Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).toArray(new String[((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).size()])) : new String[]{"STRUCTURE_BLOCK"};
-        new SlimefunItem(Categories.MACHINES_1, SlimefunItems.BLOCK_PLACER, "BLOCK_PLACER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K, new ItemStack(Material.IRON_INGOT), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.IRON_INGOT), SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K}, new String[]{"unplaceable-blocks"}, new Object[]{Arrays.asList("STRUCTURE_BLOCK")}).register(true, new AutonomousMachineHandler() {
+        final String[] blockPlacerBlacklist = (Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).toArray(new String[0])) : new String[]{"STRUCTURE_BLOCK"};
+        new SlimefunItem(Categories.MACHINES_1, SlimefunItems.BLOCK_PLACER, "BLOCK_PLACER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K, new ItemStack(Material.IRON_INGOT), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.IRON_INGOT), SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K}, new String[]{"unplaceable-blocks"}, new Object[]{Collections.singletonList("STRUCTURE_BLOCK")}).register(true, new AutonomousMachineHandler() {
             @Override
             public boolean onBlockDispense(final BlockDispenseEvent e, final Block dispenser, final Dispenser d, final Block block, final Block chest, final SlimefunItem machine) {
-                if (machine.getID().equalsIgnoreCase("BLOCK_PLACER")) {
+                if ("BLOCK_PLACER".equalsIgnoreCase(machine.getID())) {
                     e.setCancelled(true);
                     if ((block.getType() == null || block.getType() == Material.AIR) && e.getItem().getType().isBlock()) {
                         for (final String blockType : blockPlacerBlacklist) {
@@ -1994,6 +2037,7 @@ public class SlimefunSetup {
                                 d.getInventory().removeItem(new CustomItem(e.getItem(), 1));
                             } else {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                                    @Override
                                     public void run() {
                                         d.getInventory().removeItem(e.getItem());
                                     }
@@ -2885,7 +2929,7 @@ public class SlimefunSetup {
                     return false;
                 }
                 final SlimefunItem item = BlockStorage.check(e.getClickedBlock());
-                if (item == null || !item.getName().equals("GPS_CONTROL_PANEL")) {
+                if (item == null || !"GPS_CONTROL_PANEL".equals(item.getName())) {
                     return false;
                 }
                 e.setCancelled(true);
@@ -3157,7 +3201,7 @@ public class SlimefunSetup {
                     return false;
                 }
                 final SlimefunItem item = BlockStorage.check(e.getClickedBlock());
-                if (item == null || !item.getName().equals("GPS_GEO_SCANNER")) {
+                if (item == null || !"GPS_GEO_SCANNER".equals(item.getName())) {
                     return false;
                 }
                 e.setCancelled(true);
@@ -3275,7 +3319,7 @@ public class SlimefunSetup {
                     return false;
                 }
                 final SlimefunItem item = BlockStorage.check(e.getClickedBlock());
-                if (item == null || !item.getName().equals("HOLOGRAM_PROJECTOR")) {
+                if (item == null || !"HOLOGRAM_PROJECTOR".equals(item.getName())) {
                     return false;
                 }
                 e.setCancelled(true);
@@ -3358,7 +3402,7 @@ public class SlimefunSetup {
                 if (item == null) {
                     return false;
                 }
-                if (!item.getName().equals("ELEVATOR_PLATE")) {
+                if (!"ELEVATOR_PLATE".equals(item.getName())) {
                     return false;
                 }
                 if (BlockStorage.getBlockInfo(e.getClickedBlock(), "owner").equals(p.getUniqueId().toString())) {
@@ -3629,6 +3673,7 @@ public class SlimefunSetup {
             @Override
             public void extraTick(final Location l) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, new BukkitRunnable() {
+                    @Override
                     public void run() {
                         for (final Entity entity : ReactorHologram.getArmorStand(l).getNearbyEntities(5.0, 5.0, 5.0)) {
                             if (entity instanceof LivingEntity) {
@@ -3673,7 +3718,7 @@ public class SlimefunSetup {
                     return false;
                 }
                 final SlimefunItem item = BlockStorage.check(e.getClickedBlock());
-                if (item == null || !item.getName().equals("CARGO_MANAGER")) {
+                if (item == null || !"CARGO_MANAGER".equals(item.getName())) {
                     return false;
                 }
                 e.setCancelled(true);
@@ -3708,7 +3753,7 @@ public class SlimefunSetup {
                 if (item == null) {
                     return false;
                 }
-                if (!item.getName().equals("CARGO_NODE")) {
+                if (!"CARGO_NODE".equals(item.getName())) {
                     return false;
                 }
                 if (CargoNet.isConnected(e.getClickedBlock())) {

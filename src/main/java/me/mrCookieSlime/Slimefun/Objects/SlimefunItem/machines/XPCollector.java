@@ -24,8 +24,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.Iterator;
-
 public class XPCollector
         extends SlimefunItem {
     private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
@@ -34,20 +32,24 @@ public class XPCollector
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, "&a经验收集器") {
+            @Override
             public void init() {
                 XPCollector.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) return XPCollector.this.getOutputSlots();
                 return new int[0];
@@ -55,11 +57,13 @@ public class XPCollector
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 me.mrCookieSlime.Slimefun.holograms.XPCollector.getArmorStand(b).remove();
                 BlockMenu inv = BlockStorage.getInventory(b);
@@ -121,6 +125,7 @@ public class XPCollector
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 try {
                     XPCollector.this.tick(b);
@@ -130,10 +135,12 @@ public class XPCollector
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }
@@ -142,10 +149,8 @@ public class XPCollector
         super.register(slimefun);
     }
 
-    protected void tick(Block b) throws Exception {
-        Iterator<Entity> iterator = me.mrCookieSlime.Slimefun.holograms.XPCollector.getArmorStand(b).getNearbyEntities(4.0D, 4.0D, 4.0D).iterator();
-        while (iterator.hasNext()) {
-            Entity n = iterator.next();
+    protected void tick(Block b) {
+        for (Entity n : me.mrCookieSlime.Slimefun.holograms.XPCollector.getArmorStand(b).getNearbyEntities(4.0D, 4.0D, 4.0D)) {
             if (n instanceof ExperienceOrb) {
                 if (ChargableBlock.getCharge(b) < getEnergyConsumption())
                     return;

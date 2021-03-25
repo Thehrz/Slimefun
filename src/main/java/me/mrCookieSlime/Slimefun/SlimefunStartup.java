@@ -273,7 +273,6 @@ public class SlimefunStartup extends Plugin {
                 }, this.getPlugin());
             }
             this.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                Slimefun.emeraldenchants = this.getPlugin().getServer().getPluginManager().isPluginEnabled("EmeraldEnchants");
                 this.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
 
                     @EventHandler
@@ -302,7 +301,6 @@ public class SlimefunStartup extends Plugin {
                     }
                 }, this.getPlugin());
                 this.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                    Slimefun.emeraldenchants = this.getPlugin().getServer().getPluginManager().isPluginEnabled("EmeraldEnchants");
                     SlimefunGuide.all_recipes = config.getBoolean("options.show-vanilla-recipes-in-guide");
                     MiscSetup.loadItems();
                     for (World world : Bukkit.getWorlds()) {

@@ -14,6 +14,7 @@ public abstract class FoodFabricator
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(12, new ItemStack[]{SlimefunItems.CAN, new ItemStack(Material.WHEAT)}, new ItemStack[]{SlimefunItems.ORGANIC_FOOD2});
         registerRecipe(12, new ItemStack[]{SlimefunItems.CAN, new ItemStack(Material.CARROT_ITEM)}, new ItemStack[]{SlimefunItems.ORGANIC_FOOD3});
@@ -25,6 +26,7 @@ public abstract class FoodFabricator
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "FOOD_FABRICATOR";
     }

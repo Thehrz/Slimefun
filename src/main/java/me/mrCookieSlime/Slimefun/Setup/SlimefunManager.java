@@ -106,14 +106,15 @@ public class SlimefunManager {
     }
 
     private static boolean equalsLore(List<String> lore, List<String> lore2) {
-        String string1 = "", string2 = "";
+        StringBuilder string1 = new StringBuilder();
+        StringBuilder string2 = new StringBuilder();
         for (String string : lore) {
-            if (!string.startsWith("&e&e&7")) string1 = string1 + "-NEW LINE-" + string;
+            if (!string.startsWith("&e&e&7")) string1.append("-NEW LINE-").append(string);
         }
         for (String string : lore2) {
-            if (!string.startsWith("&e&e&7")) string2 = string2 + "-NEW LINE-" + string;
+            if (!string.startsWith("&e&e&7")) string2.append("-NEW LINE-").append(string);
         }
-        return string1.equals(string2);
+        return string1.toString().equals(string2.toString());
     }
 
     public enum DataType {

@@ -58,7 +58,7 @@ public class Talisman
     public static boolean checkFor(Event e, SlimefunItem talisman) {
         if (talisman != null) {
             if (talisman instanceof Talisman) {
-                boolean message = !((Talisman) talisman).getSuffix().equalsIgnoreCase("");
+                boolean message = !"".equalsIgnoreCase(((Talisman) talisman).getSuffix());
                 if (SlimefunStartup.chance(100, ((Talisman) talisman).getChance())) {
                     Player p = null;
 
@@ -151,10 +151,8 @@ public class Talisman
         List<String> lore = new ArrayList<>();
         lore.add("&7&oEnder Infused");
         lore.add("");
-        for (String line : getItem().getItemMeta().getLore()) {
-            lore.add(line);
-        }
-        return new CustomItem(getItem().getType(), "&5Ender " + ChatColor.stripColor(getItem().getItemMeta().getDisplayName()), getItem().getDurability(), lore.toArray(new String[lore.size()]));
+        lore.addAll(getItem().getItemMeta().getLore());
+        return new CustomItem(getItem().getType(), "&5Ender " + ChatColor.stripColor(getItem().getItemMeta().getDisplayName()), getItem().getDurability(), lore.toArray(new String[0]));
     }
 
 

@@ -50,17 +50,19 @@ public abstract class AReactor extends SlimefunItem {
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 AReactor.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
                     if (BlockStorage.getLocationInfo(b.getLocation(), "reactor-mode") == null) {
                         BlockStorage.addBlockInfo(b, "reactor-mode", "generator");
                     }
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "reactor-mode").equals("generator")) {
+                    if (!BlockStorage.hasBlockInfo(b) || "generator".equals(BlockStorage.getLocationInfo(b.getLocation(), "reactor-mode"))) {
                         menu.replaceExistingItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&7优先: &e发电", "", "&6你的反应器将专注于发电", "&6如果你的能量网络无需能源", "&6它将不会生产任何东西", "", "&7> 点击修改为优先 &e生产"));
                         menu.addMenuClickHandler(4, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "reactor-mode", "production");
@@ -81,22 +83,26 @@ public abstract class AReactor extends SlimefunItem {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -226,7 +232,7 @@ public abstract class AReactor extends SlimefunItem {
                             ChargableBlock.addCharge(l, AReactor.this.getEnergyProduction());
                             space -= produced;
                         }
-                        if (space >= produced || !BlockStorage.getBlockInfo(l, "reactor-mode").equals("generator")) {
+                        if (space >= produced || !"generator".equals(BlockStorage.getBlockInfo(l, "reactor-mode"))) {
                             AReactor.progress.put(l, timeleft - 1);
 
                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {

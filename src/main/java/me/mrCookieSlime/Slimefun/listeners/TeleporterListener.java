@@ -25,7 +25,7 @@ public class TeleporterListener implements Listener {
         SlimefunItem item = BlockStorage.check(e.getClickedBlock());
         if (item == null)
             return;
-        if (item.getID().equals("GPS_ACTIVATION_DEVICE_SHARED")) {
+        if ("GPS_ACTIVATION_DEVICE_SHARED".equals(item.getID())) {
             SlimefunItem teleporter = BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN));
 
             if (teleporter instanceof Teleporter) {
@@ -40,7 +40,7 @@ public class TeleporterListener implements Listener {
                 }
 
             }
-        } else if (item.getID().equals("GPS_ACTIVATION_DEVICE_PERSONAL")) {
+        } else if ("GPS_ACTIVATION_DEVICE_PERSONAL".equals(item.getID())) {
             if (BlockStorage.getLocationInfo(e.getClickedBlock().getLocation(), "owner").equals(e.getPlayer().getUniqueId().toString())) {
                 SlimefunItem teleporter = BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN));
 
@@ -58,7 +58,7 @@ public class TeleporterListener implements Listener {
             } else {
                 e.setCancelled(true);
             }
-        } else if (item.getID().equals("ELEVATOR_PLATE")) {
+        } else if ("ELEVATOR_PLATE".equals(item.getID())) {
             Elevator.openDialogue(e.getPlayer(), e.getClickedBlock());
         }
     }

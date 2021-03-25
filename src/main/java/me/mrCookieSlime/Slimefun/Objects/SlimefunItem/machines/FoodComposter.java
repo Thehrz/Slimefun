@@ -13,6 +13,7 @@ public abstract class FoodComposter
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(30, new ItemStack[]{SlimefunItems.ORGANIC_FOOD2}, new ItemStack[]{SlimefunItems.FERTILIZER2});
         registerRecipe(30, new ItemStack[]{SlimefunItems.ORGANIC_FOOD3}, new ItemStack[]{SlimefunItems.FERTILIZER3});
@@ -24,6 +25,7 @@ public abstract class FoodComposter
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "FOOD_COMPOSTER";
     }

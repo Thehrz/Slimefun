@@ -47,20 +47,24 @@ public class FluidPump
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 FluidPump.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return FluidPump.this.getInputSlots();
                 return FluidPump.this.getOutputSlots();
@@ -85,11 +89,13 @@ public class FluidPump
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
 
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -162,15 +168,18 @@ public class FluidPump
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 FluidPump.this.tick(b);
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }

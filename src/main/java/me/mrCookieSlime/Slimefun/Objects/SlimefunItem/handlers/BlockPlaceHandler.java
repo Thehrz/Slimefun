@@ -7,6 +7,7 @@ public abstract class BlockPlaceHandler
         extends ItemHandler {
     public abstract boolean onBlockPlace(BlockPlaceEvent paramBlockPlaceEvent, ItemStack paramItemStack);
 
+    @Override
     public String toCodename() {
         return "BlockPlaceHandler";
     }

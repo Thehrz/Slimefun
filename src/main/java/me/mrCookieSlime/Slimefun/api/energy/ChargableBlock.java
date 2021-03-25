@@ -117,7 +117,7 @@ public class ChargableBlock {
         }
     }
 
-    private static void updateTexture(final Location l) throws Exception {
+    private static void updateTexture(final Location l) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
             try {
                 Block b = l.getBlock();

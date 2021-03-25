@@ -24,20 +24,24 @@ public class TrashCan
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 TrashCan.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return true;
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return TrashCan.this.getInputSlots();
                 return new int[0];
@@ -65,10 +69,12 @@ public class TrashCan
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 for (int slot : TrashCan.this.getInputSlots()) {
@@ -77,6 +83,7 @@ public class TrashCan
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return false;
             }

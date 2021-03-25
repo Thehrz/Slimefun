@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,9 +22,7 @@ public class SlimefunMachine
         super(category, item, id, RecipeType.MULTIBLOCK, recipe);
         this.recipes = new ArrayList<>();
         this.shownRecipes = new ArrayList<>();
-        for (ItemStack i : machineRecipes) {
-            this.shownRecipes.add(i);
-        }
+        this.shownRecipes.addAll(Arrays.asList(machineRecipes));
         this.trigger = trigger;
     }
 
@@ -31,9 +30,7 @@ public class SlimefunMachine
         super(category, item, id, RecipeType.MULTIBLOCK, recipe, ghost);
         this.recipes = new ArrayList<>();
         this.shownRecipes = new ArrayList<>();
-        for (ItemStack i : machineRecipes) {
-            this.shownRecipes.add(i);
-        }
+        this.shownRecipes.addAll(Arrays.asList(machineRecipes));
         this.trigger = trigger;
     }
 
@@ -41,9 +38,7 @@ public class SlimefunMachine
         super(category, item, id, RecipeType.MULTIBLOCK, recipe, keys, values);
         this.recipes = new ArrayList<>();
         this.shownRecipes = new ArrayList<>();
-        for (ItemStack i : machineRecipes) {
-            this.shownRecipes.add(i);
-        }
+        this.shownRecipes.addAll(Arrays.asList(machineRecipes));
         this.trigger = trigger;
     }
 
@@ -93,7 +88,7 @@ public class SlimefunMachine
             }
 
         }
-        Material[] build = mats.toArray(new Material[mats.size()]);
+        Material[] build = mats.toArray(new Material[0]);
         return new MultiBlock(build, this.trigger);
     }
 

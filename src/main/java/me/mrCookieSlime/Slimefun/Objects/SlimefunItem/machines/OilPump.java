@@ -33,15 +33,18 @@ public abstract class OilPump
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 OilPump.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 if (!p.hasPermission("slimefun.inventory.bypass") && !CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true)) {
                     return false;
@@ -55,6 +58,7 @@ public abstract class OilPump
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return OilPump.this.getInputSlots();
                 return OilPump.this.getOutputSlots();
@@ -63,25 +67,30 @@ public abstract class OilPump
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "OIL_PUMP";
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&4原油泵";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_SPADE);
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);

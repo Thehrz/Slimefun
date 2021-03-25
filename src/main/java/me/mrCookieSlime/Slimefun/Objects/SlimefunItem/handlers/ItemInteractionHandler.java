@@ -9,6 +9,7 @@ public abstract class ItemInteractionHandler
         extends ItemHandler {
     public abstract boolean onRightClick(ItemUseEvent paramItemUseEvent, Player paramPlayer, ItemStack paramItemStack);
 
+    @Override
     public String toCodename() {
         return "ItemInteractionHandler";
     }

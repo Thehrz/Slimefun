@@ -23,6 +23,7 @@ public class EnhancedFurnace
         this.fortune = fortune - 1;
 
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 if (b.getState() instanceof Furnace && (
                         (Furnace) b.getState()).getCookTime() > 0) {
@@ -33,10 +34,12 @@ public class EnhancedFurnace
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }

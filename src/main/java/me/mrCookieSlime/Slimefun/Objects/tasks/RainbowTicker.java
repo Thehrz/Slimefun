@@ -22,17 +22,20 @@ public class RainbowTicker
     }
 
 
+    @Override
     public void tick(Block b, SlimefunItem item, Config data) {
         b.setData((byte) this.meta, false);
     }
 
 
+    @Override
     public void uniqueTick() {
         this.index = (this.index == this.queue.length - 1) ? 0 : (this.index + 1);
         this.meta = this.queue[this.index];
     }
 
 
+    @Override
     public boolean isSynchronized() {
         return true;
     }

@@ -45,20 +45,24 @@ public abstract class CropGrowthAccelerator
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, "&b植物生长加速器") {
+            @Override
             public void init() {
                 CropGrowthAccelerator.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return CropGrowthAccelerator.this.getInputSlots();
                 return new int[0];
@@ -66,10 +70,12 @@ public abstract class CropGrowthAccelerator
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -101,6 +107,7 @@ public abstract class CropGrowthAccelerator
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 try {
                     CropGrowthAccelerator.this.tick(b);
@@ -110,10 +117,12 @@ public abstract class CropGrowthAccelerator
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }

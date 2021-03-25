@@ -35,20 +35,24 @@ public class AnimalGrowthAccelerator
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, "&b动物成长加速器") {
+            @Override
             public void init() {
                 AnimalGrowthAccelerator.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return AnimalGrowthAccelerator.this.getInputSlots();
                 return new int[0];
@@ -56,10 +60,12 @@ public class AnimalGrowthAccelerator
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 me.mrCookieSlime.Slimefun.holograms.AnimalGrowthAccelerator.getArmorStand(b).remove();
                 BlockMenu inv = BlockStorage.getInventory(b);
@@ -96,6 +102,7 @@ public class AnimalGrowthAccelerator
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 try {
                     AnimalGrowthAccelerator.this.tick(b);
@@ -105,10 +112,12 @@ public class AnimalGrowthAccelerator
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }

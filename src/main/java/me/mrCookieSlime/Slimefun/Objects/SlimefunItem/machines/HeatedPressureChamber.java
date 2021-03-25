@@ -27,7 +27,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class HeatedPressureChamber
         extends AContainer {
@@ -35,25 +38,30 @@ public abstract class HeatedPressureChamber
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 HeatedPressureChamber.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) return HeatedPressureChamber.this.getOutputSlots();
 
@@ -69,8 +77,8 @@ public abstract class HeatedPressureChamber
                     return HeatedPressureChamber.this.getInputSlots();
                 }
 
-                Collections.sort(slots, new RecipeSorter(menu));
-                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[slots.size()]));
+                slots.sort(new RecipeSorter(menu));
+                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[0]));
             }
         };
 
@@ -79,6 +87,7 @@ public abstract class HeatedPressureChamber
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(45, new ItemStack[]{SlimefunItems.BUCKET_OF_OIL}, new ItemStack[]{new CustomItem(SlimefunItems.PLASTIC_SHEET, 8)});
         registerRecipe(30, new ItemStack[]{SlimefunItems.GOLD_24K, SlimefunItems.URANIUM}, new ItemStack[]{SlimefunItems.BLISTERING_INGOT});
@@ -89,18 +98,22 @@ public abstract class HeatedPressureChamber
         registerRecipe(45, new ItemStack[]{SlimefunItems.ENRICHED_NETHER_ICE}, new ItemStack[]{new CustomItem(SlimefunItems.NETHER_ICE_COOLANT_CELL, 8)});
     }
 
+    @Override
     public String getInventoryTitle() {
         return "&c热压力室";
     }
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
 
+    @Override
     public int[] getInputSlots() {
         return new int[]{19, 20};
     }
 
+    @Override
     public int[] getOutputSlots() {
         return new int[]{24, 25};
     }
@@ -109,15 +122,18 @@ public abstract class HeatedPressureChamber
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 HeatedPressureChamber.this.tick(b);
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return false;
             }
@@ -127,6 +143,7 @@ public abstract class HeatedPressureChamber
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);
@@ -194,6 +211,7 @@ public abstract class HeatedPressureChamber
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "HEATED_PRESSURE_CHAMBER";
     }

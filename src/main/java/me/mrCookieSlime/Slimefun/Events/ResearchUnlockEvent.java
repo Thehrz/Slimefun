@@ -24,6 +24,7 @@ public class ResearchUnlockEvent
         return handlers;
     }
 
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
@@ -37,11 +38,13 @@ public class ResearchUnlockEvent
     }
 
 
+    @Override
     public boolean isCancelled() {
         return this.cancelled;
     }
 
 
+    @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }

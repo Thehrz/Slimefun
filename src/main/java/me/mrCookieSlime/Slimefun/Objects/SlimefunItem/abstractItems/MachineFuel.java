@@ -30,6 +30,32 @@ public class MachineFuel {
     public int getTicks() {
         return this.seconds;
     }
+
+    @Override
+    public int hashCode() {
+        if (output != null) {
+            return fuel.hashCode() + output.hashCode() + seconds;
+        }
+        return fuel.hashCode() + seconds;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MachineFuel machineFuel = (MachineFuel) obj;
+        if (output != null && machineFuel.output != null) {
+            return seconds == machineFuel.seconds && fuel.equals(machineFuel.fuel) && output.equals(machineFuel.output);
+        }
+        return seconds == machineFuel.seconds && fuel.equals(machineFuel.fuel);
+    }
 }
 
 

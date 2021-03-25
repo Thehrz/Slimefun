@@ -21,20 +21,24 @@ public class ChargingBench
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
                 ChargingBench.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return ChargingBench.this.getInputSlots();
                 return ChargingBench.this.getOutputSlots();
@@ -43,24 +47,29 @@ public class ChargingBench
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&3充电架";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.GOLD_PICKAXE);
     }
 
 
+    @Override
     public int getEnergyConsumption() {
         return 10;
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
+    @Override
     protected void tick(Block b) {
         if (ChargableBlock.getCharge(b) < getEnergyConsumption())
             return;
@@ -97,11 +106,13 @@ public class ChargingBench
     }
 
 
+    @Override
     public int getSpeed() {
         return 1;
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "CHARGING_BENCH";
     }

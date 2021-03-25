@@ -21,6 +21,7 @@ public abstract class BlockTicker
 
     public abstract void tick(Block paramBlock, SlimefunItem paramSlimefunItem, Config paramConfig);
 
+    @Override
     public String toCodename() {
         return "BlockTicker";
     }

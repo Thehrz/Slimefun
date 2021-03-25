@@ -67,6 +67,7 @@ public class UniversalBlockMenu extends ChestMenu {
         return this.preset.canOpen(b, p);
     }
 
+    @Override
     public void replaceExistingItem(final int slot, final ItemStack item) {
         this.replaceExistingItem(slot, item, true);
     }

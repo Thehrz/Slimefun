@@ -9,7 +9,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class BlockMenuPreset
         extends ChestMenu {
@@ -72,6 +75,7 @@ public abstract class BlockMenuPreset
         return getSlotsAccessedByItemTransport(flow);
     }
 
+    @Override
     public ChestMenu addItem(int slot, ItemStack item) {
         this.occupied.add(slot);
         return super.addItem(slot, item);
@@ -116,8 +120,7 @@ public abstract class BlockMenuPreset
     public void clone(BlockMenu menu) {
         menu.setPlayerInventoryClickable(true);
 
-        for (Iterator<Integer> iterator = this.occupied.iterator(); iterator.hasNext(); ) {
-            int i = iterator.next();
+        for (int i : this.occupied) {
             menu.addItem(i, getItemInSlot(i));
         }
 
@@ -137,8 +140,7 @@ public abstract class BlockMenuPreset
     public void clone(UniversalBlockMenu menu) {
         menu.setPlayerInventoryClickable(true);
 
-        for (Iterator<Integer> iterator = this.occupied.iterator(); iterator.hasNext(); ) {
-            int i = iterator.next();
+        for (int i : this.occupied) {
             menu.addItem(i, getItemInSlot(i));
         }
 

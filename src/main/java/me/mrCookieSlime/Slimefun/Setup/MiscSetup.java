@@ -154,22 +154,40 @@ public class MiscSetup {
                     for (ItemStack i : input) {
                         if (i != null) {
                             inputs.add(i);
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.ALUMINUM_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.COPPER_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.GOLD_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.IRON_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.LEAD_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.MAGNESIUM_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.SILVER_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.TIN_DUST, true)) dust = true;
-                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.ZINC_DUST, true)) dust = true;
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.ALUMINUM_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.COPPER_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.GOLD_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.IRON_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.LEAD_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.MAGNESIUM_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.SILVER_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.TIN_DUST, true)) {
+                                dust = true;
+                            }
+                            if (SlimefunManager.isItemSimiliar(i, SlimefunItems.ZINC_DUST, true)) {
+                                dust = true;
+                            }
 
                         }
                     }
                     if (!dust || inputs.size() != 1) {
 
 
-                        SlimefunRecipes.registerMachineRecipe("ELECTRIC_SMELTERY", 12, inputs.toArray(new ItemStack[inputs.size()]), new ItemStack[]{recipe[0]});
+                        SlimefunRecipes.registerMachineRecipe("ELECTRIC_SMELTERY", 12, inputs.toArray(new ItemStack[0]), new ItemStack[]{recipe[0]});
                     }
                 }
                 input = null;

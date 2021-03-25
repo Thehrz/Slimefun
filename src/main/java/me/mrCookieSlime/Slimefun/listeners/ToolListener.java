@@ -231,7 +231,7 @@ public class ToolListener implements Listener {
             SlimefunItem item = BlockStorage.check(block);
             if (item != null) {
                 blocks.remove();
-                if (!item.getID().equalsIgnoreCase("HARDENED_GLASS") && !item.getID().equalsIgnoreCase("WITHER_PROOF_OBSIDIAN") && !item.getID().equalsIgnoreCase("WITHER_PROOF_GLASS") && !item.getID().equalsIgnoreCase("FORCEFIELD_PROJECTOR") && !item.getID().equalsIgnoreCase("FORCEFIELD_RELAY")) {
+                if (!"HARDENED_GLASS".equalsIgnoreCase(item.getID()) && !"WITHER_PROOF_OBSIDIAN".equalsIgnoreCase(item.getID()) && !"WITHER_PROOF_GLASS".equalsIgnoreCase(item.getID()) && !"FORCEFIELD_PROJECTOR".equalsIgnoreCase(item.getID()) && !"FORCEFIELD_RELAY".equalsIgnoreCase(item.getID())) {
                     boolean success = true;
                     if (SlimefunItem.blockhandler.containsKey(item.getID())) {
                         success = SlimefunItem.blockhandler.get(item.getID()).onBreak(null, block, item, UnregisterReason.EXPLODE);

@@ -74,7 +74,7 @@ public class AncientAltarListener implements Listener {
         Block b = e.getClickedBlock();
         SlimefunItem item = BlockStorage.check(b);
         if (item != null) {
-            if (item.getID().equals("ANCIENT_PEDESTAL")) {
+            if ("ANCIENT_PEDESTAL".equals(item.getID())) {
                 if (Variables.altarinuse.contains(b.getLocation())) {
                     e.setCancelled(true);
                     return;
@@ -101,7 +101,7 @@ public class AncientAltarListener implements Listener {
                     PlayerInventory.update(e.getPlayer());
                 }
 
-            } else if (item.getID().equals("ANCIENT_ALTAR")) {
+            } else if ("ANCIENT_ALTAR".equals(item.getID())) {
                 if (Variables.altarinuse.contains(b.getLocation())) {
                     e.setCancelled(true);
                     return;
@@ -180,7 +180,7 @@ public class AncientAltarListener implements Listener {
         SlimefunItem item = BlockStorage.check(b);
         if (item == null)
             return;
-        if (item.getID().equalsIgnoreCase("ANCIENT_PEDESTAL")) {
+        if ("ANCIENT_PEDESTAL".equalsIgnoreCase(item.getID())) {
             Messages.local.sendTranslation(e.getPlayer(), "messages.cannot-place", true);
             e.setCancelled(true);
         }

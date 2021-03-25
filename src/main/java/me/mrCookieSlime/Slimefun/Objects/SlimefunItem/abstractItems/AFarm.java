@@ -36,21 +36,25 @@ public abstract class AFarm
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 AFarm.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) return AFarm.this.getOutputSlots();
                 return new int[0];
@@ -58,10 +62,12 @@ public abstract class AFarm
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -81,21 +87,25 @@ public abstract class AFarm
         super(category, item, id, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 AFarm.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) return AFarm.this.getOutputSlots();
                 return new int[0];
@@ -103,10 +113,12 @@ public abstract class AFarm
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
@@ -138,11 +150,13 @@ public abstract class AFarm
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
 
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -179,15 +193,18 @@ public abstract class AFarm
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 AFarm.this.tick(b);
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return true;
             }

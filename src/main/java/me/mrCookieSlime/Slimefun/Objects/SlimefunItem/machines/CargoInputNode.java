@@ -29,14 +29,16 @@ public class CargoInputNode
         super(category, item, name, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(name, "&3输入接口") {
+            @Override
             public void init() {
                 CargoInputNode.this.constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-type").equals("whitelist")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || "whitelist".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-type"))) {
                         menu.replaceExistingItem(15, new CustomItem(new MaterialData(Material.WOOL), "&7类型: &r白名单", "", "&e> 点击切换为黑名单"));
                         menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-type", "blacklist");
@@ -53,7 +55,7 @@ public class CargoInputNode
                         });
                     }
 
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability").equals("false")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-durability"))) {
                         menu.replaceExistingItem(16, new CustomItem(new MaterialData(Material.STONE_SWORD, (byte) 20), "&7需要匹配的 子ID/耐久值: &4✘", "", "&e> 点击修改需要匹配的耐久值"));
                         menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-durability", "true");
@@ -70,7 +72,7 @@ public class CargoInputNode
                         });
                     }
 
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "round-robin") == null || BlockStorage.getLocationInfo(b.getLocation(), "round-robin").equals("false")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "round-robin") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "round-robin"))) {
                         menu.replaceExistingItem(24, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDc4ZjJiN2U1ZTc1NjM5ZWE3ZmI3OTZjMzVkMzY0YzRkZjI4YjQyNDNlNjZiNzYyNzdhYWRjZDYyNjEzMzcifX19"), "&7循环模式: &4✘", "", "&e> 点击激活循环模式", "&e(物品将在频段中被均分)"));
                         menu.addMenuClickHandler(24, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "round-robin", "true");
@@ -87,7 +89,7 @@ public class CargoInputNode
                         });
                     }
 
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore").equals("true")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore") == null || "true".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-lore"))) {
                         menu.replaceExistingItem(25, new CustomItem(new MaterialData(Material.EMPTY_MAP), "&7需要匹配的 说明(Lore): &2✔", "", "&e> 点击修改需要匹配的Lore"));
                         menu.addMenuClickHandler(25, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-lore", "false");
@@ -151,6 +153,7 @@ public class CargoInputNode
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
                 if (!open) {
@@ -160,12 +163,14 @@ public class CargoInputNode
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
                 BlockStorage.addBlockInfo(b, "index", "0");
@@ -177,6 +182,7 @@ public class CargoInputNode
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {

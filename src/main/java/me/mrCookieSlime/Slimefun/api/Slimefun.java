@@ -17,7 +17,6 @@ public class Slimefun {
     public static final List<GuideHandler> guide_handlers2 = new ArrayList<>();
     private static final GPSNetwork gps = new GPSNetwork();
     public static Map<Integer, List<GuideHandler>> guide_handlers = new HashMap<>();
-    public static boolean emeraldenchants = false;
 
     public static void registerGuideHandler(GuideHandler handler) {
         List<GuideHandler> handlers = new ArrayList<>();
@@ -63,8 +62,9 @@ public class Slimefun {
         SlimefunItem.State state = SlimefunItem.getState(item);
         if (sfItem == null) {
             if (state != SlimefunItem.State.ENABLED) {
-                if (message && state != SlimefunItem.State.VANILLA)
+                if (message && state != SlimefunItem.State.VANILLA) {
                     Messages.local.sendTranslation(p, "messages.disabled-item", true);
+                }
                 return false;
             }
             return true;
@@ -88,11 +88,16 @@ public class Slimefun {
 
     public static boolean hasUnlocked(Player p, SlimefunItem sfItem, boolean message) {
         if (isEnabled(p, sfItem, message) && hasPermission(p, sfItem, message)) {
-            if (sfItem.getResearch() == null) return true;
-            if (sfItem.getResearch().hasUnlocked(p)) return true;
+            if (sfItem.getResearch() == null) {
+                return true;
+            }
+            if (sfItem.getResearch().hasUnlocked(p)) {
+                return true;
+            }
 
-            if (message && !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.VanillaItem))
+            if (message && !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.VanillaItem)) {
                 Messages.local.sendTranslation(p, "messages.not-researched", true);
+            }
             return false;
         }
 
@@ -101,12 +106,18 @@ public class Slimefun {
 
 
     public static boolean hasPermission(Player p, SlimefunItem item, boolean message) {
-        if (item == null) return true;
-        if (item.getPermission().equalsIgnoreCase("")) return true;
-        if (p.hasPermission(item.getPermission())) return true;
-
-        if (message)
+        if (item == null) {
+            return true;
+        }
+        if ("".equalsIgnoreCase(item.getPermission())) {
+            return true;
+        }
+        if (p.hasPermission(item.getPermission())) {
+            return true;
+        }
+        if (message) {
             Messages.local.sendTranslation(p, "messages.no-permission", true);
+        }
         return false;
     }
 
@@ -114,21 +125,28 @@ public class Slimefun {
     public static boolean isEnabled(Player p, ItemStack item, boolean message) {
         String world = p.getWorld().getName();
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
-        if (sfItem == null) return !SlimefunItem.isDisabled(item);
+        if (sfItem == null) {
+            return !SlimefunItem.isDisabled(item);
+        }
         if (SlimefunStartup.getWhitelist().contains(world + ".enabled")) {
             if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled")) {
-                if (!SlimefunStartup.getWhitelist().contains(world + ".enabled-items." + sfItem.getID()))
+                if (!SlimefunStartup.getWhitelist().contains(world + ".enabled-items." + sfItem.getID())) {
                     SlimefunStartup.getWhitelist().setDefaultValue(world + ".enabled-items." + sfItem.getID(), Boolean.TRUE);
-                if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled-items." + sfItem.getID())) return true;
+                }
+                if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled-items." + sfItem.getID())) {
+                    return true;
+                }
 
-                if (message)
+                if (message) {
                     Messages.local.sendTranslation(p, "messages.disabled-in-world", true);
+                }
                 return false;
             }
 
 
-            if (message)
+            if (message) {
                 Messages.local.sendTranslation(p, "messages.disabled-in-world", true);
+            }
             return false;
         }
 
@@ -140,18 +158,21 @@ public class Slimefun {
         String world = p.getWorld().getName();
         if (SlimefunStartup.getWhitelist().contains(world + ".enabled")) {
             if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled")) {
-                if (!SlimefunStartup.getWhitelist().contains(world + ".enabled-items." + sfItem.getID()))
+                if (!SlimefunStartup.getWhitelist().contains(world + ".enabled-items." + sfItem.getID())) {
                     SlimefunStartup.getWhitelist().setDefaultValue(world + ".enabled-items." + sfItem.getID(), Boolean.TRUE);
-                if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled-items." + sfItem.getID())) return true;
-
-                if (message)
+                }
+                if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled-items." + sfItem.getID())) {
+                    return true;
+                }
+                if (message) {
                     Messages.local.sendTranslation(p, "messages.disabled-in-world", true);
+                }
                 return false;
             }
 
-
-            if (message)
+            if (message) {
                 Messages.local.sendTranslation(p, "messages.disabled-in-world", true);
+            }
             return false;
         }
 
@@ -200,11 +221,6 @@ public class Slimefun {
 
     public static void addOfficialWikiPage(String id, String page) {
         addWikiPage(id, "https://github.com/TheBusyBiscuit/Slimefun4/wiki/" + page);
-    }
-
-
-    public static boolean isEmeraldEnchantsInstalled() {
-        return emeraldenchants;
     }
 
     public static List<GuideHandler> getGuideHandlers(int tier) {

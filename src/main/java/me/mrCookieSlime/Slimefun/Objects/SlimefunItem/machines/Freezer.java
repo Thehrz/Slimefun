@@ -14,6 +14,7 @@ public abstract class Freezer
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(2, new ItemStack[]{new ItemStack(Material.WATER_BUCKET)}, new ItemStack[]{new ItemStack(Material.BUCKET), new ItemStack(Material.ICE)});
         registerRecipe(8, new ItemStack[]{new ItemStack(Material.LAVA_BUCKET)}, new ItemStack[]{new ItemStack(Material.BUCKET), new ItemStack(Material.OBSIDIAN)});
@@ -22,6 +23,7 @@ public abstract class Freezer
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "FREEZER";
     }

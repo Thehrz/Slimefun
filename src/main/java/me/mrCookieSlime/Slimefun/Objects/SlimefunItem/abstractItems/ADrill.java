@@ -35,6 +35,7 @@ public abstract class ADrill
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 constructMenu(this);
             }
@@ -55,11 +56,13 @@ public abstract class ADrill
 
                 for (int i : ADrill.this.getOutputSlots()) {
                     preset.addMenuClickHandler(i, new AdvancedMenuClickHandler() {
+                        @Override
                         public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                             return false;
                         }
 
 
+                        @Override
                         public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                             return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                         }
@@ -68,10 +71,12 @@ public abstract class ADrill
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 if (!p.hasPermission("slimefun.inventory.bypass") && !CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true)) {
                     return false;
@@ -88,6 +93,7 @@ public abstract class ADrill
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) return ADrill.this.getInputSlots();
                 return ADrill.this.getOutputSlots();
@@ -96,15 +102,18 @@ public abstract class ADrill
     }
 
 
+    @Override
     public int[] getInputSlots() {
         return new int[0];
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);
@@ -152,6 +161,7 @@ public abstract class ADrill
 
     public abstract int getProcessingTime();
 
+    @Override
     public abstract int getSpeed();
 }
 

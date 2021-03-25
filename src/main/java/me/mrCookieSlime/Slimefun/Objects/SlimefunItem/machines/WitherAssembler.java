@@ -45,7 +45,7 @@ public class WitherAssembler extends SlimefunItem {
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
                         menu.replaceExistingItem(22, new CustomItem(new MaterialData(Material.SULPHUR), "&7激活状态: &4✘", "", "&e> 点击激活这个机器"));
                         menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "enabled", "true");
@@ -62,11 +62,11 @@ public class WitherAssembler extends SlimefunItem {
                         });
                     }
 
-                    double offset = (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "offset") == null) ? 3.0D : Double.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "offset"));
+                    double offset = (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "offset") == null) ? 3.0D : Double.parseDouble(BlockStorage.getLocationInfo(b.getLocation(), "offset"));
 
                     menu.replaceExistingItem(31, new CustomItem(new MaterialData(Material.PISTON_BASE), "&7偏移: &3" + offset + " 方块", "", "&r左键点击: &7+0.1", "&r右键点击: &7-0.1"));
                     menu.addMenuClickHandler(31, (p, arg1, arg2, arg3) -> {
-                        double offset1 = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "offset")).doubleValue() + (arg3.isRightClicked() ? -0.1F : 0.1F));
+                        double offset1 = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "offset")) + (arg3.isRightClicked() ? -0.1F : 0.1F));
                         BlockStorage.addBlockInfo(b, "offset", String.valueOf(offset1));
                         newInstance(menu, b);
                         return false;
@@ -104,12 +104,14 @@ public class WitherAssembler extends SlimefunItem {
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "offset", "3.0");
                 BlockStorage.addBlockInfo(b, "enabled", "false");
             }
 
 
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 if (reason.equals(UnregisterReason.EXPLODE)) return false;
                 BlockMenu inv = BlockStorage.getInventory(b);
@@ -180,8 +182,9 @@ public class WitherAssembler extends SlimefunItem {
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
 
+            @Override
             public void tick(final Block b, SlimefunItem sf, Config data) {
-                if (BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false"))
+                if ("false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled")))
                     return;
                 if (WitherAssembler.lifetime % 60 == 0) {
                     if (ChargableBlock.getCharge(b) < WitherAssembler.this.getEnergyConsumption())
@@ -248,11 +251,13 @@ public class WitherAssembler extends SlimefunItem {
             }
 
 
+            @Override
             public void uniqueTick() {
                 WitherAssembler.lifetime++;
             }
 
 
+            @Override
             public boolean isSynchronized() {
                 return false;
             }
