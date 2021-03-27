@@ -240,16 +240,29 @@ public class SlimefunGuide {
             if (locked) {
                 continue;
             }
-            if (!(category instanceof LockedCategory)) {
-                if (!(category instanceof SeasonCategory)) {
+
+            if (category instanceof LockedCategory) {
+                if (((LockedCategory) category).hasUnlocked(p) || (!survival)) {
                     menu.addItem(index, category.getItem());
                     menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
                         SlimefunGuide.openCategory(player, category, survival, 1);
                         return false;
                     });
                     index++;
-                    continue;
+                } else {
+                    List<String> parents = new ArrayList<>();
+                    parents.add("");
+                    parents.add(ChatColor.translateAlternateColorCodes('&', "&r你需要先解锁所有"));
+                    parents.add(ChatColor.translateAlternateColorCodes('&', "&r来自以下系列的物品:"));
+                    parents.add("");
+                    for (Category parent : ((LockedCategory) category).getParents()) {
+                        parents.add(parent.getItem().getItemMeta().getDisplayName());
+                    }
+                    menu.addItem(index, new CustomItem(Material.BARRIER, "&4未解锁 &7- &r" + category.getItem().getItemMeta().getDisplayName(), 0, parents.toArray(new String[0])));
+                    menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> false);
+                    index++;
                 }
+            } else if (category instanceof SeasonCategory) {
                 if (((SeasonCategory) category).isUnlocked() || (!survival)) {
                     menu.addItem(index, category.getItem());
                     menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
@@ -258,28 +271,14 @@ public class SlimefunGuide {
                     });
                     index++;
                 }
-                continue;
-            }
-            if (((LockedCategory) category).hasUnlocked(p) || (!survival)) {
+            } else {
                 menu.addItem(index, category.getItem());
                 menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
                     SlimefunGuide.openCategory(player, category, survival, 1);
                     return false;
                 });
                 index++;
-                continue;
             }
-            List<String> parents = new ArrayList<>();
-            parents.add("");
-            parents.add(ChatColor.translateAlternateColorCodes('&', "&r你需要先解锁所有"));
-            parents.add(ChatColor.translateAlternateColorCodes('&', "&r来自以下系列的物品:"));
-            parents.add("");
-            for (Category parent : ((LockedCategory) category).getParents()) {
-                parents.add(parent.getItem().getItemMeta().getDisplayName());
-            }
-            menu.addItem(index, new CustomItem(Material.BARRIER, "&4未解锁 &7- &r" + category.getItem().getItemMeta().getDisplayName(), 0, parents.toArray(new String[0])));
-            menu.addMenuClickHandler(index, (arg0, arg1, arg2, arg3) -> false);
-            index++;
         }
 
         int finalPages = pages;

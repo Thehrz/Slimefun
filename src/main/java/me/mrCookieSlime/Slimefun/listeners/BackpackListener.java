@@ -8,6 +8,7 @@ import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
 import me.mrCookieSlime.Slimefun.Variables;
 import me.mrCookieSlime.Slimefun.api.Backpacks;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,11 +23,16 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 @TListener
 public class BackpackListener implements Listener {
+    public BackpackListener(JavaPlugin plugin) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Variables.enchanting.remove(e.getPlayer().getUniqueId());

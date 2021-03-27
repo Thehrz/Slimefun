@@ -14,8 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class BlockMenuPreset
-        extends ChestMenu {
+public abstract class BlockMenuPreset extends ChestMenu {
     public static Map<String, BlockMenuPreset> presets = new HashMap<>();
 
     private final String title;

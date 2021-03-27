@@ -7,6 +7,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Talisman;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -23,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -33,6 +35,10 @@ import java.util.Set;
 
 @TListener
 public class TalismanListener implements Listener {
+    public TalismanListener(JavaPlugin plugin) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDamageGet(final EntityDamageEvent e) {
         if (!e.isCancelled()) {

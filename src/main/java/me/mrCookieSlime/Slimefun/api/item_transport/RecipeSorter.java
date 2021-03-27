@@ -4,8 +4,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 import java.util.Comparator;
 
-public class RecipeSorter
-        implements Comparator<Integer> {
+public class RecipeSorter implements Comparator<Integer> {
     final BlockMenu menu;
 
     public RecipeSorter(BlockMenu menu) {
