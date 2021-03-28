@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.mrCookieSlime.Slimefun.SlimefunGuide;
+import org.jetbrains.annotations.NotNull;
 
 
 public class GitHubSetup {
@@ -41,18 +42,21 @@ public class GitHubSetup {
             }
 
 
+            @NotNull
             @Override
             public String getRepository() {
                 return "Slimefun/Slimefun4";
             }
 
 
+            @NotNull
             @Override
             public String getFileName() {
                 return "contributors";
             }
 
 
+            @NotNull
             @Override
             public String getURLSuffix() {
                 return "/contributors";
@@ -75,18 +79,21 @@ public class GitHubSetup {
             }
 
 
+            @NotNull
             @Override
             public String getRepository() {
                 return "Slimefun/Slimefun4";
             }
 
 
+            @NotNull
             @Override
             public String getFileName() {
                 return "repo";
             }
 
 
+            @NotNull
             @Override
             public String getURLSuffix() {
                 return "";
@@ -106,18 +113,21 @@ public class GitHubSetup {
             }
 
 
+            @NotNull
             @Override
             public String getRepository() {
                 return "Slimefun/Slimefun4";
             }
 
 
+            @NotNull
             @Override
             public String getFileName() {
                 return "languages";
             }
 
 
+            @NotNull
             @Override
             public String getURLSuffix() {
                 return "/languages";

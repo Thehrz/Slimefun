@@ -3,6 +3,7 @@ package me.mrCookieSlime.Slimefun;
 import io.izzel.taboolib.util.item.ItemBuilder;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.SkullItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Math.DoubleHandler;
 import me.mrCookieSlime.CSCoreLibPlugin.general.String.StringUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.World.CustomSkull;
@@ -34,10 +35,8 @@ import org.bukkit.material.MaterialData;
 import java.util.*;
 
 public class SlimefunGuide {
-    private static final int category_size = 36;
     private static final int[] slots = new int[]{1, 3, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
     public static Map<UUID, List<URID>> history = new HashMap<>();
-    public static int month = 0;
     public static List<Contributor> contributors = new ArrayList<>();
     public static int issues = 0;
     public static int forks = 0;
@@ -59,10 +58,6 @@ public class SlimefunGuide {
 
     public static ItemStack getItem() {
         return getItem(BookDesign.CHEST);
-    }
-
-    public static ItemStack getDeprecatedItem(boolean book) {
-        return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&eSlimefun之书 &8(右键点击打开)", book ? "" : "&2", "&7这是Slimefun的使用向导书", "&7书本虽已泛黄, 知识却历久弥新", "&7你可以在书中解锁物品", "&7查看机器搭建方法以及物品制作、合成方法");
     }
 
     public static void openSettings(Player p, final ItemStack guide) {
@@ -147,39 +142,69 @@ public class SlimefunGuide {
 
 
     public static void openCredits(Player p, final ItemStack guide) {
-        ChestMenu menu = new ChestMenu("重置内容");
+        final ChestMenu menu = new ChestMenu("§4贡献者鸣谢");
 
         menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler(p12 -> p12.playSound(p12.getLocation(), Sound.BLOCK_NOTE_HARP, 0.7F, 0.7F));
-
-        try {
-            menu.addItem(9, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzUwM2NiN2VkODQ1ZTdhNTA3ZjU2OWFmYzY0N2M0N2FjNDgzNzcxNDY1YzlhNjc5YTU0NTk0Yzc2YWZiYSJ9fX0="), "&c修复机器人漏洞", "", "&a修复机器人主人离线后一系列问题", "&a解决于: 2020.10.1"));
-            menu.addItem(10, new CustomItem(new ItemStack(Material.BARRIER), "&c修复汉化错误", "", "&a修复少量汉化错误", "&a解决于: 2020.10.1"));
-            menu.addItem(11, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&c修复核电错误", "", "&a修复核电爆炸会连带能量调度器", "&a解决于: 2020.10.1"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        menu.addMenuOpeningHandler((player) -> player.playSound(p.getLocation(), Sound.BLOCK_NOTE_HARP, 0.7F, 0.7F));
 
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
-                menu.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
+                menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
                 menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
             } else {
-                menu.addItem(4, new CustomItem(new ItemStack(Material.EMERALD), "&7⇦ 返回设置界面"));
-                menu.addMenuClickHandler(4, (p1, arg1, arg2, arg3) -> {
-                    SlimefunGuide.openSettings(p1, guide);
+                menu.addItem(4, new CustomItem(new MaterialData(Material.EMERALD), "&7\u21E6 返回设置"));
+                menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> {
+                    openSettings(p, guide);
                     return false;
                 });
             }
         }
 
-        for (int j = 0; j < 9; j++) {
-            menu.addItem(36 + j, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "));
-            menu.addMenuClickHandler(36 + j, (arg0, arg1, arg2, arg3) -> false);
+        int index = 9;
+
+        double total = 0;
+
+        for (Contributor contributor : contributors) {
+            total += contributor.getCommits();
+        }
+
+        for (final Contributor contributor : contributors) {
+            ItemStack skull = new SkullItem("&a" + contributor.getName(), contributor.getName());
+
+            ItemMeta meta = skull.getItemMeta();
+
+            if (contributor.getCommits() > 0) {
+                double percentage = DoubleHandler.fixDouble((contributor.getCommits() * 100.0) / total, 2);
+
+                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob()), ChatColor.translateAlternateColorCodes('&', "&7Contributions: &r" + contributor.getCommits() + " commits &7(&r" + percentage + "%&7)"), "", ChatColor.translateAlternateColorCodes('&', "&7\u21E8 Click to view my GitHub profile")));
+            } else {
+                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob())));
+            }
+
+            skull.setItemMeta(meta);
+
+            menu.addItem(index, skull);
+            menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
+                if (contributor.getCommits() > 0) {
+                    p.closeInventory();
+                    p.sendMessage("");
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&o" + contributor.getProfile()));
+                    p.sendMessage("");
+                }
+                return false;
+            });
+
+            index++;
+        }
+
+        for (int i = 0; i < 9; i++) {
+            menu.addItem(36 + i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
+            menu.addMenuClickHandler(36 + i, (player, slot, itemStack, clickAction) -> false);
         }
 
         menu.open(p);
     }
+
 
     public static void openCheatMenu(Player p) {
         openMainMenu(p, false, 1);
