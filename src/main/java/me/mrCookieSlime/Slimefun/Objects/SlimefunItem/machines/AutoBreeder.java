@@ -25,11 +25,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
-public class AutoBreeder
-        extends SlimefunItem {
-    private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+public class AutoBreeder extends SlimefunItem {
+    private static final int[] BORDER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
     public AutoBreeder(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
@@ -37,24 +35,21 @@ public class AutoBreeder
         new BlockMenuPreset(name, "&6自动喂养器") {
             @Override
             public void init() {
-                AutoBreeder.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return AutoBreeder.this.getInputSlots();
+                getInputSlots();
                 return new int[0];
             }
         };
@@ -64,13 +59,12 @@ public class AutoBreeder
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 me.mrCookieSlime.Slimefun.holograms.AutoBreeder.getArmorStand(b).remove();
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AutoBreeder.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -82,13 +76,11 @@ public class AutoBreeder
         });
     }
 
-
     protected void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+        for (int i : BORDER) {
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
     }
-
 
     public int getEnergyConsumption() {
         return 60;
@@ -97,7 +89,6 @@ public class AutoBreeder
     public int[] getInputSlots() {
         return new int[]{10, 11, 12, 13, 14, 15, 16};
     }
-
 
     @Override
     public void register(boolean slimefun) {
@@ -111,11 +102,9 @@ public class AutoBreeder
                 }
             }
 
-
             @Override
             public void uniqueTick() {
             }
-
 
             @Override
             public boolean isSynchronized() {
@@ -128,11 +117,12 @@ public class AutoBreeder
 
     protected void tick(Block b) throws Exception {
         for (Entity n : me.mrCookieSlime.Slimefun.holograms.AutoBreeder.getArmorStand(b).getNearbyEntities(4.0D, 2.0D, 4.0D)) {
-            if (Animals.isFeedable(n))
+            if (Animals.isFeedable(n)) {
                 for (int slot : getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), SlimefunItems.ORGANIC_FOOD, false)) {
-                        if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                        if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                             return;
+                        }
                         ChargableBlock.addCharge(b, -getEnergyConsumption());
                         BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                         Animals.feed(n);
@@ -140,6 +130,7 @@ public class AutoBreeder
                         return;
                     }
                 }
+            }
         }
     }
 }

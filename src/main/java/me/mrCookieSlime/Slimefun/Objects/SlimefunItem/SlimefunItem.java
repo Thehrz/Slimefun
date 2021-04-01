@@ -43,7 +43,6 @@ public class SlimefunItem {
 
     private final String id;
     private final URID urid;
-    private final int month = -1;
     private final Set<ItemHandler> itemhandlers = new HashSet<>();
     private String hash;
     private State state;
@@ -205,10 +204,10 @@ public class SlimefunItem {
     public static boolean isDisabled(ItemStack item) {
         for (SlimefunItem i : all) {
             if (i.isItem(item)) {
-                return i.isDisabled();
+                return !i.isDisabled();
             }
         }
-        return false;
+        return true;
     }
 
     public static Set<ItemHandler> getHandlers(String codeid) {
@@ -330,7 +329,7 @@ public class SlimefunItem {
     }
 
     public int getMonth() {
-        return this.month;
+        return -1;
     }
 
     public boolean isEnchantable() {

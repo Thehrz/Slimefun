@@ -39,13 +39,13 @@ public class WitherAssembler extends SlimefunItem {
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                WitherAssembler.this.constructMenu(this);
+                constructMenu(this);
             }
 
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
-                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
+                    if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
                         menu.replaceExistingItem(22, new CustomItem(new MaterialData(Material.SULPHUR), "&7激活状态: &4✘", "", "&e> 点击激活这个机器"));
                         menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "enabled", "true");
@@ -85,7 +85,7 @@ public class WitherAssembler extends SlimefunItem {
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    return WitherAssembler.this.getInputSlots();
+                    getInputSlots();
                 }
                 return new int[0];
             }
@@ -95,9 +95,9 @@ public class WitherAssembler extends SlimefunItem {
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
                     if (SlimefunManager.isItemSimiliar(item, new ItemStack(Material.SOUL_SAND), true)) {
-                        return WitherAssembler.this.getSoulSandSlots();
+                        getSoulSandSlots();
                     }
-                    return WitherAssembler.this.getWitherSkullSlots();
+                    getWitherSkullSlots();
                 }
                 return new int[0];
             }
@@ -110,19 +110,20 @@ public class WitherAssembler extends SlimefunItem {
                 BlockStorage.addBlockInfo(b, "enabled", "false");
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
-                if (reason.equals(UnregisterReason.EXPLODE)) return false;
+                if (reason.equals(UnregisterReason.EXPLODE)) {
+                    return false;
+                }
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : WitherAssembler.this.getSoulSandSlots()) {
+                    for (int slot : getSoulSandSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : WitherAssembler.this.getWitherSkullSlots()) {
+                    for (int slot : getWitherSkullSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -140,22 +141,17 @@ public class WitherAssembler extends SlimefunItem {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-
         for (int i : border_1) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
         }
-
 
         for (int i : border_2) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 12), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-
         preset.addItem(1, new CustomItem(new MaterialData(Material.SKULL_ITEM, (byte) 1), "&7凋零头颅槽", "", "&r这个槽位用于放置凋零头颅"), (arg0, arg1, arg2, arg3) -> false);
 
-
         preset.addItem(7, new CustomItem(new MaterialData(Material.SOUL_SAND), "&7灵魂沙槽", "", "&r这个槽位用于放置灵魂沙"), (arg0, arg1, arg2, arg3) -> false);
-
 
         preset.addItem(13, new CustomItem(new MaterialData(Material.WATCH), "&7冷却: &b30 秒", "", "&r这个机器需要半分钟的时间来作运转准备", "&r请耐心等待!"), (arg0, arg1, arg2, arg3) -> false);
     }
@@ -177,48 +173,45 @@ public class WitherAssembler extends SlimefunItem {
         return new int[]{25, 34};
     }
 
-
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
-
             @Override
             public void tick(final Block b, SlimefunItem sf, Config data) {
-                if ("false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled")))
+                if (BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
                     return;
+                }
                 if (WitherAssembler.lifetime % 60 == 0) {
-                    if (ChargableBlock.getCharge(b) < WitherAssembler.this.getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     int soulsand = 0;
                     int skulls = 0;
 
-                    for (int slot : WitherAssembler.this.getSoulSandSlots()) {
+                    for (int slot : getSoulSandSlots()) {
                         if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.SOUL_SAND), true, SlimefunManager.DataType.ALWAYS)) {
                             soulsand += BlockStorage.getInventory(b).getItemInSlot(slot).getAmount();
                             if (soulsand > 3) {
                                 soulsand = 4;
-
                                 break;
                             }
                         }
                     }
-                    for (int slot : WitherAssembler.this.getWitherSkullSlots()) {
+                    for (int slot : getWitherSkullSlots()) {
                         if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), (new MaterialData(Material.SKULL_ITEM, (byte) 1)).toItemStack(1), true, SlimefunManager.DataType.ALWAYS)) {
                             skulls += BlockStorage.getInventory(b).getItemInSlot(slot).getAmount();
                             if (skulls > 2) {
                                 skulls = 3;
-
                                 break;
                             }
                         }
                     }
                     if (soulsand > 3 && skulls > 2) {
-                        for (int slot : WitherAssembler.this.getSoulSandSlots()) {
+                        for (int slot : getSoulSandSlots()) {
                             if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.SOUL_SAND), true, SlimefunManager.DataType.ALWAYS)) {
                                 int amount = BlockStorage.getInventory(b).getItemInSlot(slot).getAmount();
                                 if (amount >= soulsand) {
                                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), soulsand));
-
                                     break;
                                 }
                                 soulsand -= amount;
@@ -227,7 +220,7 @@ public class WitherAssembler extends SlimefunItem {
                         }
 
 
-                        for (int slot : WitherAssembler.this.getWitherSkullSlots()) {
+                        for (int slot : getWitherSkullSlots()) {
                             if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), (new MaterialData(Material.SKULL_ITEM, (byte) 1)).toItemStack(1), true, SlimefunManager.DataType.ALWAYS)) {
                                 int amount = BlockStorage.getInventory(b).getItemInSlot(slot).getAmount();
                                 if (amount >= skulls) {
@@ -241,7 +234,7 @@ public class WitherAssembler extends SlimefunItem {
                         }
 
 
-                        ChargableBlock.addCharge(b, -WitherAssembler.this.getEnergyConsumption());
+                        ChargableBlock.addCharge(b, -getEnergyConsumption());
 
                         final double offset = Double.parseDouble(BlockStorage.getLocationInfo(b.getLocation(), "offset"));
 
@@ -250,12 +243,10 @@ public class WitherAssembler extends SlimefunItem {
                 }
             }
 
-
             @Override
             public void uniqueTick() {
                 WitherAssembler.lifetime++;
             }
-
 
             @Override
             public boolean isSynchronized() {

@@ -31,7 +31,7 @@ public class CargoOutputNode
         new BlockMenuPreset(name, "&6输出节点") {
             @Override
             public void init() {
-                CargoOutputNode.this.constructMenu(this);
+                constructMenu(this);
             }
 
 

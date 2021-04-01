@@ -1,8 +1,10 @@
 package me.mrCookieSlime.Slimefun.GitHub;
 
+import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import me.mrCookieSlime.Slimefun.SlimefunStartup;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
@@ -23,11 +25,18 @@ public abstract class GitHubConnector {
         connectors.add(this);
     }
 
-
+    @NotNull
     public abstract String getFileName();
 
-
+    @NotNull
     public abstract String getRepository();
+
+    @NotNull
+    public abstract String getURLSuffix();
+
+    public abstract void onSuccess(JsonElement paramJsonElement);
+
+    public abstract void onFailure();
 
     public void pullFile() {
         if (SlimefunStartup.getCfg().getBoolean("options.print-out-github-data-retrieving")) {
@@ -60,12 +69,6 @@ public abstract class GitHubConnector {
         }
     }
 
-    public abstract String getURLSuffix();
-
-    public abstract void onSuccess(JsonElement paramJsonElement);
-
-    public abstract void onFailure();
-
     public boolean hasData() {
         return getFile().exists();
     }
@@ -94,6 +97,23 @@ public abstract class GitHubConnector {
             e.printStackTrace();
             onFailure();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        GitHubConnector that = (GitHubConnector) obj;
+        return Objects.equal(file, that.file);
+    }
+
+    @Override
+    public int hashCode() {
+        return getRepository().hashCode() + getFileName().hashCode() + getURLSuffix().hashCode();
     }
 }
 

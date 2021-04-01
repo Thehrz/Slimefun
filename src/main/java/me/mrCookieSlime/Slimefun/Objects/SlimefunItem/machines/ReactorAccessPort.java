@@ -25,12 +25,11 @@ import org.bukkit.material.MaterialData;
 import java.util.Iterator;
 import java.util.Map;
 
-public class ReactorAccessPort
-        extends SlimefunItem {
-    private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 21, 23};
-    private static final int[] border_1 = new int[]{9, 10, 11, 18, 20, 27, 29, 36, 38, 45, 46, 47};
-    private static final int[] border_2 = new int[]{15, 16, 17, 24, 26, 33, 35, 42, 44, 51, 52, 53};
-    private static final int[] border_3 = new int[]{30, 31, 32, 39, 41, 48, 49, 50};
+public class ReactorAccessPort extends SlimefunItem {
+    private static final int[] BORDER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 21, 23};
+    private static final int[] BORDER_1 = new int[]{9, 10, 11, 18, 20, 27, 29, 36, 38, 45, 46, 47};
+    private static final int[] BORDER_2 = new int[]{15, 16, 17, 24, 26, 33, 35, 42, 44, 51, 52, 53};
+    private static final int[] BORDER_3 = new int[]{30, 31, 32, 39, 41, 48, 49, 50};
 
     public ReactorAccessPort(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
@@ -38,33 +37,30 @@ public class ReactorAccessPort
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                ReactorAccessPort.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return ReactorAccessPort.this.getInputSlots();
+                getInputSlots();
                 return ReactorAccessPort.getOutputSlots();
             }
-
 
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    if (SlimefunManager.isItemSimiliar(item, SlimefunItems.REACTOR_COOLANT_CELL, true))
-                        return ReactorAccessPort.this.getCoolantSlots();
+                    if (SlimefunManager.isItemSimiliar(item, SlimefunItems.REACTOR_COOLANT_CELL, true)) {
+                        return getCoolantSlots();
+                    }
                     return ReactorAccessPort.this.getFuelSlots();
                 }
                 return ReactorAccessPort.getOutputSlots();
@@ -76,18 +72,17 @@ public class ReactorAccessPort
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : ReactorAccessPort.this.getFuelSlots()) {
+                    for (int slot : getFuelSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : ReactorAccessPort.this.getCoolantSlots()) {
+                    for (int slot : getCoolantSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -139,22 +134,22 @@ public class ReactorAccessPort
     }
 
     private void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
+        for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
 
-        for (int i : border_1) {
+        for (int i : BORDER_1) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
 
-        for (int i : border_2) {
+        for (int i : BORDER_2) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
 
-        for (int i : border_3) {
+        for (int i : BORDER_3) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 13), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 

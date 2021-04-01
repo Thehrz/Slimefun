@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems;
 
+import com.google.common.base.Objects;
 import org.bukkit.inventory.ItemStack;
 
 public class MachineFuel {
@@ -32,29 +33,20 @@ public class MachineFuel {
     }
 
     @Override
-    public int hashCode() {
-        if (output != null) {
-            return fuel.hashCode() + output.hashCode() + seconds;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return fuel.hashCode() + seconds;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MachineFuel that = (MachineFuel) o;
+        return seconds == that.seconds && Objects.equal(fuel, that.fuel) && Objects.equal(output, that.output);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        MachineFuel machineFuel = (MachineFuel) obj;
-        if (output != null && machineFuel.output != null) {
-            return seconds == machineFuel.seconds && fuel.equals(machineFuel.fuel) && output.equals(machineFuel.output);
-        }
-        return seconds == machineFuel.seconds && fuel.equals(machineFuel.fuel);
+    public int hashCode() {
+        return Objects.hashCode(seconds, fuel, output);
     }
 }
 

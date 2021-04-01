@@ -1,5 +1,6 @@
 package me.mrCookieSlime.Slimefun.api;
 
+import com.google.common.base.Objects;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Math.DoubleHandler;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -21,9 +22,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 public class BlockStorage {
@@ -385,61 +383,29 @@ public class BlockStorage {
                 storage.getUniversalInventory(l).save();
             }
             final String chunk_string = locationToChunkString(l);
-            if (BlockStorage.ticking_chunks.containsKey(chunk_string)) {
-                final Set<Location> locations = BlockStorage.ticking_chunks.get(chunk_string);
+            if (ticking_chunks.containsKey(chunk_string)) {
+                Set<Location> locations = BlockStorage.ticking_chunks.get(chunk_string);
                 locations.remove(l);
                 if (locations.isEmpty()) {
-                    BlockStorage.ticking_chunks.remove(chunk_string);
-                    BlockStorage.loaded_tickers.remove(chunk_string);
+                    ticking_chunks.remove(chunk_string);
+                    loaded_tickers.remove(chunk_string);
                 } else {
-                    BlockStorage.ticking_chunks.put(chunk_string, locations);
+                    ticking_chunks.put(chunk_string, locations);
                 }
             }
         }
     }
 
     @Deprecated
-    public static void moveBlockInfo(final Block block, final Block newBlock) {
+    public static void moveBlockInfo(Block block, Block newBlock) {
         moveBlockInfo(block.getLocation(), newBlock.getLocation());
     }
 
-    public static void moveBlockInfo(final Location from, final Location to) {
+    public static void moveBlockInfo(Location from, Location to) {
         SlimefunStartup.ticker.move.put(from, to);
     }
 
-    @Deprecated
-    public static void _integrated_moveBlockInfo(final Block block, final Block newBlock) {
-        _integrated_moveLocationInfo(block.getLocation(), newBlock.getLocation());
-    }
-
-    public static void _integrated_moveLocationInfo(final Location from, final Location to) {
-        if (!hasBlockInfo(from)) {
-            return;
-        }
-        final BlockStorage storage = getStorage(from.getWorld());
-        setBlockInfo(to, getLocationInfo(from), true);
-        if (storage.inventories.containsKey(from)) {
-            final BlockMenu menu = storage.inventories.get(from);
-            storage.inventories.put(to, menu);
-            storage.clearInventory(from);
-            menu.move(to);
-        }
-        refreshCache(storage, from, getLocationInfo(from).getString("id"), null, true);
-        storage.storage.remove(from);
-        final String chunk_string = locationToChunkString(from);
-        if (BlockStorage.ticking_chunks.containsKey(chunk_string)) {
-            final Set<Location> locations = BlockStorage.ticking_chunks.get(chunk_string);
-            locations.remove(from);
-            if (locations.isEmpty()) {
-                BlockStorage.ticking_chunks.remove(chunk_string);
-                BlockStorage.loaded_tickers.remove(chunk_string);
-            } else {
-                BlockStorage.ticking_chunks.put(chunk_string, locations);
-            }
-        }
-    }
-
-    private static void refreshCache(final BlockStorage storage, final Location l, final String key, final String value, final boolean updateTicker) {
+    private static void refreshCache(BlockStorage storage, Location l, final String key, final String value, final boolean updateTicker) {
         final Config cfg = storage.cache_blocks.containsKey(key) ? storage.cache_blocks.get(key) : new Config("data-storage/Slimefun/stored-blocks/" + l.getWorld().getName() + "/" + key + ".sfb");
         cfg.setValue(serializeLocation(l), value);
         storage.cache_blocks.put(key, cfg);
@@ -457,45 +423,45 @@ public class BlockStorage {
         }
     }
 
-    public static SlimefunItem check(final Block block) {
+    public static SlimefunItem check(Block block) {
         return check(block.getLocation());
     }
 
-    public static SlimefunItem check(final Location l) {
+    public static SlimefunItem check(Location l) {
         if (!hasBlockInfo(l)) {
             return null;
         }
         return SlimefunItem.getByID(getLocationInfo(l, "id"));
     }
 
-    public static String checkID(final Block block) {
+    public static String checkID(Block block) {
         return checkID(block.getLocation());
     }
 
-    public static boolean check(final Block block, final String slimefunItem) {
+    public static boolean check(Block block, String slimefunItem) {
         return check(block.getLocation(), slimefunItem);
     }
 
-    public static String checkID(final Location l) {
+    public static String checkID(Location l) {
         if (!hasBlockInfo(l)) {
             return null;
         }
         return getLocationInfo(l, "id");
     }
 
-    public static boolean check(final Location l, final String slimefunItem) {
+    public static boolean check(Location l, String slimefunItem) {
         if (!hasBlockInfo(l)) {
             return false;
         }
         try {
-            final String id = getLocationInfo(l, "id");
+            String id = getLocationInfo(l, "id");
             return id != null && id.equalsIgnoreCase(slimefunItem);
         } catch (NullPointerException x) {
             return false;
         }
     }
 
-    public static boolean isWorldRegistered(final String name) {
+    public static boolean isWorldRegistered(String name) {
         return BlockStorage.worlds.containsKey(name);
     }
 
@@ -504,32 +470,28 @@ public class BlockStorage {
     }
 
     @Deprecated
-    public static Set<Block> getTickingBlocks(final Chunk chunk) {
+    public static Set<Block> getTickingBlocks(Chunk chunk) {
         return getTickingBlocks(chunk.toString());
     }
 
-    public static Set<Location> getTickingLocations(final Chunk chunk) {
-        return getTickingLocations(chunk.toString());
-    }
-
     @Deprecated
-    public static Set<Block> getTickingBlocks(final String chunk) {
-        final Set<Block> ret = new HashSet<>();
-        for (final Location l : getTickingLocations(chunk)) {
+    public static Set<Block> getTickingBlocks(String chunk) {
+        Set<Block> ret = new HashSet<>();
+        for (Location l : getTickingLocations(chunk)) {
             ret.add(l.getBlock());
         }
         return ret;
     }
 
-    public static Set<Location> getTickingLocations(final String chunk) {
+    public static Set<Location> getTickingLocations(String chunk) {
         return new HashSet<>(BlockStorage.ticking_chunks.get(chunk));
     }
 
-    public static BlockMenu getInventory(final Block b) {
+    public static BlockMenu getInventory(Block b) {
         return getInventory(b.getLocation());
     }
 
-    public static BlockMenu getInventory(final Location l) {
+    public static BlockMenu getInventory(Location l) {
         final BlockStorage storage = getStorage(l.getWorld());
         if (storage == null) {
             return null;
@@ -544,13 +506,13 @@ public class BlockStorage {
         return new JSONParser();
     }
 
-    public static Config getChunkInfo(final Chunk chunk) {
+    public static Config getChunkInfo(Chunk chunk) {
         try {
             final Config cfg = new Config("data-storage/Slimefun/temp.yml");
             if (!BlockStorage.map_chunks.containsKey(serializeChunk(chunk))) {
                 return cfg;
             }
-            for (final Map.Entry<String, String> entry : parseJSON(getJSONData(chunk)).entrySet()) {
+            for (Map.Entry<String, String> entry : parseJSON(getJSONData(chunk)).entrySet()) {
                 cfg.setValue(entry.getKey(), entry.getValue());
             }
             return cfg;
@@ -567,17 +529,17 @@ public class BlockStorage {
         }
     }
 
-    public static boolean hasChunkInfo(final Chunk chunk) {
+    public static boolean hasChunkInfo(Chunk chunk) {
         return BlockStorage.map_chunks.containsKey(serializeChunk(chunk));
     }
 
-    public static void setChunkInfo(final Chunk chunk, final String key, final String value) {
+    public static void setChunkInfo(Chunk chunk, String key, String value) {
         Config cfg = new Config("data-storage/Slimefun/temp.yml");
         if (hasChunkInfo(chunk)) {
             cfg = getChunkInfo(chunk);
         }
         cfg.setValue(key, value);
-        final JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject(new HashMap<String, String>());
         for (final String path : cfg.getKeys()) {
             json.put(path, cfg.getString(path));
         }
@@ -585,35 +547,35 @@ public class BlockStorage {
         ++BlockStorage.chunk_changes;
     }
 
-    public static String getChunkInfo(final Chunk chunk, final String key) {
+    public static String getChunkInfo(Chunk chunk, String key) {
         return getChunkInfo(chunk).getString(key);
     }
 
-    public static boolean hasChunkInfo(final Chunk chunk, final String key) {
+    public static boolean hasChunkInfo(Chunk chunk, String key) {
         return getChunkInfo(chunk, key) != null;
     }
 
-    public static void clearChunkInfo(final Chunk chunk) {
+    public static void clearChunkInfo(Chunk chunk) {
         BlockStorage.map_chunks.remove(serializeChunk(chunk));
     }
 
-    public static String getBlockInfoAsJson(final Block block) {
+    public static String getBlockInfoAsJson(Block block) {
         return getBlockInfoAsJson(block.getLocation());
     }
 
-    public static String getBlockInfoAsJson(final Location l) {
+    public static String getBlockInfoAsJson(Location l) {
         return serializeBlockInfo(getLocationInfo(l));
     }
 
     public void computeChanges() {
-        this.changes = this.cache_blocks.size() + BlockStorage.chunk_changes;
+        changes = cache_blocks.size() + BlockStorage.chunk_changes;
         final Map<Location, BlockMenu> inventories2 = new HashMap<>(this.inventories);
         for (final Map.Entry<Location, BlockMenu> entry : inventories2.entrySet()) {
-            this.changes += entry.getValue().changes;
+            changes += entry.getValue().changes;
         }
         final Map<String, UniversalBlockMenu> universal_inventories2 = new HashMap<>(BlockStorage.universal_inventories);
         for (final Map.Entry<String, UniversalBlockMenu> entry2 : universal_inventories2.entrySet()) {
-            this.changes += entry2.getValue().changes;
+            changes += entry2.getValue().changes;
         }
     }
 
@@ -625,56 +587,63 @@ public class BlockStorage {
         this.save(true, remove);
     }
 
-    public void save(final boolean computeChanges, final boolean remove) {
+    public void save(boolean computeChanges, boolean remove) {
         if (computeChanges) {
-            this.computeChanges();
+            computeChanges();
         }
-        if (this.changes == 0) {
+
+        if (changes == 0) {
             return;
         }
+
         System.out.println("[Slimefun] 正在为世界 \"" + this.world.getName() + "\" 保存方块信息 (共保存" + this.changes + " 个改变)");
-        final Map<String, Config> cache = new HashMap<>(this.cache_blocks);
-        for (final Map.Entry<String, Config> entry : cache.entrySet()) {
-            this.cache_blocks.remove(entry.getKey());
-            final Config cfg = entry.getValue();
+
+        Map<String, Config> cache = new HashMap<>(cache_blocks);
+
+        for (Map.Entry<String, Config> entry : cache.entrySet()) {
+            cache_blocks.remove(entry.getKey());
+            Config cfg = entry.getValue();
             if (cfg.getKeys().isEmpty()) {
                 cfg.getFile().delete();
             } else {
-                final File tmpFile = new File(cfg.getFile().getParentFile(), cfg.getFile().getName() + ".tmp");
-                cfg.save(tmpFile);
-                try {
-                    Files.move(tmpFile.toPath(), cfg.getFile().toPath(), StandardCopyOption.ATOMIC_MOVE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                cfg.save();
             }
         }
-        final Map<Location, BlockMenu> inventories2 = new HashMap<>(this.inventories);
-        for (final Map.Entry<Location, BlockMenu> entry2 : inventories2.entrySet()) {
-            entry2.getValue().save(entry2.getKey());
+
+        Map<Location, BlockMenu> inventories2 = new HashMap<Location, BlockMenu>(inventories);
+
+        for (Map.Entry<Location, BlockMenu> entry : inventories2.entrySet()) {
+            entry.getValue().save(entry.getKey());
         }
-        final Map<String, UniversalBlockMenu> universal_inventories2 = new HashMap<>(BlockStorage.universal_inventories);
-        for (final Map.Entry<String, UniversalBlockMenu> entry3 : universal_inventories2.entrySet()) {
-            entry3.getValue().save();
+
+        Map<String, UniversalBlockMenu> universal_inventories2 = new HashMap<String, UniversalBlockMenu>(universal_inventories);
+
+        for (Map.Entry<String, UniversalBlockMenu> entry : universal_inventories2.entrySet()) {
+            entry.getValue().save();
         }
-        if (BlockStorage.chunk_changes > 0) {
-            final File chunks = new File("data-storage/Slimefun/stored-chunks/chunks.sfc");
-            final Config cfg2 = new Config("data-storage/Slimefun/temp.yml");
-            for (final Map.Entry<String, String> entry4 : BlockStorage.map_chunks.entrySet()) {
-                cfg2.setValue(entry4.getKey(), entry4.getValue());
+
+        if (chunk_changes > 0) {
+            File chunks = new File(path_chunks + "chunks.sfc");
+            Config cfg = new Config("data-storage/Slimefun/temp.yml");
+
+            for (Map.Entry<String, String> entry : map_chunks.entrySet()) {
+                cfg.setValue(entry.getKey(), entry.getValue());
             }
-            cfg2.save(chunks);
+
+            cfg.save(chunks);
+
             if (remove) {
-                BlockStorage.worlds.remove(this.world.getName());
+                worlds.remove(world.getName());
             }
         }
-        this.changes = 0;
-        BlockStorage.chunk_changes = 0;
+
+        changes = 0;
+        chunk_changes = 0;
     }
 
     public BlockMenu loadInventory(final Location l, final BlockMenuPreset preset) {
-        final BlockMenu menu = new BlockMenu(preset, l);
-        this.inventories.put(l, menu);
+        BlockMenu menu = new BlockMenu(preset, l);
+        inventories.put(l, menu);
         return menu;
     }
 
@@ -683,12 +652,12 @@ public class BlockStorage {
     }
 
     public void clearInventory(final Location l) {
-        final BlockMenu menu = getInventory(l);
+        BlockMenu menu = getInventory(l);
         for (final HumanEntity human : new ArrayList<>(menu.toInventory().getViewers())) {
             human.closeInventory();
         }
-        this.inventories.get(l).delete(l);
-        this.inventories.remove(l);
+        inventories.get(l).delete(l);
+        inventories.remove(l);
     }
 
     public boolean hasInventory(final Location l) {
@@ -719,5 +688,23 @@ public class BlockStorage {
     public boolean hasUniversalInventory(final Location l) {
         final String id = checkID(l);
         return id != null && this.hasUniversalInventory(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(storage, inventories, cache_blocks, world, changes);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BlockStorage that = (BlockStorage) obj;
+        return changes == that.changes && Objects.equal(storage, that.storage) && Objects.equal(inventories, that.inventories) && Objects.equal(cache_blocks, that.cache_blocks) && Objects.equal(world, that.world);
     }
 }

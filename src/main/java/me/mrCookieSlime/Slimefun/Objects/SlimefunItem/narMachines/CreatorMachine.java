@@ -32,7 +32,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class CreatorMachine extends SlimefunItem {
     public static final Map<Block, MachineRecipe> processing = new HashMap<>();
@@ -48,25 +52,24 @@ public abstract class CreatorMachine extends SlimefunItem {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
-
             @Override
             public void init() {
-                CreatorMachine.this.constructMenu(this);
+                constructMenu(this);
             }
 
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
-                if (BlockStorage.getBlockInfo(b, "random-code") == null) {
-                    Random random = new Random();
+                if (BlockStorage.getLocationInfo(b.getLocation(), "random-code") == null) {
+                    SecureRandom random = new SecureRandom();
                     BlockStorage.addBlockInfo(b, "random-code", String.valueOf(random.nextInt(127)));
                 }
-                if (BlockStorage.getBlockInfo(b, "last-code") == null) {
+                if (BlockStorage.getLocationInfo(b.getLocation(), "last-code") == null) {
                     BlockStorage.addBlockInfo(b, "last-code", "0000000");
                 }
-                if (BlockStorage.getBlockInfo(b, "set-code") == null) {
+                if (BlockStorage.getLocationInfo(b.getLocation(), "set-code") == null) {
                     BlockStorage.addBlockInfo(b, "set-code", "0000000");
                 }
-                if (BlockStorage.getBlockInfo(b, "output-item") == null) {
+                if (BlockStorage.getLocationInfo(b.getLocation(), "output-item") == null) {
                     BlockStorage.addBlockInfo(b, "output-item", "0");
                 }
                 try {
@@ -100,18 +103,17 @@ public abstract class CreatorMachine extends SlimefunItem {
                 }
 
 
-                ItemStack resultItem = CreatorMachine.this.recipes.get(Integer.parseInt(BlockStorage.getBlockInfo(b, "output-item"))).getOutput()[0];
+                ItemStack resultItem = recipes.get(Integer.parseInt(BlockStorage.getBlockInfo(b, "output-item"))).getOutput()[0];
                 menu.replaceExistingItem(22, new CustomItem(resultItem, "§7制作: " + resultItem.getItemMeta().getDisplayName()));
                 menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
-                    Random random = new Random();
+                    SecureRandom random = new SecureRandom();
                     BlockStorage.addBlockInfo(b, "random-code", String.valueOf(random.nextInt(127)));
-                    int outItem = Integer.valueOf(BlockStorage.getBlockInfo(b, "output-item"));
+                    int outItem = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "output-item"));
                     BlockStorage.addBlockInfo(b, "output-item", (outItem >= CreatorMachine.this.recipes.size() - 1) ? "0" : String.valueOf(++outItem));
                     newInstance(menu, b);
                     return false;
                 });
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
@@ -119,13 +121,12 @@ public abstract class CreatorMachine extends SlimefunItem {
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    return CreatorMachine.this.getInputSlots();
+                    return getInputSlots();
                 }
-                return CreatorMachine.this.getOutputSlots();
+                return getOutputSlots();
             }
         };
         registerBlockHandler(name, new SlimefunBlockHandler() {
@@ -133,25 +134,24 @@ public abstract class CreatorMachine extends SlimefunItem {
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
 
-                    for (int slot : CreatorMachine.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                         }
                     }
-                    for (int slot : CreatorMachine.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                         }
                     }
                 }
-                CreatorMachine.progress.remove(b);
-                CreatorMachine.processing.remove(b);
+                progress.remove(b);
+                processing.remove(b);
                 return true;
             }
         });
@@ -165,14 +165,12 @@ public abstract class CreatorMachine extends SlimefunItem {
 
             @Override
             public void init() {
-                CreatorMachine.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
@@ -180,13 +178,12 @@ public abstract class CreatorMachine extends SlimefunItem {
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    return CreatorMachine.this.getInputSlots();
+                    return getInputSlots();
                 }
-                return CreatorMachine.this.getOutputSlots();
+                return getOutputSlots();
             }
         };
         registerBlockHandler(name, new SlimefunBlockHandler() {
@@ -194,21 +191,20 @@ public abstract class CreatorMachine extends SlimefunItem {
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
-                for (int slot : CreatorMachine.this.getInputSlots()) {
+                for (int slot : getInputSlots()) {
                     if (BlockStorage.getInventory(b).getItemInSlot(slot) != null) {
                         b.getWorld().dropItemNaturally(b.getLocation(), BlockStorage.getInventory(b).getItemInSlot(slot));
                     }
                 }
-                for (int slot : CreatorMachine.this.getOutputSlots()) {
+                for (int slot : getOutputSlots()) {
                     if (BlockStorage.getInventory(b).getItemInSlot(slot) != null) {
                         b.getWorld().dropItemNaturally(b.getLocation(), BlockStorage.getInventory(b).getItemInSlot(slot));
                     }
                 }
-                CreatorMachine.processing.remove(b);
-                CreatorMachine.progress.remove(b);
+                processing.remove(b);
+                progress.remove(b);
                 return true;
             }
         });
@@ -237,7 +233,6 @@ public abstract class CreatorMachine extends SlimefunItem {
                 public boolean onClick(Player player, int i, ItemStack item, ClickAction action) {
                     return false;
                 }
-
 
                 @Override
                 public boolean onClick(InventoryClickEvent event, Player player, int slot, ItemStack item, ClickAction action) {
@@ -302,7 +297,7 @@ public abstract class CreatorMachine extends SlimefunItem {
     protected void pushMainItems(Block b, ItemStack[] items) {
         if (BlockStorage.getBlockInfo(b, "random-code").equals(String.valueOf(invertBinary(BlockStorage.getBlockInfo(b, "set-code"))))) {
 
-            Random random = new Random();
+            SecureRandom random = new SecureRandom();
             BlockStorage.addBlockInfo(b, "random-code", String.valueOf(random.nextInt(127)));
             Inventory inv = inject(b);
             inv.addItem(items);
@@ -320,21 +315,17 @@ public abstract class CreatorMachine extends SlimefunItem {
         }
     }
 
-
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
-
             @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 CreatorMachine.this.tick(b);
             }
 
-
             @Override
             public void uniqueTick() {
             }
-
 
             @Override
             public boolean isSynchronized() {

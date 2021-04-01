@@ -43,9 +43,7 @@ public class CSCoreLibLoader {
         System.err.println(" ");
         System.err.println("#################### - INFO - ####################");
         System.err.println(" ");
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
-            if (CSCoreLibLoader.this.connect()) CSCoreLibLoader.this.install();
-        }, 10L);
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> install(), 10L);
         return false;
     }
 

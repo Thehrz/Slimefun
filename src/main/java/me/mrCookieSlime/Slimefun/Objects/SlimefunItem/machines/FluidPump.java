@@ -35,8 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class FluidPump
-        extends SlimefunItem {
+public class FluidPump extends SlimefunItem {
     private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 22};
     private static final int[] border_in = new int[]{9, 10, 11, 12, 18, 21, 27, 28, 29, 30};
     private static final int[] border_out = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
@@ -49,25 +48,24 @@ public class FluidPump
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                FluidPump.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return FluidPump.this.getInputSlots();
-                return FluidPump.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
     }
@@ -89,13 +87,11 @@ public class FluidPump
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
-                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
 
-                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -124,7 +120,7 @@ public class FluidPump
                         return;
                     ItemStack output = new ItemStack(Material.LAVA_BUCKET);
 
-                    if (!fits(b, new ItemStack[]{output}))
+                    if (fits(b, new ItemStack[]{output}))
                         return;
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
@@ -146,7 +142,7 @@ public class FluidPump
                         return;
                     ItemStack output = new ItemStack(Material.WATER_BUCKET);
 
-                    if (!fits(b, new ItemStack[]{output}))
+                    if (fits(b, new ItemStack[]{output}))
                         return;
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
@@ -173,11 +169,9 @@ public class FluidPump
                 FluidPump.this.tick(b);
             }
 
-
             @Override
             public void uniqueTick() {
             }
-
 
             @Override
             public boolean isSynchronized() {
@@ -201,7 +195,7 @@ public class FluidPump
     }
 
     protected boolean fits(Block b, ItemStack[] items) {
-        return inject(b).addItem(items).isEmpty();
+        return !inject(b).addItem(items).isEmpty();
     }
 
     protected void pushItems(Block b, ItemStack[] items) {

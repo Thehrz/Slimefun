@@ -8,13 +8,12 @@ import java.util.Comparator;
 public class ScriptDownloadSorter implements Comparator<Config> {
     ProgrammableAndroid android;
 
-    public ScriptDownloadSorter(ProgrammableAndroid programmableAndroid) {
+    public ScriptDownloadSorter(final ProgrammableAndroid programmableAndroid) {
         this.android = programmableAndroid;
     }
 
     @Override
-    public int compare(Config c1, Config c2) {
+    public int compare(final Config c1, final Config c2) {
         return c2.getInt("downloads") - c1.getInt("downloads");
     }
 }
-

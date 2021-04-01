@@ -22,27 +22,23 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class OilPump
-        extends AContainer {
+public abstract class OilPump extends AContainer {
     public OilPump(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                OilPump.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
@@ -50,45 +46,41 @@ public abstract class OilPump
                     return false;
                 }
 
-                if (!OreGenSystem.wasResourceGenerated(OreGenSystem.getResource("原油"), b.getChunk())) {
+                if (OreGenSystem.wasResourceGenerated(OreGenSystem.getResource("原油"), b.getChunk())) {
                     Messages.local.sendTranslation(p, "gps.geo.scan-required", true);
                     return false;
                 }
                 return true;
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return OilPump.this.getInputSlots();
-                return OilPump.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
     }
-
 
     @Override
     public String getMachineIdentifier() {
         return "OIL_PUMP";
     }
 
-
     @Override
     public String getInventoryTitle() {
         return "&4原油泵";
     }
-
 
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_SPADE);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
     }
-
 
     @Override
     protected void tick(Block b) {
@@ -108,14 +100,15 @@ public abstract class OilPump
 
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
-                if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                     return;
+                }
                 ChargableBlock.addCharge(b, -getEnergyConsumption());
 
                 progress.put(b, timeleft - 1);
             } else {
 
-                BlockStorage.getInventory(b).replaceExistingItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "));
+                BlockStorage.getInventory(b).replaceExistingItem(22, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "));
                 pushItems(b, processing.get(b).getOutput());
 
                 progress.remove(b);
@@ -126,8 +119,9 @@ public abstract class OilPump
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.BUCKET), true)) {
                     MachineRecipe r = new MachineRecipe(26, new ItemStack[0], new ItemStack[]{SlimefunItems.BUCKET_OF_OIL});
-                    if (!fits(b, r.getOutput()))
+                    if (!fits(b, r.getOutput())) {
                         return;
+                    }
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                     processing.put(b, r);
                     progress.put(b, r.getTicks());

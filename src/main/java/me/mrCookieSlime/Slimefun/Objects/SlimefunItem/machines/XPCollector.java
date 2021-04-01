@@ -22,11 +22,9 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
-public class XPCollector
-        extends SlimefunItem {
-    private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+public class XPCollector extends SlimefunItem {
+    private static final int[] BORDER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
     public XPCollector(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
@@ -34,24 +32,21 @@ public class XPCollector
         new BlockMenuPreset(name, "&a经验收集器") {
             @Override
             public void init() {
-                XPCollector.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.WITHDRAW)) return XPCollector.this.getOutputSlots();
+                getOutputSlots();
                 return new int[0];
             }
         };
@@ -62,13 +57,12 @@ public class XPCollector
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 me.mrCookieSlime.Slimefun.holograms.XPCollector.getArmorStand(b).remove();
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : XPCollector.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -111,8 +105,8 @@ public class XPCollector
 
 
     protected void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 10), " "), (arg0, arg1, arg2, arg3) -> false);
+        for (int i : BORDER) {
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 10), " "), (arg0, arg1, arg2, arg3) -> false);
         }
     }
 
@@ -134,11 +128,9 @@ public class XPCollector
                 }
             }
 
-
             @Override
             public void uniqueTick() {
             }
-
 
             @Override
             public boolean isSynchronized() {
@@ -149,11 +141,12 @@ public class XPCollector
         super.register(slimefun);
     }
 
-    protected void tick(Block b) {
+    protected void tick(Block b) throws Exception {
         for (Entity n : me.mrCookieSlime.Slimefun.holograms.XPCollector.getArmorStand(b).getNearbyEntities(4.0D, 4.0D, 4.0D)) {
             if (n instanceof ExperienceOrb) {
-                if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                     return;
+                }
                 if (n.isValid()) {
                     int xp = getEXP(b) + ((ExperienceOrb) n).getExperience();
 
@@ -178,7 +171,9 @@ public class XPCollector
 
     private int getEXP(Block b) {
         Config cfg = BlockStorage.getLocationInfo(b.getLocation());
-        if (cfg.contains("stored-exp")) return Integer.parseInt(cfg.getString("stored-exp"));
+        if (cfg.contains("stored-exp")) {
+            return Integer.parseInt(cfg.getString("stored-exp"));
+        }
 
         BlockStorage.addBlockInfo(b, "stored-exp", "0");
         return 0;

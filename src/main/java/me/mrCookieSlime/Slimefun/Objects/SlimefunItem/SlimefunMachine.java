@@ -70,7 +70,7 @@ public class SlimefunMachine
                 this.recipes.add(new ItemStack[]{i});
                 continue;
             }
-            if (!SlimefunItem.isDisabled(i)) this.recipes.add(new ItemStack[]{i});
+            if (SlimefunItem.isDisabled(i)) this.recipes.add(new ItemStack[]{i});
         }
     }
 

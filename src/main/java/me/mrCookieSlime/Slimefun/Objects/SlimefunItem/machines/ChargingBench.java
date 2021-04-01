@@ -23,7 +23,7 @@ public class ChargingBench
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                ChargingBench.this.constructMenu(this);
+                constructMenu(this);
             }
 
 
@@ -40,8 +40,10 @@ public class ChargingBench
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return ChargingBench.this.getInputSlots();
-                return ChargingBench.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
     }

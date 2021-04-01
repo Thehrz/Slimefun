@@ -65,15 +65,15 @@ public class TickerTask implements Runnable {
         if (!this.HALTED) {
             for (String c : BlockStorage.getTickingChunks()) {
                 long timestamp2 = System.currentTimeMillis();
-                this.chunks++;
+                chunks++;
 
 
                 for (Location l : BlockStorage.getTickingLocations(c)) {
                     if (l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4)) {
-                        final Block b = l.getBlock();
-                        final SlimefunItem item = BlockStorage.check(l);
+                        Block b = l.getBlock();
+                        SlimefunItem item = BlockStorage.check(l);
                         if (item != null) {
-                            this.machines++;
+                            machines++;
                             try {
                                 item.getBlockTicker().update();
                                 if (item.getBlockTicker().isSynchronized()) {
@@ -82,14 +82,15 @@ public class TickerTask implements Runnable {
                                             long timestamp3 = System.currentTimeMillis();
                                             item.getBlockTicker().tick(b, item, BlockStorage.getLocationInfo(l));
 
-                                            TickerTask.this.map_machinetime.put(item.getID(), (TickerTask.this.map_machinetime.containsKey(item.getID()) ? TickerTask.this.map_machinetime.get(item.getID()) : 0L) + System.currentTimeMillis() - timestamp3);
-                                            TickerTask.this.map_chunk.put(c, (TickerTask.this.map_chunk.containsKey(c) ? TickerTask.this.map_chunk.get(c) : 0) + 1);
-                                            TickerTask.this.map_machine.put(item.getID(), (TickerTask.this.map_machine.containsKey(item.getID()) ? TickerTask.this.map_machine.get(item.getID()) : 0) + 1);
+                                            map_machinetime.put(item.getID(), (map_machinetime.getOrDefault(item.getID(), 0L)) + System.currentTimeMillis() - timestamp3);
+                                            map_chunk.put(c, (TickerTask.this.map_chunk.getOrDefault(c, 0)) + 1);
+                                            map_machine.put(item.getID(), (map_machine.getOrDefault(item.getID(), 0)) + 1);
                                             TickerTask.block_timings.put(l, System.currentTimeMillis() - timestamp3);
                                         } catch (Exception x) {
                                             int errors = 0;
-                                            if (bugged.containsKey(l))
+                                            if (bugged.containsKey(l)) {
                                                 errors = bugged.get(l);
+                                            }
                                             errors++;
 
                                             if (errors == 1) {
@@ -190,7 +191,9 @@ public class TickerTask implements Runnable {
                             } catch (Exception x) {
 
                                 int errors = 0;
-                                if (bugged.containsKey(l)) errors = bugged.get(l);
+                                if (bugged.containsKey(l)) {
+                                    errors = bugged.get(l);
+                                }
                                 errors++;
 
                                 if (errors == 1) {
@@ -295,7 +298,7 @@ public class TickerTask implements Runnable {
         }
 
         for (Map.Entry<Location, Location> entry : this.move.entrySet()) {
-            BlockStorage._integrated_moveLocationInfo(entry.getKey(), entry.getValue());
+            BlockStorage.moveBlockInfo(entry.getKey(), entry.getValue());
         }
         this.move.clear();
 

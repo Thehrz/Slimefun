@@ -414,7 +414,7 @@ public class SlimefunSetup {
                     e.getParentEvent().setCancelled(true);
                     PlayerInventory.update(p);
                     if (p.getInventory().getHelmet() != null && p.getInventory().getChestplate() != null && p.getInventory().getLeggings() != null && p.getInventory().getBoots() != null && SlimefunManager.isItemSimiliar(p.getInventory().getHelmet(), SlimefunItems.ENDER_HELMET, true) && SlimefunManager.isItemSimiliar(p.getInventory().getChestplate(), SlimefunItems.ENDER_CHESTPLATE, true) && SlimefunManager.isItemSimiliar(p.getInventory().getLeggings(), SlimefunItems.ENDER_LEGGINGS, true) && SlimefunManager.isItemSimiliar(p.getInventory().getBoots(), SlimefunItems.ENDER_BOOTS, true)) {
-                        p.launchProjectile((Class) EnderPearl.class);
+                        p.launchProjectile(EnderPearl.class);
                         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.0f, 1.0f);
                     }
                     return true;
@@ -3870,6 +3870,18 @@ public class SlimefunSetup {
             }
         }.registerChargeableBlock(true, 1024);
         new WitherAssembler(Categories.ELECTRICITY, SlimefunItems.WITHER_ASSEMBLER, "WITHER_ASSEMBLER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.BLISTERING_INGOT_3, new ItemStack(Material.NETHER_STAR), SlimefunItems.BLISTERING_INGOT_3, SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.ANDROID_MEMORY_CORE, SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.CARBONADO_EDGED_CAPACITOR}).registerChargeableBlock(true, 4096);
+//        new SlimefunItem(Categories.PORTABLE, SlimefunItems.LANTERN, "LANTERN", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.TORCH), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT), new ItemStack(Material.IRON_INGOT)}).register(true, new SlimefunBlockHandler() {
+//            @Override
+//            public void onPlace(Player paramPlayer, Block paramBlock, SlimefunItem paramSlimefunItem) {
+//                TLight.create(paramBlock, Type.BLOCK, 15);
+//            }
+//
+//            @Override
+//            public boolean onBreak(Player paramPlayer, Block paramBlock, SlimefunItem paramSlimefunItem, UnregisterReason paramUnregisterReason) {
+//                TLight.delete(paramBlock, Type.BLOCK);
+//                return true;
+//            }
+//        });
     }
 
     public static void registerPostHandler(final PostSlimefunLoadingHandler handler) {

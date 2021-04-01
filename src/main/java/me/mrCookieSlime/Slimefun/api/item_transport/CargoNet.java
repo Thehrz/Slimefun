@@ -203,7 +203,7 @@ public class CargoNet extends Network {
             if (BlockStorage.getLocationInfo(b.getLocation(), "visualizer") == null) {
                 self.display();
             }
-            for (final Location input : CargoNet.this.inputNodes) {
+            for (Location input : inputNodes) {
                 final int frequency = getFrequency(input);
                 if (frequency >= 0) {
                     if (frequency > 15) {

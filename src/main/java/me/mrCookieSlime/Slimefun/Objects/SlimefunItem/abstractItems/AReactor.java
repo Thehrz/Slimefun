@@ -52,9 +52,8 @@ public abstract class AReactor extends SlimefunItem {
         new BlockMenuPreset(id, getInventoryTitle()) {
             @Override
             public void init() {
-                AReactor.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
@@ -89,7 +88,6 @@ public abstract class AReactor extends SlimefunItem {
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
@@ -101,32 +99,31 @@ public abstract class AReactor extends SlimefunItem {
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AReactor.this.getFuelSlots()) {
+                    for (int slot : getFuelSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : AReactor.this.getCoolantSlots()) {
+                    for (int slot : getCoolantSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : AReactor.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
                 }
-                AReactor.progress.remove(b.getLocation());
-                AReactor.processing.remove(b.getLocation());
+                progress.remove(b.getLocation());
+                processing.remove(b.getLocation());
                 ReactorHologram.remove(b.getLocation());
                 return true;
             }
@@ -220,28 +217,29 @@ public abstract class AReactor extends SlimefunItem {
 
             @Override
             public double generateEnergy(final Location l, SlimefunItem sf, Config data) {
-                BlockMenu port = AReactor.this.getAccessPort(l);
+                BlockMenu port = getAccessPort(l);
 
-                if (AReactor.this.isProcessing(l)) {
-                    AReactor.this.extraTick(l);
-                    int timeleft = AReactor.progress.get(l);
+                if (isProcessing(l)) {
+                    extraTick(l);
+                    int timeleft = progress.get(l);
                     if (timeleft > 0) {
-                        int produced = AReactor.this.getEnergyProduction();
+                        int produced = getEnergyProduction();
                         int space = ChargableBlock.getMaxCharge(l) - ChargableBlock.getCharge(l);
                         if (space >= produced) {
-                            ChargableBlock.addCharge(l, AReactor.this.getEnergyProduction());
+                            ChargableBlock.addCharge(l, getEnergyProduction());
                             space -= produced;
                         }
                         if (space >= produced || !"generator".equals(BlockStorage.getBlockInfo(l, "reactor-mode"))) {
-                            AReactor.progress.put(l, timeleft - 1);
+                            progress.put(l, timeleft - 1);
 
                             Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
-                                if (!l.getBlock().getRelative(AReactor.cooling[CSCoreLib.randomizer().nextInt(AReactor.cooling.length)]).isLiquid())
+                                if (!l.getBlock().getRelative(AReactor.cooling[CSCoreLib.randomizer().nextInt(AReactor.cooling.length)]).isLiquid()) {
                                     explode.add(l);
+                                }
 
                             });
 
-                            ItemStack item = AReactor.this.getProgressBar().clone();
+                            ItemStack item = getProgressBar().clone();
                             ItemMeta im = item.getItemMeta();
                             im.setDisplayName(" ");
                             List<String> lore = new ArrayList<>();
@@ -254,20 +252,20 @@ public abstract class AReactor extends SlimefunItem {
 
                             BlockStorage.getInventory(l).replaceExistingItem(22, item);
 
-                            if (AReactor.this.needsCooling()) {
+                            if (needsCooling()) {
                                 boolean coolant = ((AReactor.processing.get(l).getTicks() - timeleft) % 25 == 0);
 
                                 if (coolant) {
                                     if (port != null) {
-                                        for (int slot : AReactor.this.getCoolantSlots()) {
-                                            if (SlimefunManager.isItemSimiliar(port.getItemInSlot(slot), AReactor.this.getCoolant(), true)) {
-                                                port.replaceExistingItem(slot, AReactor.this.pushItems(l, port.getItemInSlot(slot), AReactor.this.getCoolantSlots()));
+                                        for (int slot : getCoolantSlots()) {
+                                            if (SlimefunManager.isItemSimiliar(port.getItemInSlot(slot), getCoolant(), true)) {
+                                                port.replaceExistingItem(slot, AReactor.this.pushItems(l, port.getItemInSlot(slot), getCoolantSlots()));
                                             }
                                         }
                                     }
 
                                     boolean explosion = true;
-                                    for (int slot : AReactor.this.getCoolantSlots()) {
+                                    for (int slot : getCoolantSlots()) {
                                         if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(l).getItemInSlot(slot), AReactor.this.getCoolant(), true)) {
                                             BlockStorage.getInventory(l).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(l).getItemInSlot(slot), 1));
                                             ReactorHologram.update(l, "&b❄ &7100%");
@@ -292,18 +290,19 @@ public abstract class AReactor extends SlimefunItem {
                     }
 
                     BlockStorage.getInventory(l).replaceExistingItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "));
-                    if (AReactor.processing.get(l).getOutput() != null)
-                        AReactor.this.pushItems(l, AReactor.processing.get(l).getOutput());
+                    if (processing.get(l).getOutput() != null) {
+                        pushItems(l, processing.get(l).getOutput());
+                    }
 
                     if (port != null) {
-                        for (int slot : AReactor.this.getOutputSlots()) {
-                            if (BlockStorage.getInventory(l).getItemInSlot(slot) != null)
+                        for (int slot : getOutputSlots()) {
+                            if (BlockStorage.getInventory(l).getItemInSlot(slot) != null) {
                                 BlockStorage.getInventory(l).replaceExistingItem(slot, ReactorAccessPort.pushItems(port.getLocation(), BlockStorage.getInventory(l).getItemInSlot(slot)));
-
+                            }
                         }
                     }
-                    AReactor.progress.remove(l);
-                    AReactor.processing.remove(l);
+                    progress.remove(l);
+                    processing.remove(l);
                     return 0.0D;
                 }
 
@@ -312,10 +311,10 @@ public abstract class AReactor extends SlimefunItem {
                 Map<Integer, Integer> found = new HashMap<>();
 
                 if (port != null) {
-                    for (int slot : AReactor.this.getFuelSlots()) {
-                        for (MachineFuel recipe : AReactor.this.recipes) {
+                    for (int slot : getFuelSlots()) {
+                        for (MachineFuel recipe : recipes) {
                             if (SlimefunManager.isItemSimiliar(port.getItemInSlot(slot), recipe.getInput(), true) &&
-                                    AReactor.this.pushItems(l, new CustomItem(port.getItemInSlot(slot), 1), AReactor.this.getFuelSlots()) == null) {
+                                    pushItems(l, new CustomItem(port.getItemInSlot(slot), 1), getFuelSlots()) == null) {
                                 port.replaceExistingItem(slot, InvUtils.decreaseItem(port.getItemInSlot(slot), 1));
 
 
@@ -324,14 +323,14 @@ public abstract class AReactor extends SlimefunItem {
                     }
                 }
 
-                label92:
+                MachineFuel:
                 for (MachineFuel recipe : AReactor.this.recipes) {
                     for (int slot : AReactor.this.getFuelSlots()) {
                         if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(l).getItemInSlot(slot), recipe.getInput(), true)) {
                             found.put(slot, recipe.getInput().getAmount());
                             r = recipe;
 
-                            break label92;
+                            break MachineFuel;
                         }
                     }
                 }
@@ -423,7 +422,9 @@ public abstract class AReactor extends SlimefunItem {
 
     public BlockMenu getAccessPort(Location l) {
         Location portL = new Location(l.getWorld(), l.getX(), l.getY() + 3.0D, l.getZ());
-        if (BlockStorage.check(portL, "REACTOR_ACCESS_PORT")) return BlockStorage.getInventory(portL);
+        if (BlockStorage.check(portL, "REACTOR_ACCESS_PORT")) {
+            return BlockStorage.getInventory(portL);
+        }
         return null;
     }
 

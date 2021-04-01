@@ -101,12 +101,16 @@ public abstract class BlockMenuPreset extends ChestMenu {
         Set<Integer> empty = new HashSet<>();
         if (this.size > -1) {
             for (int i = 0; i < this.size; i++) {
-                if (!this.occupied.contains(i)) empty.add(i);
+                if (!this.occupied.contains(i)) {
+                    empty.add(i);
+                }
 
             }
         } else {
             for (int i = 0; i < toInventory().getSize(); i++) {
-                if (!this.occupied.contains(i)) empty.add(i);
+                if (!this.occupied.contains(i)) {
+                    empty.add(i);
+                }
             }
         }
         return empty;
@@ -124,11 +128,15 @@ public abstract class BlockMenuPreset extends ChestMenu {
         }
 
 
-        if (this.size > -1) menu.addItem(this.size - 1, null);
+        if (this.size > -1) {
+            menu.addItem(this.size - 1, null);
+        }
 
         newInstance(menu, menu.getLocation());
         for (int slot = 0; slot < 54; slot++) {
-            if (getMenuClickHandler(slot) != null) menu.addMenuClickHandler(slot, getMenuClickHandler(slot));
+            if (getMenuClickHandler(slot) != null) {
+                menu.addMenuClickHandler(slot, getMenuClickHandler(slot));
+            }
 
         }
         menu.addMenuOpeningHandler(getMenuOpeningHandler());
@@ -144,10 +152,13 @@ public abstract class BlockMenuPreset extends ChestMenu {
         }
 
 
-        if (this.size > -1) menu.addItem(this.size - 1, null);
+        if (this.size > -1) {
+            menu.addItem(this.size - 1, null);
+        }
         for (int slot = 0; slot < 54; slot++) {
-            if (getMenuClickHandler(slot) != null) menu.addMenuClickHandler(slot, getMenuClickHandler(slot));
-
+            if (getMenuClickHandler(slot) != null) {
+                menu.addMenuClickHandler(slot, getMenuClickHandler(slot));
+            }
         }
         menu.addMenuOpeningHandler(getMenuOpeningHandler());
         menu.addMenuCloseHandler(getMenuCloseHandler());
@@ -159,7 +170,7 @@ public abstract class BlockMenuPreset extends ChestMenu {
     }
 
     public void newInstance(final BlockMenu menu, final Location l) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> BlockMenuPreset.this.newInstance(menu, l.getBlock()));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> newInstance(menu, l.getBlock()));
     }
 }
 

@@ -129,7 +129,7 @@ public class GPSNetwork {
         menu.addItem(6, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzljODg4MWU0MjkxNWE5ZDI5YmI2MWExNmZiMjZkMDU5OTEzMjA0ZDI2NWRmNWI0MzliM2Q3OTJhY2Q1NiJ9fX0="), "&7&7路径点概览 &r(选择)"));
         menu.addMenuClickHandler(6, (arg0, arg1, arg2, arg3) -> {
             try {
-                GPSNetwork.this.openWaypointControlPanel(arg0);
+                openWaypointControlPanel(arg0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -162,7 +162,7 @@ public class GPSNetwork {
         menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjOWMxYTAyMmY0MGI3M2YxNGI0Y2JhMzdjNzE4YzZhNTMzZjNhMjg2NGI2NTM2ZDVmNDU2OTM0Y2MxZiJ9fX0="), "&7信号发射器概览 &r(选择)"));
         menu.addMenuClickHandler(2, (arg0, arg1, arg2, arg3) -> {
             try {
-                GPSNetwork.this.openTransmitterControlPanel(arg0);
+                openTransmitterControlPanel(arg0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -192,7 +192,7 @@ public class GPSNetwork {
                 cfg.save();
                 arg0.playSound(arg0.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
                 try {
-                    GPSNetwork.this.openWaypointControlPanel(arg0);
+                    openWaypointControlPanel(arg0);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -224,7 +224,7 @@ public class GPSNetwork {
         Messages.local.sendTranslation(p, "gps.waypoint.new", true);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5F, 1.0F);
         MenuHelper.awaitChatInput(p, (p1, message) -> {
-            GPSNetwork.this.addWaypoint(p1, message, l);
+            addWaypoint(p1, message, l);
             return false;
         });
     }

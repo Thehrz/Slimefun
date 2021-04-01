@@ -18,30 +18,18 @@ public class TeleporterListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onStarve(PlayerInteractEvent e) {
-        if (!e.getAction().equals(Action.PHYSICAL))
+        if (!e.getAction().equals(Action.PHYSICAL)) {
             return;
-        if (e.getClickedBlock() == null)
+        }
+        if (e.getClickedBlock() == null) {
             return;
+        }
         SlimefunItem item = BlockStorage.check(e.getClickedBlock());
-        if (item == null)
+        if (item == null) {
             return;
-        if ("GPS_ACTIVATION_DEVICE_SHARED".equals(item.getID())) {
-            SlimefunItem teleporter = BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN));
-
-            if (teleporter instanceof Teleporter) {
-                for (BlockFace face : this.faces) {
-                    if (!BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN).getRelative(face), "GPS_TELEPORTER_PYLON"))
-                        return;
-                }
-                try {
-                    ((Teleporter) teleporter).onInteract(e.getPlayer(), e.getClickedBlock().getRelative(BlockFace.DOWN));
-                } catch (Exception x) {
-                    x.printStackTrace();
-                }
-
-            }
-        } else if ("GPS_ACTIVATION_DEVICE_PERSONAL".equals(item.getID())) {
-            if (BlockStorage.getLocationInfo(e.getClickedBlock().getLocation(), "owner").equals(e.getPlayer().getUniqueId().toString())) {
+        }
+        switch (item.getID()) {
+            case "GPS_ACTIVATION_DEVICE_SHARED":
                 SlimefunItem teleporter = BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN));
 
                 if (teleporter instanceof Teleporter) {
@@ -54,12 +42,32 @@ public class TeleporterListener implements Listener {
                     } catch (Exception x) {
                         x.printStackTrace();
                     }
+
                 }
-            } else {
-                e.setCancelled(true);
-            }
-        } else if ("ELEVATOR_PLATE".equals(item.getID())) {
-            Elevator.openDialogue(e.getPlayer(), e.getClickedBlock());
+                break;
+            case "GPS_ACTIVATION_DEVICE_PERSONAL":
+                if (BlockStorage.getLocationInfo(e.getClickedBlock().getLocation(), "owner").equals(e.getPlayer().getUniqueId().toString())) {
+                    teleporter = BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN));
+
+                    if (teleporter instanceof Teleporter) {
+                        for (BlockFace face : this.faces) {
+                            if (!BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN).getRelative(face), "GPS_TELEPORTER_PYLON")) {
+                                return;
+                            }
+                        }
+                        try {
+                            ((Teleporter) teleporter).onInteract(e.getPlayer(), e.getClickedBlock().getRelative(BlockFace.DOWN));
+                        } catch (Exception x) {
+                            x.printStackTrace();
+                        }
+                    }
+                } else {
+                    e.setCancelled(true);
+                }
+                break;
+            case "ELEVATOR_PLATE":
+                Elevator.openDialogue(e.getPlayer(), e.getClickedBlock());
+                break;
         }
     }
 }

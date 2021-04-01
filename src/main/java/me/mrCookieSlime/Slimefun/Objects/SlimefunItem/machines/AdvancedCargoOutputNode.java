@@ -21,8 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class AdvancedCargoOutputNode
-        extends SlimefunItem {
+public class AdvancedCargoOutputNode extends SlimefunItem {
     private static final int[] border = new int[]{0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 22, 23, 24, 26, 27, 31, 32, 33, 34, 35, 36, 40, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
 
     public AdvancedCargoOutputNode(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
@@ -31,7 +30,7 @@ public class AdvancedCargoOutputNode
         new BlockMenuPreset(name, "&c输出节点") {
             @Override
             public void init() {
-                AdvancedCargoOutputNode.this.constructMenu(this);
+                constructMenu(this);
             }
 
 
@@ -168,7 +167,7 @@ public class AdvancedCargoOutputNode
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AdvancedCargoOutputNode.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);

@@ -240,11 +240,11 @@ public class ItemListener implements Listener {
                     if (e.getClickedBlock() != null && BlockStorage.hasBlockInfo(e.getClickedBlock())) {
                         final String id = BlockStorage.checkID(e.getClickedBlock());
                         if (BlockMenuPreset.isInventory(id)) {
-                            if (!this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_INPUT, true)) {
-                                if (!this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_OUTPUT, true)) {
-                                    if (!this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_OUTPUT_ADVANCED, true)) {
-                                        if (!this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CT_IMPORT_BUS, true)) {
-                                            if (!this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CT_EXPORT_BUS, true)) {
+                            if (this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_INPUT, true)) {
+                                if (this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_OUTPUT, true)) {
+                                    if (this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CARGO_OUTPUT_ADVANCED, true)) {
+                                        if (this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CT_IMPORT_BUS, true)) {
+                                            if (this.canPlaceBlock(p, e.getClickedBlock().getRelative(e.getParentEvent().getBlockFace())) || !SlimefunManager.isItemSimiliar(item, SlimefunItems.CT_EXPORT_BUS, true)) {
                                                 e.setCancelled(true);
                                                 final BlockStorage storage = BlockStorage.getStorage(e.getClickedBlock().getWorld());
                                                 if (storage.hasUniversalInventory(id)) {
@@ -283,7 +283,7 @@ public class ItemListener implements Listener {
     }
 
     private boolean canPlaceBlock(final Player p, final Block relative) {
-        return p.isSneaking() && relative.getType().equals(Material.AIR);
+        return !p.isSneaking() || !relative.getType().equals(Material.AIR);
     }
 
     @EventHandler
@@ -408,7 +408,7 @@ public class ItemListener implements Listener {
             if (SlimefunManager.isItemSimiliar(e.getInventory().getContents()[0], SlimefunItems.ELYTRA, true)) {
                 return;
             }
-            if (SlimefunItem.getByItem(e.getInventory().getContents()[0]) != null && !SlimefunItem.isDisabled(e.getInventory().getContents()[0])) {
+            if (SlimefunItem.getByItem(e.getInventory().getContents()[0]) != null && SlimefunItem.isDisabled(e.getInventory().getContents()[0])) {
                 e.setCancelled(true);
                 Messages.local.sendTranslation(e.getWhoClicked(), "anvil.not-working", true);
             }

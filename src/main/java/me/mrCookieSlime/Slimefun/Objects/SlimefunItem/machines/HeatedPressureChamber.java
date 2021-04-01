@@ -32,49 +32,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class HeatedPressureChamber
-        extends AContainer {
+public abstract class HeatedPressureChamber extends AContainer {
     public HeatedPressureChamber(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
             @Override
             public void init() {
-                HeatedPressureChamber.this.constructMenu(this);
+                constructMenu(this);
             }
-
 
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow.equals(ItemTransportFlow.WITHDRAW)) return HeatedPressureChamber.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.WITHDRAW)) {
+                    return getOutputSlots();
+                }
 
                 List<Integer> slots = new ArrayList<>();
 
-                for (int slot : HeatedPressureChamber.this.getInputSlots()) {
+                for (int slot : getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(menu.getItemInSlot(slot), item, true)) {
                         slots.add(slot);
                     }
                 }
 
                 if (slots.isEmpty()) {
-                    return HeatedPressureChamber.this.getInputSlots();
+                    getInputSlots();
                 }
 
                 slots.sort(new RecipeSorter(menu));
@@ -85,7 +82,6 @@ public abstract class HeatedPressureChamber
 
         registerDefaultRecipes();
     }
-
 
     @Override
     public void registerDefaultRecipes() {
@@ -127,11 +123,9 @@ public abstract class HeatedPressureChamber
                 HeatedPressureChamber.this.tick(b);
             }
 
-
             @Override
             public void uniqueTick() {
             }
-
 
             @Override
             public boolean isSynchronized() {
@@ -162,8 +156,9 @@ public abstract class HeatedPressureChamber
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
                 if (ChargableBlock.isChargable(b)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     progress.put(b, timeleft - 1);
                 } else {
@@ -199,8 +194,9 @@ public abstract class HeatedPressureChamber
             }
 
             if (r != null) {
-                if (!fits(b, r.getOutput()))
+                if (!fits(b, r.getOutput())) {
                     return;
+                }
                 for (Map.Entry<Integer, Integer> entry : found.entrySet()) {
                     BlockStorage.getInventory(b).replaceExistingItem(entry.getKey(), InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(entry.getKey()), entry.getValue()));
                 }

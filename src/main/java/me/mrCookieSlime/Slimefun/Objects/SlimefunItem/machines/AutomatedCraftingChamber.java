@@ -35,15 +35,15 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AutomatedCraftingChamber extends SlimefunItem {
-    private static final int[] BORDER;
-    private static final int[] BORDER_IN;
-    private static final int[] BORDER_OUT;
+    private static final int[] border;
+    private static final int[] border_in;
+    private static final int[] border_out;
     public static Map<String, ItemStack> recipes;
 
     static {
-        BORDER = new int[]{0, 1, 3, 4, 5, 7, 8, 13, 14, 15, 16, 17, 50, 51, 52, 53};
-        BORDER_IN = new int[]{9, 10, 11, 12, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
-        BORDER_OUT = new int[]{23, 24, 25, 26, 32, 35, 41, 42, 43, 44};
+        border = new int[]{0, 1, 3, 4, 5, 7, 8, 13, 14, 15, 16, 17, 50, 51, 52, 53};
+        border_in = new int[]{9, 10, 11, 12, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
+        border_out = new int[]{23, 24, 25, 26, 32, 35, 41, 42, 43, 44};
         AutomatedCraftingChamber.recipes = new HashMap<>();
     }
 
@@ -52,20 +52,20 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
         new BlockMenuPreset(name, "&6自动合成机") {
             @Override
             public void init() {
-                AutomatedCraftingChamber.this.constructMenu(this);
+                constructMenu(this);
             }
 
             @Override
             public void newInstance(final BlockMenu menu, final Block b) {
-                if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
-                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.SULPHUR), "&7启动状态: &4✘", new String[]{"", "&e> 点击激活这个机器"}));
+                if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
+                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.SULPHUR), "&7启动状态: &4✘", "", "&e> 点击激活这个机器"));
                     menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "true");
                         newInstance(menu, b);
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.REDSTONE), "&7启动状态: &2✔", new String[]{"", "&e> 点击停止这个机器"}));
+                    menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.REDSTONE), "&7启动状态: &2✔", "", "&e> 点击停止这个机器"));
                     menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "false");
                         newInstance(menu, b);
@@ -87,10 +87,10 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
             @Override
             public int[] getSlotsAccessedByItemTransport(final BlockMenu menu, final ItemTransportFlow flow, final ItemStack item) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) {
-                    return AutomatedCraftingChamber.this.getOutputSlots();
+                    return getOutputSlots();
                 }
                 final List<Integer> slots = new ArrayList<>();
-                for (final int slot : AutomatedCraftingChamber.this.getInputSlots()) {
+                for (final int slot : getInputSlots()) {
                     if (menu.getItemInSlot(slot) != null) {
                         slots.add(slot);
                     }
@@ -109,13 +109,13 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
             public boolean onBreak(final Player p, final Block b, final SlimefunItem item, final UnregisterReason reason) {
                 final BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (final int slot : AutomatedCraftingChamber.this.getInputSlots()) {
+                    for (final int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (final int slot : AutomatedCraftingChamber.this.getOutputSlots()) {
+                    for (final int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -128,29 +128,27 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void constructMenu(final BlockMenuPreset preset) {
-        for (final int i : AutomatedCraftingChamber.BORDER) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.border) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.BORDER_IN) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.border_in) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " "), (arg0, arg1, arg2, arg3) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.BORDER_OUT) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " ", new String[0]), (arg0, arg1, arg2, arg3) -> false);
+        for (final int i : AutomatedCraftingChamber.border_out) {
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
         }
         for (final int i : this.getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
-                @Override
                 public boolean onClick(final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return false;
                 }
 
-                @Override
                 public boolean onClick(final InventoryClickEvent e, final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR;
                 }
             });
         }
-        preset.addItem(2, new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", new String[]{"", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"}), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(2, new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", "", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"), (arg0, arg1, arg2, arg3) -> false);
     }
 
     public abstract int getEnergyConsumption();
@@ -180,9 +178,9 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void pushItems(final Block b, final ItemStack[] items) {
-        final Inventory inv = this.inject(b);
+        final Inventory inv = inject(b);
         inv.addItem(items);
-        for (final int slot : this.getOutputSlots()) {
+        for (final int slot : getOutputSlots()) {
             BlockStorage.getInventory(b).replaceExistingItem(slot, inv.getItem(slot));
         }
     }
@@ -208,7 +206,7 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void tick(final Block b) {
-        if ("false".equals(BlockStorage.getLocationInfo(b.getLocation(), "enabled"))) {
+        if (BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
             return;
         }
         if (ChargableBlock.getCharge(b) < this.getEnergyConsumption()) {

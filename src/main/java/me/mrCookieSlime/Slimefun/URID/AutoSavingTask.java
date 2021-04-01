@@ -10,7 +10,6 @@ import java.util.Set;
 
 
 public class AutoSavingTask implements Runnable {
-    @Override
     public void run() {
         Set<BlockStorage> worlds = new HashSet<>();
 
@@ -28,9 +27,8 @@ public class AutoSavingTask implements Runnable {
         if (!worlds.isEmpty()) {
             System.out.println("[Slimefun] 自动保存数据中... (距下一次自动保存: " + SlimefunStartup.getCfg().getInt("options.auto-save-delay-in-minutes") + "m)");
 
-            for (BlockStorage storage : worlds) {
+            for (BlockStorage storage : worlds)
                 storage.save(false);
-            }
         }
     }
 }
