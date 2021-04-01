@@ -38,8 +38,7 @@ public class EnergyHologram {
 
         }
 
-        ArmorStand hologram = ArmorStandFactory.createHidden(l);
-        return hologram;
+        return ArmorStandFactory.createHidden(l);
     }
 }
 

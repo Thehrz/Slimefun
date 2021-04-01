@@ -25,41 +25,40 @@ import org.bukkit.material.MaterialData;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ADrill
-        extends AContainer {
-    private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 9, 10, 11, 12, 18, 21, 27, 28, 29, 30, 19, 20};
-    private static final int[] border_out = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
+public abstract class ADrill extends AContainer {
+    private static final int[] BORDER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 9, 10, 11, 12, 18, 21, 27, 28, 29, 30, 19, 20};
+    private static final int[] BORDER_OUT = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
 
 
     public ADrill(Category category, ItemStack item, String id, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
                 constructMenu(this);
             }
 
-
             private void constructMenu(BlockMenuPreset preset) {
-                for (int i : ADrill.border) {
+                for (int i : ADrill.BORDER) {
                     preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
                 }
 
-                for (int i : ADrill.border_out) {
+                for (int i : ADrill.BORDER_OUT) {
                     preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
                 }
-
 
                 preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
 
 
-                for (int i : ADrill.this.getOutputSlots()) {
+                for (int i : getOutputSlots()) {
                     preset.addMenuClickHandler(i, new AdvancedMenuClickHandler() {
+                        @Override
                         public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                             return false;
                         }
 
-
+                        @Override
                         public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                             return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                         }
@@ -67,11 +66,11 @@ public abstract class ADrill
                 }
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 if (!p.hasPermission("slimefun.inventory.bypass") && !CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true)) {
                     return false;
@@ -80,31 +79,36 @@ public abstract class ADrill
                     return false;
                 }
 
-                if (!OreGenSystem.wasResourceGenerated(ADrill.this.getOreGenResource(), b.getChunk())) {
+                if (OreGenSystem.wasResourceGenerated(getOreGenResource(), b.getChunk())) {
                     Messages.local.sendTranslation(p, "gps.geo.scan-required", true);
                     return false;
                 }
                 return true;
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return ADrill.this.getInputSlots();
-                return ADrill.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
     }
 
 
+    @Override
     public int[] getInputSlots() {
         return new int[0];
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);
@@ -122,8 +126,9 @@ public abstract class ADrill
 
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
-                if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                     return;
+                }
                 ChargableBlock.addCharge(b, -getEnergyConsumption());
 
                 progress.put(b, timeleft - 1);
@@ -138,8 +143,9 @@ public abstract class ADrill
 
         } else if (OreGenSystem.getSupplies(getOreGenResource(), b.getChunk(), false) > 0) {
             MachineRecipe r = new MachineRecipe(getProcessingTime() / getSpeed(), new ItemStack[0], getOutputItems());
-            if (!fits(b, r.getOutput()))
+            if (!fits(b, r.getOutput())) {
                 return;
+            }
             processing.put(b, r);
             progress.put(b, r.getTicks());
             OreGenSystem.setSupplies(getOreGenResource(), b.getChunk(), OreGenSystem.getSupplies(getOreGenResource(), b.getChunk(), false) - 1);
@@ -152,6 +158,7 @@ public abstract class ADrill
 
     public abstract int getProcessingTime();
 
+    @Override
     public abstract int getSpeed();
 }
 

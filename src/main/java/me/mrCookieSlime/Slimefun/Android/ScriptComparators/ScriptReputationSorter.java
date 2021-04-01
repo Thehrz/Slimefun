@@ -5,17 +5,15 @@ import me.mrCookieSlime.Slimefun.Android.ProgrammableAndroid;
 
 import java.util.Comparator;
 
-public class ScriptReputationSorter
-        implements Comparator<Config> {
+public class ScriptReputationSorter implements Comparator<Config> {
     ProgrammableAndroid android;
 
-    public ScriptReputationSorter(ProgrammableAndroid programmableAndroid) {
+    public ScriptReputationSorter(final ProgrammableAndroid programmableAndroid) {
         this.android = programmableAndroid;
     }
 
     @Override
-    public int compare(Config c1, Config c2) {
+    public int compare(final Config c1, final Config c2) {
         return (int) (this.android.getScriptRating(c2) - this.android.getScriptRating(c1));
     }
 }
-

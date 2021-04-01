@@ -15,6 +15,7 @@ public abstract class ElectricIngotFactory
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(new MachineRecipe(8, new ItemStack[]{SlimefunItems.ALUMINUM_DUST}, new ItemStack[]{SlimefunItems.ALUMINUM_INGOT}));
         registerRecipe(new MachineRecipe(8, new ItemStack[]{SlimefunItems.COPPER_DUST}, new ItemStack[]{SlimefunItems.COPPER_INGOT}));
@@ -28,6 +29,7 @@ public abstract class ElectricIngotFactory
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "ELECTRIC_INGOT_FACTORY";
     }

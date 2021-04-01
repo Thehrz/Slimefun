@@ -19,8 +19,7 @@ public class URID {
     }
 
     public static URID nextURID(Object object, boolean dirty) {
-        URID urid = new URID(object, dirty);
-        return urid;
+        return new URID(object, dirty);
     }
 
     public static URID fromInteger(int id) {

@@ -68,10 +68,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class SlimefunSetup {
     public static boolean legacy_ore_washer;
@@ -106,22 +103,22 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
-                                    if (!(SlimefunItem.getByItem(inputs.get(i)[j]) instanceof SlimefunBackpack)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
+                                    if (!(SlimefunItem.getByItem(input[j]) instanceof SlimefunBackpack)) {
                                         craft = false;
                                         break;
                                     }
-                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], false)) {
+                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], false)) {
                                         craft = false;
                                         break;
                                     }
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     final Inventory inv2 = Bukkit.createInventory(null, 9, "test");
                                     for (int k = 0; k < inv.getContents().length; ++k) {
@@ -255,19 +252,19 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
                                     craft = false;
                                     break;
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     if (InvUtils.fits(inv, adding)) {
-                                        for (final ItemStack removing : inputs.get(i)) {
+                                        for (final ItemStack removing : input) {
                                             if (removing != null) {
                                                 inv.removeItem(removing);
                                             }
@@ -411,7 +408,7 @@ public class SlimefunSetup {
                     e.getParentEvent().setCancelled(true);
                     PlayerInventory.update(p);
                     if (p.getInventory().getHelmet() != null && p.getInventory().getChestplate() != null && p.getInventory().getLeggings() != null && p.getInventory().getBoots() != null && SlimefunManager.isItemSimiliar(p.getInventory().getHelmet(), SlimefunItems.ENDER_HELMET, true) && SlimefunManager.isItemSimiliar(p.getInventory().getChestplate(), SlimefunItems.ENDER_CHESTPLATE, true) && SlimefunManager.isItemSimiliar(p.getInventory().getLeggings(), SlimefunItems.ENDER_LEGGINGS, true) && SlimefunManager.isItemSimiliar(p.getInventory().getBoots(), SlimefunItems.ENDER_BOOTS, true)) {
-                        p.launchProjectile((Class) EnderPearl.class);
+                        p.launchProjectile(EnderPearl.class);
                         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.0f, 1.0f);
                     }
                     return true;
@@ -481,9 +478,9 @@ public class SlimefunSetup {
                         final Dispenser disp = (Dispenser) b.getRelative(BlockFace.DOWN).getState();
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
-                            for (final ItemStack converting : inputs.get(i)) {
+                            for (final ItemStack converting : input) {
                                 if (converting != null) {
                                     for (int j = 0; j < inv.getContents().length; ++j) {
                                         if (j == inv.getContents().length - 1 && !SlimefunManager.isItemSimiliar(converting, inv.getContents()[j], true, SlimefunManager.DataType.ALWAYS)) {
@@ -497,10 +494,10 @@ public class SlimefunSetup {
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     if (InvUtils.fits(inv, adding)) {
-                                        for (final ItemStack removing : inputs.get(i)) {
+                                        for (final ItemStack removing : input) {
                                             if (removing != null) {
                                                 inv.removeItem(removing);
                                             }
@@ -721,22 +718,22 @@ public class SlimefunSetup {
                         }
                         final Inventory inv = disp.getInventory();
                         final List<ItemStack[]> inputs = RecipeType.getRecipeInputList(machine);
-                        for (int i = 0; i < inputs.size(); ++i) {
+                        for (ItemStack[] input : inputs) {
                             boolean craft = true;
                             for (int j = 0; j < inv.getContents().length; ++j) {
-                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], true)) {
-                                    if (!(SlimefunItem.getByItem(inputs.get(i)[j]) instanceof SlimefunBackpack)) {
+                                if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], true)) {
+                                    if (!(SlimefunItem.getByItem(input[j]) instanceof SlimefunBackpack)) {
                                         craft = false;
                                         break;
                                     }
-                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], inputs.get(i)[j], false)) {
+                                    if (!SlimefunManager.isItemSimiliar(inv.getContents()[j], input[j], false)) {
                                         craft = false;
                                         break;
                                     }
                                 }
                             }
                             if (craft) {
-                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, inputs.get(i)).clone();
+                                final ItemStack adding = RecipeType.getRecipeOutputList(machine, input).clone();
                                 if (Slimefun.hasUnlocked(p, adding, true)) {
                                     final Inventory inv2 = Bukkit.createInventory(null, 9, "test");
                                     for (int k = 0; k < inv.getContents().length; ++k) {
@@ -1486,7 +1483,7 @@ public class SlimefunSetup {
             }
         });
         new SlimefunItem(Categories.MAGIC_ARMOR, SlimefunItems.FARMER_SHOES, "FARMER_SHOES", RecipeType.ARMOR_FORGE, new ItemStack[]{null, null, null, new ItemStack(Material.HAY_BLOCK), null, new ItemStack(Material.HAY_BLOCK), new ItemStack(Material.HAY_BLOCK), null, new ItemStack(Material.HAY_BLOCK)}).register(true);
-        final String[] explosiveblacklist = (Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).toArray(new String[((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).size()])) : new String[]{"BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING"};
+        final String[] explosiveblacklist = (Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("EXPLOSIVE_PICKAXE", "unbreakable-blocks")).toArray(new String[0])) : new String[]{"BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING"};
         new SlimefunItem(Categories.TOOLS, SlimefunItems.EXPLOSIVE_PICKAXE, "EXPLOSIVE_PICKAXE", RecipeType.MAGIC_WORKBENCH, new ItemStack[]{new ItemStack(Material.TNT), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.TNT), null, SlimefunItems.FERROSILICON, null, null, SlimefunItems.FERROSILICON, null}, new String[]{"unbreakable-blocks"}, new Object[]{Arrays.asList("BEDROCK", "BARRIER", "COMMAND", "COMMAND_CHAIN", "COMMAND_REPEATING")}).register(true, new BlockBreakHandler() {
             @Override
             public boolean onBlockBreak(final BlockBreakEvent e, final ItemStack item, final int fortune, final List<ItemStack> drops) {
@@ -1956,8 +1953,8 @@ public class SlimefunSetup {
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.ELECTRIC_MOTOR, "ELECTRIC_MOTOR", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, SlimefunItems.ELECTRO_MAGNET, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.COPPER_WIDE, "COPPER_WIDE", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, null, null, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, null, null, null}).register(true);
         new SlimefunItem(Categories.TECH_MISC, SlimefunItems.HEATING_COIL, "HEATING_COIL", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT, SlimefunItems.COPPER_INGOT}).register(true);
-        final String[] blockPlacerBlacklist = (Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).toArray(new String[((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).size()])) : new String[]{"STRUCTURE_BLOCK"};
-        new SlimefunItem(Categories.MACHINES_1, SlimefunItems.BLOCK_PLACER, "BLOCK_PLACER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K, new ItemStack(Material.IRON_INGOT), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.IRON_INGOT), SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K}, new String[]{"unplaceable-blocks"}, new Object[]{Arrays.asList("STRUCTURE_BLOCK")}).register(true, new AutonomousMachineHandler() {
+        final String[] blockPlacerBlacklist = (Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks") != null) ? ((String[]) ((List) Slimefun.getItemValue("BLOCK_PLACER", "unplaceable-blocks")).toArray(new String[0])) : new String[]{"STRUCTURE_BLOCK"};
+        new SlimefunItem(Categories.MACHINES_1, SlimefunItems.BLOCK_PLACER, "BLOCK_PLACER", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K, new ItemStack(Material.IRON_INGOT), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.IRON_INGOT), SlimefunItems.GOLD_4K, new ItemStack(Material.PISTON_BASE), SlimefunItems.GOLD_4K}, new String[]{"unplaceable-blocks"}, new Object[]{Collections.singletonList("STRUCTURE_BLOCK")}).register(true, new AutonomousMachineHandler() {
             @Override
             public boolean onBlockDispense(final BlockDispenseEvent e, final Block dispenser, final Dispenser d, final Block block, final Block chest, final SlimefunItem machine) {
                 if (machine.getID().equalsIgnoreCase("BLOCK_PLACER")) {

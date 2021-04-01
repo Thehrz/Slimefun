@@ -114,7 +114,7 @@ public class Slimefun {
     public static boolean isEnabled(Player p, ItemStack item, boolean message) {
         String world = p.getWorld().getName();
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
-        if (sfItem == null) return !SlimefunItem.isDisabled(item);
+        if (sfItem == null) return SlimefunItem.isDisabled(item);
         if (SlimefunStartup.getWhitelist().contains(world + ".enabled")) {
             if (SlimefunStartup.getWhitelist().getBoolean(world + ".enabled")) {
                 if (!SlimefunStartup.getWhitelist().contains(world + ".enabled-items." + sfItem.getID()))

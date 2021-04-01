@@ -50,51 +50,52 @@ public abstract class UUMachine extends SlimefunItem {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
-
+            @Override
             public void init() {
-                UUMachine.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    return UUMachine.this.getInputSlots();
+                    return getInputSlots();
                 }
-                return UUMachine.this.getOutputSlots();
+                return getOutputSlots();
             }
         };
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
 
-                    for (int slot : UUMachine.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                         }
                     }
-                    for (int slot : UUMachine.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                         }
                     }
                 }
-                UUMachine.progress.remove(b);
-                UUMachine.processing.remove(b);
+                progress.remove(b);
+                processing.remove(b);
                 return true;
             }
         });
@@ -106,46 +107,51 @@ public abstract class UUMachine extends SlimefunItem {
 
         new BlockMenuPreset(name, getInventoryTitle()) {
 
+            @Override
             public void init() {
-                UUMachine.this.constructMenu(this);
+                constructMenu(this);
             }
 
 
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
 
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
 
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    return UUMachine.this.getInputSlots();
+                    return getInputSlots();
                 }
-                return UUMachine.this.getOutputSlots();
+                return getOutputSlots();
             }
         };
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
-                for (int slot : UUMachine.this.getInputSlots()) {
+                for (int slot : getInputSlots()) {
                     if (BlockStorage.getInventory(b).getItemInSlot(slot) != null) {
                         b.getWorld().dropItemNaturally(b.getLocation(), BlockStorage.getInventory(b).getItemInSlot(slot));
                     }
                 }
-                for (int slot : UUMachine.this.getOutputSlots()) {
+                for (int slot : getOutputSlots()) {
                     if (BlockStorage.getInventory(b).getItemInSlot(slot) != null) {
                         b.getWorld().dropItemNaturally(b.getLocation(), BlockStorage.getInventory(b).getItemInSlot(slot));
                     }
                 }
-                UUMachine.processing.remove(b);
-                UUMachine.progress.remove(b);
+                processing.remove(b);
+                progress.remove(b);
                 return true;
             }
         });
@@ -183,11 +189,12 @@ public abstract class UUMachine extends SlimefunItem {
 
         for (int i : uuInfo) {
             preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "), new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(InventoryClickEvent inventoryClickEvent, Player player, int i, ItemStack itemStack, ClickAction clickAction) {
                     return false;
                 }
 
-
+                @Override
                 public boolean onClick(Player player, int i, ItemStack itemStack, ClickAction clickAction) {
                     return false;
                 }
@@ -250,9 +257,9 @@ public abstract class UUMachine extends SlimefunItem {
         if (BlockStorage.getBlockInfo(b, "uuAmount") == null) {
             BlockStorage.addBlockInfo(b, "uuAmount", "0", false);
         } else {
-            BlockStorage.addBlockInfo(b, "uuAmount", String.valueOf(uu + Integer.valueOf(BlockStorage.getBlockInfo(b, "uuAmount"))), false);
+            BlockStorage.addBlockInfo(b, "uuAmount", String.valueOf(uu + Integer.parseInt(BlockStorage.getBlockInfo(b, "uuAmount"))), false);
         }
-        if (Integer.valueOf(BlockStorage.getBlockInfo(b, "uuAmount")) >= getUUFull()) {
+        if (Integer.parseInt(BlockStorage.getBlockInfo(b, "uuAmount")) >= getUUFull()) {
             BlockStorage.addBlockInfo(b, "uuAmount", "0", false);
             Inventory inv = inject(b);
             inv.addItem(items);
@@ -260,7 +267,7 @@ public abstract class UUMachine extends SlimefunItem {
                 BlockStorage.getInventory(b).replaceExistingItem(slot, inv.getItem(slot));
             }
         }
-        int amount = Integer.valueOf(BlockStorage.getBlockInfo(b, "uuAmount"));
+        int amount = Integer.parseInt(BlockStorage.getBlockInfo(b, "uuAmount"));
         for (int i : uuInfo) {
             if ((i - uuInfo[0]) * getUUFull() / 7 <= amount) {
                 BlockStorage.getInventory(b).replaceExistingItem(i, new CustomItem(uuItem, "§7元物质量: §d" + amount + "§7/§c100000"));
@@ -270,19 +277,21 @@ public abstract class UUMachine extends SlimefunItem {
         }
     }
 
-
+    @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
 
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 UUMachine.this.tick(b);
             }
 
 
+            @Override
             public void uniqueTick() {
             }
 
-
+            @Override
             public boolean isSynchronized() {
                 return false;
             }

@@ -25,85 +25,89 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public abstract class ElectricSmeltery
-        extends AContainer {
-    public static final Map<Block, MachineRecipe> processing = new HashMap<>();
-    public static final Map<Block, Integer> progress = new HashMap<>();
-    private static final int[] border = new int[]{4, 5, 6, 7, 8, 13, 31, 40, 41, 42, 43, 44};
-    private static final int[] border_in = new int[]{0, 1, 2, 3, 9, 12, 18, 21, 27, 30, 36, 37, 38, 39};
-    private static final int[] border_out = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
+public abstract class ElectricSmeltery extends AContainer {
+    public static final Map<Block, MachineRecipe> PROCESSING = new HashMap<>();
+    public static final Map<Block, Integer> PROGRESS = new HashMap<>();
+    private static final int[] BORDER = new int[]{4, 5, 6, 7, 8, 13, 31, 40, 41, 42, 43, 44};
+    private static final int[] BORDER_IN = new int[]{0, 1, 2, 3, 9, 12, 18, 21, 27, 30, 36, 37, 38, 39};
+    private static final int[] BORDER_OUT = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
     protected List<MachineRecipe> recipes = new ArrayList<>();
 
     public ElectricSmeltery(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, getInventoryTitle()) {
+            @Override
             public void init() {
-                ElectricSmeltery.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow.equals(ItemTransportFlow.WITHDRAW)) return ElectricSmeltery.this.getOutputSlots();
+                getOutputSlots();
 
                 List<Integer> slots = new ArrayList<>();
 
-                for (int slot : ElectricSmeltery.this.getInputSlots()) {
+                for (int slot : getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(menu.getItemInSlot(slot), item, true)) {
                         slots.add(slot);
                     }
                 }
 
                 if (slots.isEmpty()) {
-                    return ElectricSmeltery.this.getInputSlots();
+                    getInputSlots();
                 }
 
-                Collections.sort(slots, new RecipeSorter(menu));
-                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[slots.size()]));
+                slots.sort(new RecipeSorter(menu));
+                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[0]));
             }
         };
 
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : ElectricSmeltery.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : ElectricSmeltery.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
                 }
-                ElectricSmeltery.progress.remove(b.getLocation());
-                ElectricSmeltery.processing.remove(b.getLocation());
+                ElectricSmeltery.PROGRESS.remove(b.getLocation());
+                ElectricSmeltery.PROCESSING.remove(b.getLocation());
                 return true;
             }
         });
@@ -111,17 +115,17 @@ public abstract class ElectricSmeltery
         registerDefaultRecipes();
     }
 
-
+    @Override
     protected void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
+        for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-        for (int i : border_in) {
+        for (int i : BORDER_IN) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-        for (int i : border_out) {
+        for (int i : BORDER_OUT) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
@@ -131,11 +135,12 @@ public abstract class ElectricSmeltery
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
-
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -144,26 +149,31 @@ public abstract class ElectricSmeltery
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&c电力冶炼机";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
 
 
+    @Override
     public int[] getInputSlots() {
         return new int[]{10, 11, 19, 20, 28, 29};
     }
 
 
+    @Override
     public int[] getOutputSlots() {
         return new int[]{24, 25};
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "ELECTRIC_SMELTERY";
     }

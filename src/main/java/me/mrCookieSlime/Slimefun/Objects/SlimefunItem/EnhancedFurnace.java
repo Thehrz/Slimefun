@@ -9,8 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.ItemStack;
 
-public class EnhancedFurnace
-        extends SlimefunItem {
+public class EnhancedFurnace extends SlimefunItem {
     final int speed;
     final int efficiency;
     final int fortune;
@@ -23,20 +22,21 @@ public class EnhancedFurnace
         this.fortune = fortune - 1;
 
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 if (b.getState() instanceof Furnace && (
                         (Furnace) b.getState()).getCookTime() > 0) {
                     Furnace furnace = (Furnace) b.getState();
-                    furnace.setCookTime((short) (furnace.getCookTime() + EnhancedFurnace.this.getSpeed() * 10));
+                    furnace.setCookTime((short) (furnace.getCookTime() + getSpeed() * 10));
                     furnace.update(true, false);
                 }
             }
 
-
+            @Override
             public void uniqueTick() {
             }
 
-
+            @Override
             public boolean isSynchronized() {
                 return true;
             }
@@ -54,7 +54,9 @@ public class EnhancedFurnace
     public int getOutput() {
         int fortune = this.fortune;
         fortune = SlimefunStartup.randomize(fortune + 2) - 1;
-        if (fortune <= 0) fortune = 0;
+        if (fortune <= 0) {
+            fortune = 0;
+        }
         fortune++;
         return fortune;
     }

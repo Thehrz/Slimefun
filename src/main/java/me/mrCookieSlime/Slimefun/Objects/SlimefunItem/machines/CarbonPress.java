@@ -16,6 +16,7 @@ public abstract class CarbonPress
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         registerRecipe(15, new ItemStack[]{new CustomItem((new MaterialData(Material.COAL, (byte) 1)).toItemStack(1), 4)}, new ItemStack[]{new ItemStack(Material.COAL)});
         registerRecipe(20, new ItemStack[]{new CustomItem(new ItemStack(Material.COAL), 8)}, new ItemStack[]{SlimefunItems.CARBON});
@@ -26,6 +27,7 @@ public abstract class CarbonPress
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "CARBON_PRESS";
     }

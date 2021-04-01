@@ -18,7 +18,7 @@ public class ItemEnergy {
 
         for (String line : item.getItemMeta().getLore()) {
             if (line.startsWith(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7")) && line.contains(" / ") && line.endsWith(" J")) {
-                return Float.valueOf(line.split(" / ")[0].replace(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7"), ""));
+                return Float.parseFloat(line.split(" / ")[0].replace(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7"), ""));
             }
         }
 
@@ -31,7 +31,7 @@ public class ItemEnergy {
 
         for (String line : item.getItemMeta().getLore()) {
             if (line.startsWith(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7")) && line.contains(" / ") && line.endsWith(" J")) {
-                return Float.valueOf(line.split(" / ")[1].replace(" J", ""));
+                return Float.parseFloat(line.split(" / ")[1].replace(" J", ""));
             }
         }
 

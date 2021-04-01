@@ -145,7 +145,7 @@ public abstract class Network {
 
     public void display() {
         SlimefunStartup.instance.getServer().getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
-            for (Location l : Network.this.connectedLocations) {
+            for (Location l : connectedLocations) {
                 try {
                     ParticleEffect.REDSTONE.display(l.clone().add(0.5D, 0.5D, 0.5D), 0.0F, 0.0F, 0.0F, 0.0F, 1);
                 } catch (Exception exception) {

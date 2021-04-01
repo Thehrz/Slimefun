@@ -113,7 +113,6 @@ public class SlimefunStartup extends Plugin {
 
     @Override
     public void onEnable() {
-        CSCoreLibLoader loader;
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlotSquared")) {
             this.plotSquared = true;
         }
@@ -121,7 +120,7 @@ public class SlimefunStartup extends Plugin {
             FlagPermissions.addFlag("sf-machines");
             this.residence = true;
         }
-        if ((loader = new CSCoreLibLoader(this.getPlugin())).load()) {
+        if (new CSCoreLibLoader(this.getPlugin()).load()) {
             String currentVersion = ReflectionUtils.getVersion();
             if (currentVersion.startsWith("v")) {
                 boolean compatibleVersion = false;
@@ -275,7 +274,6 @@ public class SlimefunStartup extends Plugin {
             this.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                 Slimefun.emeraldenchants = this.getPlugin().getServer().getPluginManager().isPluginEnabled("EmeraldEnchants");
                 this.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
-
                     @EventHandler
                     public void onWorldLoad(WorldLoadEvent e) {
                         BlockStorage.getForcedStorage(e.getWorld());
@@ -295,7 +293,6 @@ public class SlimefunStartup extends Plugin {
                     }
                 }, this.getPlugin());
                 this.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
-
                     @EventHandler
                     public void onDisconnect(PlayerQuitEvent e) {
                         SlimefunGuide.history.remove(e.getPlayer().getUniqueId());
@@ -373,16 +370,13 @@ public class SlimefunStartup extends Plugin {
                         connector.pullFile();
                     }
                 }, 80L, 72000L);
-                Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> SlimefunStartup.this.exoticGarden = SlimefunStartup.this.getPlugin().getServer().getPluginManager().isPluginEnabled("ExoticGarden"), 0L);
+                Bukkit.getScheduler().runTaskLater(getPlugin(), () -> exoticGarden = getPlugin().getServer().getPluginManager().isPluginEnabled("ExoticGarden"), 0L);
                 Research.creative_research = config.getBoolean("options.allow-free-creative-research");
                 AutoEnchanter.max_emerald_enchantments = config.getInt("options.emerald-enchantment-limit");
                 SlimefunSetup.legacy_ore_washer = config.getBoolean("options.legacy-ore-washer");
                 ElectricDustWasher.legacy_dust_washer = config.getBoolean("options.legacy-dust-washer");
                 CSCoreLib.getLib().filterLog("([A-Za-z0-9_]{3,16}) issued server command: /sf elevator (.{0,})");
             });
-            for (SlimefunItem item : SlimefunItem.items) {
-                System.out.println(item.getItem());
-            }
         }
 
     }

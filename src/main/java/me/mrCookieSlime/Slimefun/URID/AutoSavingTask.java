@@ -9,8 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class AutoSavingTask
-        implements Runnable {
+public class AutoSavingTask implements Runnable {
     public void run() {
         Set<BlockStorage> worlds = new HashSet<>();
 

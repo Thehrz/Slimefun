@@ -20,7 +20,7 @@ import org.bukkit.material.MaterialData;
 public class Projector {
     public static ArmorStand getArmorStand(Block projector) {
         String nametag = ChatColor.translateAlternateColorCodes('&', BlockStorage.getLocationInfo(projector.getLocation(), "text"));
-        double offset = Double.valueOf(BlockStorage.getLocationInfo(projector.getLocation(), "offset"));
+        double offset = Double.parseDouble(BlockStorage.getLocationInfo(projector.getLocation(), "offset"));
         Location l = new Location(projector.getWorld(), projector.getX() + 0.5D, projector.getY() + offset, projector.getZ() + 0.5D);
 
         for (Entity n : l.getChunk().getEntities()) {
@@ -59,9 +59,9 @@ public class Projector {
             return false;
         });
 
-        menu.addItem(1, new CustomItem(new MaterialData(Material.WATCH), "&7偏移量: &e" + DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(projector.getLocation(), "offset")) + 1.0D), "", "&r左键点击: &7+0.1", "&r右键点击: &7-0.1"));
+        menu.addItem(1, new CustomItem(new MaterialData(Material.WATCH), "&7偏移量: &e" + DoubleHandler.fixDouble(Double.parseDouble(BlockStorage.getLocationInfo(projector.getLocation(), "offset")) + 1.0D), "", "&r左键点击: &7+0.1", "&r右键点击: &7-0.1"));
         menu.addMenuClickHandler(1, (p1, arg1, arg2, arg3) -> {
-            double offset = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(projector.getLocation(), "offset")).doubleValue() + (arg3.isRightClicked() ? -0.1F : 0.1F));
+            double offset = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(projector.getLocation(), "offset")) + (arg3.isRightClicked() ? -0.1F : 0.1F));
             ArmorStand hologram = Projector.getArmorStand(projector);
             Location l = new Location(projector.getWorld(), projector.getX() + 0.5D, projector.getY() + offset, projector.getZ() + 0.5D);
 

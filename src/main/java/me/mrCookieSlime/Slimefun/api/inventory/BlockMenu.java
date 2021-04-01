@@ -128,8 +128,8 @@ public class BlockMenu extends ChestMenu {
     }
 
     public static class SaveHandler implements ChestMenu.MenuOpeningHandler {
-        final BlockMenu menu;
-        final ChestMenu.MenuOpeningHandler handler;
+        BlockMenu menu;
+        ChestMenu.MenuOpeningHandler handler;
 
         public SaveHandler(final BlockMenu menu, final ChestMenu.MenuOpeningHandler handler) {
             this.handler = handler;
@@ -138,8 +138,8 @@ public class BlockMenu extends ChestMenu {
 
         @Override
         public void onOpen(final Player p) {
-            this.handler.onOpen(p);
-            final BlockMenu menu = this.menu;
+            handler.onOpen(p);
+            BlockMenu menu = this.menu;
             ++menu.changes;
         }
     }

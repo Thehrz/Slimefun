@@ -31,25 +31,30 @@ public class AutoDisenchanter
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&5自动卸魔机";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_CHESTPLATE);
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     public int getEnergyConsumption() {
         return 9;
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);
@@ -140,11 +145,13 @@ public class AutoDisenchanter
     }
 
 
+    @Override
     public int getSpeed() {
         return 1;
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "AUTO_DISENCHANTER";
     }

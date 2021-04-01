@@ -30,13 +30,13 @@ public class TeleportationSequence {
         if (speed > 50) speed = 50;
         speed -= distance(source, destination) / 200;
 
-        return (speed < 1) ? 1 : speed;
+        return Math.max(speed, 1);
     }
 
     private static int distance(Location source, Location destination) {
         if (source.getWorld().getName().equals(destination.getWorld().getName())) {
             int distance = (int) source.distance(destination);
-            return (distance > 8000) ? 8000 : distance;
+            return Math.min(distance, 8000);
         }
         return 8000;
     }

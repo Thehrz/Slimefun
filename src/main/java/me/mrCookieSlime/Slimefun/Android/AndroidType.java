@@ -10,9 +10,7 @@ public enum AndroidType {
     FISHERMAN,
     NON_FIGHTER;
 
-
-    public boolean isType(AndroidType type) {
-        return type.equals(NONE) || type.equals(this) || type.equals(NON_FIGHTER) && !this.equals(FIGHTER);
+    public boolean isType(final AndroidType type) {
+        return type.equals(AndroidType.NONE) || type.equals(this) || (type.equals(AndroidType.NON_FIGHTER) && !this.equals(AndroidType.FIGHTER));
     }
 }
-

@@ -27,44 +27,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class AnimalGrowthAccelerator
-        extends SlimefunItem {
+public class AnimalGrowthAccelerator extends SlimefunItem {
     private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
     public AnimalGrowthAccelerator(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
         new BlockMenuPreset(name, "&b动物成长加速器") {
+            @Override
             public void init() {
-                AnimalGrowthAccelerator.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return AnimalGrowthAccelerator.this.getInputSlots();
+                getInputSlots();
                 return new int[0];
             }
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 me.mrCookieSlime.Slimefun.holograms.AnimalGrowthAccelerator.getArmorStand(b).remove();
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AnimalGrowthAccelerator.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -96,6 +97,7 @@ public class AnimalGrowthAccelerator
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new BlockTicker() {
+            @Override
             public void tick(Block b, SlimefunItem sf, Config data) {
                 try {
                     AnimalGrowthAccelerator.this.tick(b);
@@ -104,11 +106,11 @@ public class AnimalGrowthAccelerator
                 }
             }
 
-
+            @Override
             public void uniqueTick() {
             }
 
-
+            @Override
             public boolean isSynchronized() {
                 return true;
             }
@@ -119,19 +121,23 @@ public class AnimalGrowthAccelerator
 
     protected void tick(Block b) throws Exception {
         for (Entity n : me.mrCookieSlime.Slimefun.holograms.AnimalGrowthAccelerator.getArmorStand(b).getNearbyEntities(3.0D, 3.0D, 3.0D)) {
-            if (n instanceof Ageable && !((Ageable) n).isAdult())
+            if (n instanceof Ageable && !((Ageable) n).isAdult()) {
                 for (int slot : getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), SlimefunItems.ORGANIC_FOOD, false)) {
-                        if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                        if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                             return;
+                        }
                         ChargableBlock.addCharge(b, -getEnergyConsumption());
                         BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                         ((Ageable) n).setAge(((Ageable) n).getAge() + 2000);
-                        if (((Ageable) n).getAge() > 0) ((Ageable) n).setAge(0);
+                        if (((Ageable) n).getAge() > 0) {
+                            ((Ageable) n).setAge(0);
+                        }
                         ParticleEffect.VILLAGER_HAPPY.display(((LivingEntity) n).getEyeLocation(), 0.2F, 0.2F, 0.2F, 0.0F, 8);
                         return;
                     }
                 }
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ public abstract class ElectricFurnace
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         while (iterator.hasNext()) {
@@ -29,6 +30,7 @@ public abstract class ElectricFurnace
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "ELECTRIC_FURNACE";
     }

@@ -6,7 +6,7 @@ public class AndroidObject {
     ProgrammableAndroid android;
     Block b;
 
-    public AndroidObject(ProgrammableAndroid android, Block b) {
+    public AndroidObject(final ProgrammableAndroid android, final Block b) {
         this.android = android;
         this.b = b;
     }
@@ -19,4 +19,3 @@ public class AndroidObject {
         return this.b;
     }
 }
-

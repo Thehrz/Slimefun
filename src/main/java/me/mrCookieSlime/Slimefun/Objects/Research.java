@@ -206,7 +206,7 @@ public class Research {
                                     Messages.local.sendTranslation(p, "messages.research.progress", true, new Variable("%research%", getName()), new Variable("%progress%", "92%"));
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
                                         Config cfg = new Config(new File("data-storage/Slimefun/Players/" + p.getUniqueId() + ".yml"));
-                                        cfg.setValue("researches." + research, Boolean.valueOf(true));
+                                        cfg.setValue("researches." + research, Boolean.TRUE);
                                         cfg.save();
                                         Messages.local.sendTranslation(p, "messages.unlocked", true, new Variable("%research%", getName()));
                                         if (SlimefunStartup.getCfg().getBoolean("options.research-unlock-fireworks"))

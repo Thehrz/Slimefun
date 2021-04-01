@@ -65,8 +65,8 @@ public class OreGenSystem {
 
 
     public static boolean wasResourceGenerated(OreGenResource resource, Chunk chunk) {
-        if (resource == null) return false;
-        return BlockStorage.hasChunkInfo(chunk, "resources_" + resource.getName().toUpperCase());
+        if (resource == null) return true;
+        return !BlockStorage.hasChunkInfo(chunk, "resources_" + resource.getName().toUpperCase());
     }
 }
 

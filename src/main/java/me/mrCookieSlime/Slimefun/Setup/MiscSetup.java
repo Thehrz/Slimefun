@@ -169,7 +169,7 @@ public class MiscSetup {
                     if (!dust || inputs.size() != 1) {
 
 
-                        SlimefunRecipes.registerMachineRecipe("ELECTRIC_SMELTERY", 12, inputs.toArray(new ItemStack[inputs.size()]), new ItemStack[]{recipe[0]});
+                        SlimefunRecipes.registerMachineRecipe("ELECTRIC_SMELTERY", 12, inputs.toArray(new ItemStack[0]), new ItemStack[]{recipe[0]});
                     }
                 }
                 input = null;

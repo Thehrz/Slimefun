@@ -28,25 +28,30 @@ public abstract class Refinery
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "&c石油精炼器";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "REFINERY";
     }
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);

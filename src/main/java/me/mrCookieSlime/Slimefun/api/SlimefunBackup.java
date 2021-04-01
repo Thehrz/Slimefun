@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -21,7 +20,7 @@ public class SlimefunBackup {
         File folder = new File("data-storage/Slimefun/block-backups");
         List<File> backups = Arrays.asList(folder.listFiles());
         if (backups.size() > 20) {
-            Collections.sort(backups, (f1, f2) -> {
+            backups.sort((f1, f2) -> {
                 try {
                     return (int) ((new SimpleDateFormat("yyyy-MM-dd-HH-mm")).parse(f1.getName().replace(".zip", "")).getTime() - (new SimpleDateFormat("yyyy-MM-dd-HH-mm")).parse(f2.getName().replace(".zip", "")).getTime());
                 } catch (ParseException e) {
@@ -93,7 +92,7 @@ public class SlimefunBackup {
             if ((new File("data-storage/Slimefun/stored-chunks/chunks.sfc")).exists()) {
                 ZipEntry entry = new ZipEntry("stored-chunks/chunks.sfc");
                 output.putNextEntry(entry);
-                FileInputStream input = new FileInputStream(new File("data-storage/Slimefun/stored-chunks/chunks.sfc"));
+                FileInputStream input = new FileInputStream("data-storage/Slimefun/stored-chunks/chunks.sfc");
 
                 int length;
                 while ((length = input.read(buffer)) > 0) {

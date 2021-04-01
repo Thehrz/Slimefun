@@ -28,25 +28,30 @@ public abstract class AutoAnvil
     }
 
 
+    @Override
     public String getInventoryTitle() {
         return "自动铁砧";
     }
 
 
+    @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.IRON_PICKAXE);
     }
 
 
+    @Override
     public void registerDefaultRecipes() {
     }
 
 
+    @Override
     public int getSpeed() {
         return 1;
     }
 
 
+    @Override
     public String getMachineIdentifier() {
         return "AUTO_ANVIL";
     }
@@ -55,6 +60,7 @@ public abstract class AutoAnvil
     public abstract int getRepairFactor();
 
 
+    @Override
     protected void tick(Block b) {
         if (isProcessing(b)) {
             int timeleft = progress.get(b);

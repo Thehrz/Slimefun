@@ -34,8 +34,7 @@ import org.bukkit.material.MaterialData;
 import java.util.*;
 
 
-public abstract class AGenerator
-        extends SlimefunItem {
+public abstract class AGenerator extends SlimefunItem {
     public static final Map<Location, MachineFuel> processing = new HashMap<>();
     public static final Map<Location, Integer> progress = new HashMap<>();
     private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44};
@@ -47,42 +46,46 @@ public abstract class AGenerator
         super(category, item, id, recipeType, recipe);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
-                AGenerator.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return AGenerator.this.getInputSlots();
-                return AGenerator.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AGenerator.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : AGenerator.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -102,42 +105,46 @@ public abstract class AGenerator
         super(category, item, id, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(id, getInventoryTitle()) {
+            @Override
             public void init() {
-                AGenerator.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean perm = (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
                 return (perm && ProtectionUtils.canAccessItem(p, b));
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow.equals(ItemTransportFlow.INSERT)) return AGenerator.this.getInputSlots();
-                return AGenerator.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
         };
 
         registerBlockHandler(id, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : AGenerator.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
                         }
                     }
-                    for (int slot : AGenerator.this.getOutputSlots()) {
+                    for (int slot : getOutputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -170,11 +177,12 @@ public abstract class AGenerator
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
-
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -212,10 +220,10 @@ public abstract class AGenerator
 
             @Override
             public double generateEnergy(Location l, SlimefunItem sf, Config data) {
-                if (AGenerator.this.isProcessing(l)) {
+                if (isProcessing(l)) {
                     int timeleft = AGenerator.progress.get(l);
                     if (timeleft > 0) {
-                        ItemStack item = AGenerator.this.getProgressBar().clone();
+                        ItemStack item = getProgressBar().clone();
                         item.setDurability(MachineHelper.getDurability(item, timeleft, AGenerator.processing.get(l).getTicks()));
                         ItemMeta im = item.getItemMeta();
                         im.setDisplayName(" ");
@@ -229,7 +237,7 @@ public abstract class AGenerator
                         BlockStorage.getInventory(l).replaceExistingItem(22, item);
 
                         if (ChargableBlock.isChargable(l)) {
-                            if (ChargableBlock.getMaxCharge(l) - ChargableBlock.getCharge(l) >= AGenerator.this.getEnergyProduction()) {
+                            if (ChargableBlock.getMaxCharge(l) - ChargableBlock.getCharge(l) >= getEnergyProduction()) {
                                 ChargableBlock.addCharge(l, AGenerator.this.getEnergyProduction());
                                 AGenerator.progress.put(l, timeleft - 1);
                                 return ChargableBlock.getCharge(l);
@@ -238,17 +246,17 @@ public abstract class AGenerator
                         }
 
                         AGenerator.progress.put(l, timeleft - 1);
-                        return AGenerator.this.getEnergyProduction();
+                        getEnergyProduction();
                     }
 
 
                     ItemStack fuel = AGenerator.processing.get(l).getInput();
                     if (SlimefunManager.isItemSimiliar(fuel, new ItemStack(Material.LAVA_BUCKET), true)) {
-                        AGenerator.this.pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
+                        pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
                     } else if (SlimefunManager.isItemSimiliar(fuel, SlimefunItems.BUCKET_OF_FUEL, true)) {
-                        AGenerator.this.pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
+                        pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
                     } else if (SlimefunManager.isItemSimiliar(fuel, SlimefunItems.BUCKET_OF_OIL, true)) {
-                        AGenerator.this.pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
+                        pushItems(l, new ItemStack[]{new ItemStack(Material.BUCKET)});
                     }
                     BlockStorage.getInventory(l).replaceExistingItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "));
 
@@ -261,14 +269,13 @@ public abstract class AGenerator
                 MachineFuel r = null;
                 Map<Integer, Integer> found = new HashMap<>();
 
-                label41:
-                for (MachineFuel recipe : AGenerator.this.recipes) {
-                    for (int slot : AGenerator.this.getInputSlots()) {
+                MachineFuel:
+                for (MachineFuel recipe : recipes) {
+                    for (int slot : getInputSlots()) {
                         if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(l).getItemInSlot(slot), recipe.getInput(), true)) {
                             found.put(slot, recipe.getInput().getAmount());
                             r = recipe;
-
-                            break label41;
+                            break MachineFuel;
                         }
                     }
                 }
@@ -276,8 +283,8 @@ public abstract class AGenerator
                     for (Map.Entry<Integer, Integer> entry : found.entrySet()) {
                         BlockStorage.getInventory(l).replaceExistingItem(entry.getKey(), InvUtils.decreaseItem(BlockStorage.getInventory(l).getItemInSlot(entry.getKey()), entry.getValue()));
                     }
-                    AGenerator.processing.put(l, r);
-                    AGenerator.progress.put(l, r.getTicks());
+                    processing.put(l, r);
+                    progress.put(l, r.getTicks());
                 }
                 return 0.0D;
             }

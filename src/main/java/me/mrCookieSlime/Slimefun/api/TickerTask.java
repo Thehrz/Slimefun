@@ -37,6 +37,7 @@ public class TickerTask implements Runnable {
     private int machines = 0;
     private long time = 0L;
 
+    @Override
     public void run() {
         long timestamp = System.currentTimeMillis();
 
@@ -64,15 +65,15 @@ public class TickerTask implements Runnable {
         if (!this.HALTED) {
             for (String c : BlockStorage.getTickingChunks()) {
                 long timestamp2 = System.currentTimeMillis();
-                this.chunks++;
+                chunks++;
 
 
                 for (Location l : BlockStorage.getTickingLocations(c)) {
                     if (l.getWorld().isChunkLoaded(l.getBlockX() >> 4, l.getBlockZ() >> 4)) {
-                        final Block b = l.getBlock();
-                        final SlimefunItem item = BlockStorage.check(l);
+                        Block b = l.getBlock();
+                        SlimefunItem item = BlockStorage.check(l);
                         if (item != null) {
-                            this.machines++;
+                            machines++;
                             try {
                                 item.getBlockTicker().update();
                                 if (item.getBlockTicker().isSynchronized()) {
@@ -81,14 +82,15 @@ public class TickerTask implements Runnable {
                                             long timestamp3 = System.currentTimeMillis();
                                             item.getBlockTicker().tick(b, item, BlockStorage.getLocationInfo(l));
 
-                                            TickerTask.this.map_machinetime.put(item.getID(), Long.valueOf((TickerTask.this.map_machinetime.containsKey(item.getID()) ? TickerTask.this.map_machinetime.get(item.getID()).longValue() : 0L) + System.currentTimeMillis() - timestamp3));
-                                            TickerTask.this.map_chunk.put(c, Integer.valueOf((TickerTask.this.map_chunk.containsKey(c) ? TickerTask.this.map_chunk.get(c).intValue() : 0) + 1));
-                                            TickerTask.this.map_machine.put(item.getID(), Integer.valueOf((TickerTask.this.map_machine.containsKey(item.getID()) ? TickerTask.this.map_machine.get(item.getID()).intValue() : 0) + 1));
-                                            TickerTask.block_timings.put(l, Long.valueOf(System.currentTimeMillis() - timestamp3));
+                                            map_machinetime.put(item.getID(), (map_machinetime.getOrDefault(item.getID(), 0L)) + System.currentTimeMillis() - timestamp3);
+                                            map_chunk.put(c, (TickerTask.this.map_chunk.getOrDefault(c, 0)) + 1);
+                                            map_machine.put(item.getID(), (map_machine.getOrDefault(item.getID(), 0)) + 1);
+                                            TickerTask.block_timings.put(l, System.currentTimeMillis() - timestamp3);
                                         } catch (Exception x) {
                                             int errors = 0;
-                                            if (bugged.containsKey(l))
-                                                errors = bugged.get(l).intValue();
+                                            if (bugged.containsKey(l)) {
+                                                errors = bugged.get(l);
+                                            }
                                             errors++;
 
                                             if (errors == 1) {
@@ -171,7 +173,7 @@ public class TickerTask implements Runnable {
 
                                             } else {
 
-                                                TickerTask.bugged_blocks.put(l, Integer.valueOf(errors));
+                                                TickerTask.bugged_blocks.put(l, errors);
                                             }
                                         }
                                     });
@@ -180,16 +182,18 @@ public class TickerTask implements Runnable {
                                     long timestamp3 = System.currentTimeMillis();
                                     item.getBlockTicker().tick(b, item, BlockStorage.getLocationInfo(l));
 
-                                    this.map_machinetime.put(item.getID(), (this.map_machinetime.containsKey(item.getID()) ? this.map_machinetime.get(item.getID()) : 0L) + System.currentTimeMillis() - timestamp3);
-                                    this.map_chunk.put(c, (this.map_chunk.containsKey(c) ? this.map_chunk.get(c) : 0) + 1);
-                                    this.map_machine.put(item.getID(), (this.map_machine.containsKey(item.getID()) ? this.map_machine.get(item.getID()) : 0) + 1);
+                                    this.map_machinetime.put(item.getID(), (this.map_machinetime.getOrDefault(item.getID(), 0L)) + System.currentTimeMillis() - timestamp3);
+                                    this.map_chunk.put(c, (this.map_chunk.getOrDefault(c, 0)) + 1);
+                                    this.map_machine.put(item.getID(), (this.map_machine.getOrDefault(item.getID(), 0)) + 1);
                                     block_timings.put(l, System.currentTimeMillis() - timestamp3);
                                 }
                                 this.tickers.add(item.getBlockTicker());
                             } catch (Exception x) {
 
                                 int errors = 0;
-                                if (bugged.containsKey(l)) errors = bugged.get(l);
+                                if (bugged.containsKey(l)) {
+                                    errors = bugged.get(l);
+                                }
                                 errors++;
 
                                 if (errors == 1) {
@@ -294,7 +298,7 @@ public class TickerTask implements Runnable {
         }
 
         for (Map.Entry<Location, Location> entry : this.move.entrySet()) {
-            BlockStorage._integrated_moveLocationInfo(entry.getKey(), entry.getValue());
+            BlockStorage.moveBlockInfo(entry.getKey(), entry.getValue());
         }
         this.move.clear();
 
@@ -323,12 +327,12 @@ public class TickerTask implements Runnable {
             int hidden = 0;
             for (String item : this.map_machine.keySet()) {
                 if (this.map_machinetime.get(item) > 0L) {
-                    hover.append("\n&c" + item + " - " + this.map_machine.get(item) + "x &7(" + this.map_machinetime.get(item) + "ms)");
+                    hover.append("\n&c").append(item).append(" - ").append(this.map_machine.get(item)).append("x &7(").append(this.map_machinetime.get(item)).append("ms)");
                     continue;
                 }
                 hidden++;
             }
-            hover.append("\n\n&c+ &4" + hidden + " Hidden");
+            hover.append("\n\n&c+ &4").append(hidden).append(" Hidden");
             tellraw.addHoverEvent(TellRawMessage.HoverAction.SHOW_TEXT, hover.toString());
             try {
                 tellraw.send((Player) sender);
@@ -357,13 +361,13 @@ public class TickerTask implements Runnable {
             for (String c : this.map_chunktime.keySet()) {
                 if (!this.skipped_chunks.contains(c)) {
                     if (this.map_chunktime.get(c) > 0L) {
-                        hover.append("\n&c" + c.replace("CraftChunk", "") + " - " + (this.map_chunk.containsKey(c) ? this.map_chunk.get(c) : 0) + "x &7(" + this.map_chunktime.get(c) + "ms)");
+                        hover.append("\n&c").append(c.replace("CraftChunk", "")).append(" - ").append(this.map_chunk.getOrDefault(c, 0)).append("x &7(").append(this.map_chunktime.get(c)).append("ms)");
                         continue;
                     }
                     hidden++;
                 }
             }
-            hover.append("\n\n&c+ &4" + hidden + " Hidden");
+            hover.append("\n\n&c+ &4").append(hidden).append(" Hidden");
             tellraw.addHoverEvent(TellRawMessage.HoverAction.SHOW_TEXT, hover.toString());
             try {
                 tellraw.send((Player) sender);
@@ -377,7 +381,7 @@ public class TickerTask implements Runnable {
             for (String c : this.map_chunktime.keySet()) {
                 if (!this.skipped_chunks.contains(c)) {
                     if (this.map_chunktime.get(c) > 0L) {
-                        sender.sendMessage("  &c" + c.replace("CraftChunk", "") + " - " + (this.map_chunk.containsKey(c) ? this.map_chunk.get(c) : 0) + "x &7(" + this.map_chunktime.get(c) + "ms)");
+                        sender.sendMessage("  &c" + c.replace("CraftChunk", "") + " - " + (this.map_chunk.getOrDefault(c, 0)) + "x &7(" + this.map_chunktime.get(c) + "ms)");
                         continue;
                     }
                     hidden++;
@@ -388,15 +392,15 @@ public class TickerTask implements Runnable {
     }
 
     public long getTimings(Block b) {
-        return block_timings.containsKey(b.getLocation()) ? block_timings.get(b.getLocation()) : 0L;
+        return block_timings.getOrDefault(b.getLocation(), 0L);
     }
 
     public long getTimings(String item) {
-        return this.map_machinetime.containsKey(item) ? this.map_machinetime.get(item) : 0L;
+        return this.map_machinetime.getOrDefault(item, 0L);
     }
 
     public long getTimings(Chunk c) {
-        return this.map_chunktime.containsKey(c.toString()) ? this.map_chunktime.get(c.toString()) : 0L;
+        return this.map_chunktime.getOrDefault(c.toString(), 0L);
     }
 }
 

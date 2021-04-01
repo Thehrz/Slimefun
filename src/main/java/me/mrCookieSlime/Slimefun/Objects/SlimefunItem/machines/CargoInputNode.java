@@ -21,19 +21,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class CargoInputNode
-        extends SlimefunItem {
-    private static final int[] border = new int[]{0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 22, 23, 26, 27, 31, 32, 33, 34, 35, 36, 40, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+public class CargoInputNode extends SlimefunItem {
+    private static final int[] BORDER = new int[]{0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 22, 23, 26, 27, 31, 32, 33, 34, 35, 36, 40, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
 
     public CargoInputNode(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
         super(category, item, name, recipeType, recipe, recipeOutput);
 
         new BlockMenuPreset(name, "&3输入接口") {
+            @Override
             public void init() {
-                CargoInputNode.this.constructMenu(this);
+                constructMenu(this);
             }
 
-
+            @Override
             public void newInstance(final BlockMenu menu, final Block b) {
                 try {
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || BlockStorage.getLocationInfo(b.getLocation(), "filter-type").equals("whitelist")) {
@@ -44,7 +44,6 @@ public class CargoInputNode
                             return false;
                         });
                     } else {
-
                         menu.replaceExistingItem(15, new CustomItem(new MaterialData(Material.WOOL, (byte) 15), "&7类型: &8黑名单", "", "&e> 点击切换为白名单"));
                         menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-type", "whitelist");
@@ -61,7 +60,6 @@ public class CargoInputNode
                             return false;
                         });
                     } else {
-
                         menu.replaceExistingItem(16, new CustomItem(new MaterialData(Material.GOLD_SWORD, (byte) 20), "&7需要匹配的 子ID/耐久值: &2✔", "", "&e> 点击修改需要匹配的耐久值"));
                         menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-durability", "false");
@@ -78,7 +76,6 @@ public class CargoInputNode
                             return false;
                         });
                     } else {
-
                         menu.replaceExistingItem(24, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDc4ZjJiN2U1ZTc1NjM5ZWE3ZmI3OTZjMzVkMzY0YzRkZjI4YjQyNDNlNjZiNzYyNzdhYWRjZDYyNjEzMzcifX19"), "&7循环模式: &2✔", "", "&e> 点击关闭循环模式", "&e(物品将在频段中被均分)"));
                         menu.addMenuClickHandler(24, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "round-robin", "false");
@@ -95,7 +92,6 @@ public class CargoInputNode
                             return false;
                         });
                     } else {
-
                         menu.replaceExistingItem(25, new CustomItem(new MaterialData(Material.EMPTY_MAP), "&7需要匹配的 说明(Lore): &4✘", "", "&e> 点击修改需要匹配的Lore"));
                         menu.addMenuClickHandler(25, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "filter-lore", "true");
@@ -107,12 +103,13 @@ public class CargoInputNode
                     menu.replaceExistingItem(41, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI1OTliZDk4NjY1OWI4Y2UyYzQ5ODg1MjVjOTRlMTlkZGQzOWZhZDA4YTM4Mjg0YTE5N2YxYjcwNjc1YWNjIn19fQ=="), "&b频段号", "", "&e> 点击 -1 频段号"));
                     menu.addMenuClickHandler(41, (p, arg1, arg2, arg3) -> {
                         int channel = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) - 1;
-                        if (channel < 0)
+                        if (channel < 0) {
                             if (CargoNet.EXTRA_CHANNELS) {
                                 channel = 16;
                             } else {
                                 channel = 15;
                             }
+                        }
 
                         BlockStorage.addBlockInfo(b, "frequency", String.valueOf(channel));
                         newInstance(menu, b);
@@ -135,7 +132,9 @@ public class CargoInputNode
                         int channel1 = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) + 1;
 
                         if (CargoNet.EXTRA_CHANNELS) {
-                            if (channel1 > 16) channel1 = 0;
+                            if (channel1 > 16) {
+                                channel1 = 0;
+                            }
                         } else if (channel1 > 15) {
                             channel1 = 0;
                         }
@@ -150,7 +149,7 @@ public class CargoInputNode
                 }
             }
 
-
+            @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
                 if (!open) {
@@ -159,13 +158,14 @@ public class CargoInputNode
                 return open;
             }
 
-
+            @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
         };
 
         registerBlockHandler(name, new SlimefunBlockHandler() {
+            @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
                 BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
                 BlockStorage.addBlockInfo(b, "index", "0");
@@ -176,11 +176,11 @@ public class CargoInputNode
                 BlockStorage.addBlockInfo(b, "round-robin", "false");
             }
 
-
+            @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
                 if (inv != null) {
-                    for (int slot : CargoInputNode.this.getInputSlots()) {
+                    for (int slot : getInputSlots()) {
                         if (inv.getItemInSlot(slot) != null) {
                             b.getWorld().dropItemNaturally(b.getLocation(), inv.getItemInSlot(slot));
                             inv.replaceExistingItem(slot, null);
@@ -194,7 +194,7 @@ public class CargoInputNode
 
 
     protected void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
+        for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
