@@ -24,12 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+ 
+import java.util.*;
 
 public abstract class ElectricSmeltery extends AContainer {
     public static final Map<Block, MachineRecipe> PROCESSING = new HashMap<>();
@@ -61,7 +57,8 @@ public abstract class ElectricSmeltery extends AContainer {
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
-
+            
+            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.WITHDRAW)) return ElectricSmeltery.this.getOutputSlots();
 
