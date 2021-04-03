@@ -5,7 +5,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AltarRecipe {
     final ItemStack catalyst;
     final List<ItemStack> input;

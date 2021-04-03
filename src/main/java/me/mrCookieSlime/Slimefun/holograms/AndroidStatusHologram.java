@@ -10,8 +10,6 @@ import java.util.List;
 
 
 public class AndroidStatusHologram {
-    private static final double offset = 1.2D;
-
     public static void update(Block b, String name) {
         ArmorStand hologram = getArmorStand(b);
         hologram.setCustomName(name);

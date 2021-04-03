@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class Pedestals {
     public static List<AltarRecipe> recipes = new ArrayList<>();
 

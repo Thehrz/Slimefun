@@ -34,8 +34,9 @@ public class TeleporterListener implements Listener {
 
                 if (teleporter instanceof Teleporter) {
                     for (BlockFace face : this.faces) {
-                        if (!BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN).getRelative(face), "GPS_TELEPORTER_PYLON"))
+                        if (!BlockStorage.check(e.getClickedBlock().getRelative(BlockFace.DOWN).getRelative(face), "GPS_TELEPORTER_PYLON")) {
                             return;
+                        }
                     }
                     try {
                         ((Teleporter) teleporter).onInteract(e.getPlayer(), e.getClickedBlock().getRelative(BlockFace.DOWN));
@@ -67,6 +68,8 @@ public class TeleporterListener implements Listener {
                 break;
             case "ELEVATOR_PLATE":
                 Elevator.openDialogue(e.getPlayer(), e.getClickedBlock());
+                break;
+            default:
                 break;
         }
     }

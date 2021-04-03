@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class RitualAnimation implements Runnable {
     final List<Block> altars;
     final Block altar;
@@ -39,7 +38,6 @@ public class RitualAnimation implements Runnable {
         this.running = true;
         this.stage = 0;
     }
-
 
     @Override
     public void run() {

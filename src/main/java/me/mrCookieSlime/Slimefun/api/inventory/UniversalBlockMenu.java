@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class UniversalBlockMenu extends ChestMenu {
-    final BlockMenuPreset preset;
+    BlockMenuPreset preset;
     public int changes;
     ItemManipulationEvent event;
 
@@ -37,7 +37,7 @@ public class UniversalBlockMenu extends ChestMenu {
         if (preset.getSize() > -1 && !preset.getPresetSlots().contains(preset.getSize() - 1) && cfg.contains(String.valueOf(preset.getSize() - 1))) {
             this.addItem(preset.getSize() - 1, cfg.getItem(String.valueOf(preset.getSize() - 1)));
         }
-        this.getContents();
+        getContents();
     }
 
     public void registerEvent(final ItemManipulationEvent event) {
@@ -45,18 +45,18 @@ public class UniversalBlockMenu extends ChestMenu {
     }
 
     public void save() {
-        if (this.changes == 0) {
+        if (changes == 0) {
             return;
         }
-        this.getContents();
-        final File file = new File("data-storage/Slimefun/universal-inventories/" + this.preset.getID() + ".sfi");
-        final Config cfg = new Config(file);
+        getContents();
+        File file = new File("data-storage/Slimefun/universal-inventories/" + this.preset.getID() + ".sfi");
+        Config cfg = new Config(file);
         cfg.setValue("preset", this.preset.getID());
         for (final int slot : this.preset.getInventorySlots()) {
             cfg.setValue(String.valueOf(slot), this.getItemInSlot(slot));
         }
         cfg.save();
-        this.changes = 0;
+        changes = 0;
     }
 
     public BlockMenuPreset getPreset() {
@@ -78,7 +78,7 @@ public class UniversalBlockMenu extends ChestMenu {
             item = this.event.onEvent(slot, previous, item);
         }
         super.replaceExistingItem(slot, item);
-        ++this.changes;
+        ++changes;
     }
 
     public void close() {

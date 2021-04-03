@@ -44,7 +44,6 @@ import java.io.File;
 import java.util.*;
 
 public abstract class ProgrammableAndroid extends SlimefunItem {
-
     private static final int[] BORDER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 24, 25, 26, 27, 33, 35, 36, 42, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
     private static final int[] BORDER_OUT = {10, 11, 12, 13, 14, 19, 23, 28, 32, 37, 38, 39, 40, 41};
 
@@ -1385,7 +1384,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
     }
 
     public void addItems(Block b, ItemStack... items) {
-        this.pushItems(b, items);
+        pushItems(b, items);
     }
 
     @Override
@@ -1442,21 +1441,17 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
                 }
             }
         }
-
         scripts.sort(new ScriptReputationSorter(this));
-
         return scripts;
     }
 
     public List<ScriptPart> getAccessibleScriptParts() {
         List<ScriptPart> list = new ArrayList<>();
-
         for (final ScriptPart part : ScriptPart.values()) {
             if (!part.equals(ScriptPart.START) && !part.equals(ScriptPart.REPEAT) && getAndroidType().isType(part.getRequiredType())) {
                 list.add(part);
             }
         }
-
         return list;
     }
 }
