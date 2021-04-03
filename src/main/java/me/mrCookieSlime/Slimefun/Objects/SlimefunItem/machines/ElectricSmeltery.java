@@ -62,24 +62,23 @@ public abstract class ElectricSmeltery extends AContainer {
                 return new int[0];
             }
 
-            @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
-                getOutputSlots();
+                if (flow.equals(ItemTransportFlow.WITHDRAW)) return ElectricSmeltery.this.getOutputSlots();
 
                 List<Integer> slots = new ArrayList<>();
 
-                for (int slot : getInputSlots()) {
+                for (int slot : ElectricSmeltery.this.getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(menu.getItemInSlot(slot), item, true)) {
                         slots.add(slot);
                     }
                 }
 
                 if (slots.isEmpty()) {
-                    getInputSlots();
+                    return ElectricSmeltery.this.getInputSlots();
                 }
 
-                slots.sort(new RecipeSorter(menu));
-                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[0]));
+                Collections.sort(slots, new RecipeSorter(menu));
+                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[slots.size()]));
             }
         };
 
