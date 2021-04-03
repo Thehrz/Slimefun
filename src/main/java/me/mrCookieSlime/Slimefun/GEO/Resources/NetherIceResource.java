@@ -6,8 +6,8 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
 
-public class NetherIceResource
-        implements OreGenResource {
+public class NetherIceResource implements OreGenResource {
+    @Override
     public int getDefaultSupply(Biome biome) {
         if (biome == Biome.HELL) {
             return 32;
@@ -17,16 +17,19 @@ public class NetherIceResource
     }
 
 
+    @Override
     public String getName() {
         return "下界玄冰";
     }
 
 
+    @Override
     public ItemStack getIcon() {
         return SlimefunItems.NETHER_ICE.clone();
     }
 
 
+    @Override
     public String getMeasurementUnit() {
         return "块";
     }

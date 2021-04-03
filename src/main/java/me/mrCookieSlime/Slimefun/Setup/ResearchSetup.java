@@ -160,7 +160,7 @@ public class ResearchSetup {
         Slimefun.registerResearch(new Research(164, "Oil", 30), SlimefunItems.BUCKET_OF_OIL, SlimefunItems.OIL_PUMP);
         Slimefun.registerResearch(new Research(165, "Fuel", 30), SlimefunItems.BUCKET_OF_FUEL, SlimefunItems.REFINERY);
         Slimefun.registerResearch(new Research(166, "Holograms", 36), SlimefunItems.HOLOGRAM_PROJECTOR);
-        Slimefun.registerResearch(new Research(167, "Tier 1 Capacitors", 25), SlimefunItems.SMALL_CAPACITOR, SlimefunItems.MEDIUM_CAPACITOR, SlimefunItems.BIG_CAPACITOR);
+        Slimefun.registerResearch(new Research(167, "Tier 1 Capacitors", 25), SlimefunItems.ENERGYCONNECTOR, SlimefunItems.SMALL_CAPACITOR, SlimefunItems.MEDIUM_CAPACITOR, SlimefunItems.BIG_CAPACITOR);
         Slimefun.registerResearch(new Research(168, "Tier 2 Capacitors", 32), SlimefunItems.LARGE_CAPACITOR, SlimefunItems.CARBONADO_EDGED_CAPACITOR);
         Slimefun.registerResearch(new Research(169, "Solar Power Plant", 14), SlimefunItems.SOLAR_GENERATOR);
         Slimefun.registerResearch(new Research(170, "Powered Furnace", 15), SlimefunItems.ELECTRIC_FURNACE);

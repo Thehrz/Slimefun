@@ -17,8 +17,9 @@ public class Backpacks {
         List<Integer> ids = new ArrayList<>();
         Config cfg = new Config(new File("data-storage/Slimefun/Players/" + p.getUniqueId() + ".yml"));
         for (int i = 0; i < 1000 &&
-                cfg.contains("backpacks." + i + ".size"); i++)
+                cfg.contains("backpacks." + i + ".size"); i++) {
             ids.add(i);
+        }
 
 
         int id = ids.isEmpty() ? 0 : (ids.get(ids.size() - 1) + 1);

@@ -13,8 +13,12 @@ import java.util.List;
 
 public class ItemEnergy {
     public static float getStoredEnergy(ItemStack item) {
-        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) return 0.0F;
-        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return 0.0F;
+        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) {
+            return 0.0F;
+        }
+        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) {
+            return 0.0F;
+        }
 
         for (String line : item.getItemMeta().getLore()) {
             if (line.startsWith(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7")) && line.contains(" / ") && line.endsWith(" J")) {
@@ -26,8 +30,12 @@ public class ItemEnergy {
     }
 
     public static float getMaxEnergy(ItemStack item) {
-        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) return 0.0F;
-        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return 0.0F;
+        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) {
+            return 0.0F;
+        }
+        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) {
+            return 0.0F;
+        }
 
         for (String line : item.getItemMeta().getLore()) {
             if (line.startsWith(ChatColor.translateAlternateColorCodes('&', "&c&o&8⇨ &e⚡ &7")) && line.contains(" / ") && line.endsWith(" J")) {
@@ -39,8 +47,12 @@ public class ItemEnergy {
     }
 
     public static float addStoredEnergy(ItemStack item, float energy) {
-        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) return 0.0F;
-        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return 0.0F;
+        if (item == null || item.getType() == null || item.getType().equals(Material.AIR)) {
+            return 0.0F;
+        }
+        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) {
+            return 0.0F;
+        }
 
         float rest = 0.0F;
         float capacity = getMaxEnergy(item);

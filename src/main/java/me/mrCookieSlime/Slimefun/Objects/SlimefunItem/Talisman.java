@@ -58,7 +58,7 @@ public class Talisman
     public static boolean checkFor(Event e, SlimefunItem talisman) {
         if (talisman != null) {
             if (talisman instanceof Talisman) {
-                boolean message = !((Talisman) talisman).getSuffix().equalsIgnoreCase("");
+                boolean message = !"".equalsIgnoreCase(((Talisman) talisman).getSuffix());
                 if (SlimefunStartup.chance(100, ((Talisman) talisman).getChance())) {
                     Player p = null;
 

@@ -54,10 +54,10 @@ public class ToolListener implements Listener {
                 SlimefunItem.blockhandler.get(sfItem.getID()).onPlace(e.getPlayer(), e.getBlock(), sfItem);
             }
         } else {
-
             for (ItemHandler handler : SlimefunItem.getHandlers("BlockPlaceHandler")) {
-                if (((BlockPlaceHandler) handler).onBlockPlace(e, item))
+                if (((BlockPlaceHandler) handler).onBlockPlace(e, item)) {
                     break;
+                }
             }
         }
     }
@@ -204,13 +204,16 @@ public class ToolListener implements Listener {
         } else if (item != null) {
             if (item.getEnchantments().containsKey(Enchantment.LOOT_BONUS_BLOCKS) && !item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
                 fortune = SlimefunStartup.randomize(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) + 2) - 1;
-                if (fortune <= 0) fortune = 1;
+                if (fortune <= 0) {
+                    fortune = 1;
+                }
                 fortune = ((e.getBlock().getType() == Material.LAPIS_ORE) ? (4 + SlimefunStartup.randomize(5)) : 1) * (fortune + 1);
             }
 
             for (ItemHandler handler : SlimefunItem.getHandlers("BlockBreakHandler")) {
-                if (((BlockBreakHandler) handler).onBlockBreak(e, item, fortune, drops))
+                if (((BlockBreakHandler) handler).onBlockBreak(e, item, fortune, drops)) {
                     break;
+                }
             }
         }
         if (!drops.isEmpty()) {
@@ -231,7 +234,7 @@ public class ToolListener implements Listener {
             SlimefunItem item = BlockStorage.check(block);
             if (item != null) {
                 blocks.remove();
-                if (!item.getID().equalsIgnoreCase("HARDENED_GLASS") && !item.getID().equalsIgnoreCase("WITHER_PROOF_OBSIDIAN") && !item.getID().equalsIgnoreCase("WITHER_PROOF_GLASS") && !item.getID().equalsIgnoreCase("FORCEFIELD_PROJECTOR") && !item.getID().equalsIgnoreCase("FORCEFIELD_RELAY")) {
+                if (!"HARDENED_GLASS".equalsIgnoreCase(item.getID()) && !"WITHER_PROOF_OBSIDIAN".equalsIgnoreCase(item.getID()) && !"WITHER_PROOF_GLASS".equalsIgnoreCase(item.getID()) && !"FORCEFIELD_PROJECTOR".equalsIgnoreCase(item.getID()) && !"FORCEFIELD_RELAY".equalsIgnoreCase(item.getID())) {
                     boolean success = true;
                     if (SlimefunItem.blockhandler.containsKey(item.getID())) {
                         success = SlimefunItem.blockhandler.get(item.getID()).onBreak(null, block, item, UnregisterReason.EXPLODE);
@@ -250,7 +253,9 @@ public class ToolListener implements Listener {
     public void onLiquidFlow(BlockFromToEvent e) {
         Block block = e.getToBlock();
         SlimefunItem item = BlockStorage.check(block);
-        if (item != null) e.setCancelled(true);
+        if (item != null) {
+            e.setCancelled(true);
+        }
     }
 }
 

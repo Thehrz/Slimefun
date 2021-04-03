@@ -20,8 +20,20 @@ public class ItemPickupListener implements Listener {
 
     }
 
+//    @EventHandler
+//    public void onPickup(EntityPickupItemEvent e) {
+//        if (e.getItem().hasMetadata("no_pickup")) {
+//            e.setCancelled(true);
+//        } else if (!e.getItem().hasMetadata("no_pickup") && e.getItem().getItemStack().hasItemMeta() && e.getItem().getItemStack().getItemMeta().hasDisplayName() && e.getItem().getItemStack().getItemMeta().getDisplayName().startsWith(ChatColor.translateAlternateColorCodes('&', "&5&d祭坛 &3灵柱 - &e"))) {
+//            e.setCancelled(true);
+//            e.getItem().remove();
+//        }
+//
+//    }
+
     @EventHandler
     public void onMinecartPickup(InventoryPickupItemEvent e) {
+        System.out.println(e);
         if (e.getItem().hasMetadata("no_pickup")) {
             e.setCancelled(true);
         } else if (!e.getItem().hasMetadata("no_pickup") && e.getItem().getItemStack().hasItemMeta() && e.getItem().getItemStack().getItemMeta().hasDisplayName() && e.getItem().getItemStack().getItemMeta().getDisplayName().startsWith(ChatColor.translateAlternateColorCodes('&', "&5&d祭坛 &3灵柱 - &e"))) {

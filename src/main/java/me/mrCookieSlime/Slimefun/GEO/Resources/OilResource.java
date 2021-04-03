@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class OilResource
         implements OreGenResource {
+    @Override
     public int getDefaultSupply(Biome biome) {
         switch (biome) {
             case COLD_BEACH:
@@ -69,16 +70,19 @@ public class OilResource
     }
 
 
+    @Override
     public String getName() {
         return "原油";
     }
 
 
+    @Override
     public ItemStack getIcon() {
         return SlimefunItems.BUCKET_OF_OIL.clone();
     }
 
 
+    @Override
     public String getMeasurementUnit() {
         return "桶";
     }

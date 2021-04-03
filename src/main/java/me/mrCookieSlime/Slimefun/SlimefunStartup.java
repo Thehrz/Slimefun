@@ -43,7 +43,10 @@ import me.mrCookieSlime.Slimefun.api.energy.ItemEnergy;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.CargoNet;
 import me.mrCookieSlime.Slimefun.api.item_transport.ChestManipulator;
-import me.mrCookieSlime.Slimefun.listeners.*;
+import me.mrCookieSlime.Slimefun.listeners.AncientAltarListener;
+import me.mrCookieSlime.Slimefun.listeners.BackpackListener;
+import me.mrCookieSlime.Slimefun.listeners.CoolerListener;
+import me.mrCookieSlime.Slimefun.listeners.TalismanListener;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -228,51 +231,34 @@ public class SlimefunStartup extends Plugin {
             OreGenSystem.registerResource(new OilResource());
             OreGenSystem.registerResource(new NetherIceResource());
             GitHubSetup.setup();
-            new ArmorListener();
-            new ItemListener();
-            new BlockListener();
-            new GearListener();
-            new AutonomousToolsListener();
-            new DamageListener();
-            new BowListener();
-            new ToolListener();
-            new FurnaceListener();
-            new TeleporterListener();
-            new AndroidKillingListener();
-            new NetworkListener();
-            if (currentVersion.startsWith("v1_12_")) {
-                new ItemPickupListener_1_12();
-            } else {
-                new ItemPickupListener();
-            }
+
             if (config.getBoolean("items.talismans")) {
-                new TalismanListener();
+                new TalismanListener(getPlugin());
             }
             if (config.getBoolean("items.backpacks")) {
-                new BackpackListener();
+                new BackpackListener(getPlugin());
             }
             if (config.getBoolean("items.coolers")) {
-                new CoolerListener();
+                new CoolerListener(getPlugin());
             }
             if (config.getBoolean("options.give-guide-on-first-join")) {
                 this.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
                     @EventHandler
                     public void onJoin(PlayerJoinEvent e) {
                         if (!e.getPlayer().hasPlayedBefore()) {
-                            Player p = e.getPlayer();
-                            if (!SlimefunStartup.getWhitelist().getBoolean(p.getWorld().getName() + ".enabled")) {
+                            Player player = e.getPlayer();
+                            if (!SlimefunStartup.getWhitelist().getBoolean(player.getWorld().getName() + ".enabled")) {
                                 return;
                             }
-                            if (!SlimefunStartup.getWhitelist().getBoolean(p.getWorld().getName() + ".enabled-items.SLIMEFUN_GUIDE")) {
+                            if (!SlimefunStartup.getWhitelist().getBoolean(player.getWorld().getName() + ".enabled-items.SLIMEFUN_GUIDE")) {
                                 return;
                             }
-                            p.getInventory().addItem(SlimefunGuide.getItem(BookDesign.CHEST));
+                            player.getInventory().addItem(SlimefunGuide.getItem(BookDesign.CHEST));
                         }
                     }
                 }, this.getPlugin());
             }
             this.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                Slimefun.emeraldenchants = this.getPlugin().getServer().getPluginManager().isPluginEnabled("EmeraldEnchants");
                 this.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
                     @EventHandler
                     public void onWorldLoad(WorldLoadEvent e) {
@@ -299,7 +285,6 @@ public class SlimefunStartup extends Plugin {
                     }
                 }, this.getPlugin());
                 this.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                    Slimefun.emeraldenchants = this.getPlugin().getServer().getPluginManager().isPluginEnabled("EmeraldEnchants");
                     SlimefunGuide.all_recipes = config.getBoolean("options.show-vanilla-recipes-in-guide");
                     MiscSetup.loadItems();
                     for (World world : Bukkit.getWorlds()) {

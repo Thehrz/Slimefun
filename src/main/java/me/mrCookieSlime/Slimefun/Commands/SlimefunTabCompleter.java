@@ -12,15 +12,16 @@ import java.util.List;
 
 public class SlimefunTabCompleter
         implements TabCompleter {
+    @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 1) {
             return createReturnList(SlimefunCommand.tabs, args[0]);
         }
         if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("give")) {
+            if ("give".equalsIgnoreCase(args[0])) {
                 return createReturnList(Slimefun.listIDs(), args[2]);
             }
-            if (args[0].equalsIgnoreCase("research")) {
+            if ("research".equalsIgnoreCase(args[0])) {
                 List<String> researches = new ArrayList<>();
                 for (Research res : Research.list()) {
                     researches.add(res.getName().toUpperCase().replace(" ", "_"));
@@ -38,7 +39,7 @@ public class SlimefunTabCompleter
 
 
     private List<String> createReturnList(List<String> list, String string) {
-        if (string.equals("")) return list;
+        if ("".equals(string)) return list;
 
         List<String> returnList = new ArrayList<>();
         for (String item : list) {

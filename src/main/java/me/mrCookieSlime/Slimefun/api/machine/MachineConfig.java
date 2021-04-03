@@ -6,8 +6,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MachineConfig
-        extends Config {
+public class MachineConfig extends Config {
     final MachineSettings global;
     final Map<String, MachineSettings> children;
 

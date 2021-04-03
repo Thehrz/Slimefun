@@ -9,6 +9,7 @@ public abstract class MultiBlockInteractionHandler
         extends ItemHandler {
     public abstract boolean onInteract(Player paramPlayer, MultiBlock paramMultiBlock, Block paramBlock);
 
+    @Override
     public String toCodename() {
         return "MultiBlockInteractionHandler";
     }

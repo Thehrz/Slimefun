@@ -19,7 +19,6 @@ public class SlimefunManager {
     public static final Map<EntityType, List<ItemStack>> drops = new HashMap<>();
     public static final List<Material> data_safe = Arrays.asList(Material.WOOL, Material.CARPET, Material.STAINED_CLAY, Material.STAINED_GLASS, Material.STAINED_GLASS_PANE, Material.INK_SACK, Material.STONE, Material.COAL, Material.SKULL_ITEM, Material.RAW_FISH, Material.COOKED_FISH);
     public static SlimefunStartup plugin;
-    public static String PREFIX;
 
     public static void registerArmorSet(ItemStack baseComponent, ItemStack[] items, String idSyntax, PotionEffect[][] effects, boolean special, boolean slimefun) {
         String[] components = {"_HELMET", "_CHESTPLATE", "_LEGGINGS", "_BOOTS"};
@@ -30,10 +29,12 @@ public class SlimefunManager {
         recipes.add(new ItemStack[]{baseComponent, baseComponent, baseComponent, baseComponent, null, baseComponent, baseComponent, null, baseComponent});
         recipes.add(new ItemStack[]{null, null, null, baseComponent, null, baseComponent, baseComponent, null, baseComponent});
         for (int i = 0; i < 4; i++) {
-            if (effects.length - 1 >= i) if ((effects[i]).length > 0) {
-                (new SlimefunArmorPiece(cat, items[i], idSyntax + components[i], RecipeType.ARMOR_FORGE, recipes.get(i), effects[i])).register(slimefun);
-            } else {
-                (new SlimefunItem(cat, items[i], idSyntax + components[i], RecipeType.ARMOR_FORGE, recipes.get(i))).register(slimefun);
+            if (effects.length - 1 >= i) {
+                if ((effects[i]).length > 0) {
+                    (new SlimefunArmorPiece(cat, items[i], idSyntax + components[i], RecipeType.ARMOR_FORGE, recipes.get(i), effects[i])).register(slimefun);
+                } else {
+                    (new SlimefunItem(cat, items[i], idSyntax + components[i], RecipeType.ARMOR_FORGE, recipes.get(i))).register(slimefun);
+                }
             }
 
         }
@@ -61,15 +62,19 @@ public class SlimefunManager {
     }
 
     public static boolean isItemSimiliar(ItemStack item, ItemStack SFitem, boolean lore, DataType data) {
-        if (item == null) return (SFitem == null);
-        if (SFitem == null) return false;
-
+        if (item == null) {
+            return (SFitem == null);
+        }
+        if (SFitem == null) {
+            return false;
+        }
         if (item.getType() == SFitem.getType() && item.getAmount() >= SFitem.getAmount()) {
             if (data.equals(DataType.ALWAYS) || (data.equals(DataType.IF_COLORED) && data_safe.contains(item.getType()))) {
                 if (data_safe.contains(item.getType())) {
                     if (item.getData().getData() != SFitem.getData().getData() && (
-                            SFitem.getDurability() != item.getData().getData() || SFitem.getData().getData() != item.getDurability()))
+                            SFitem.getDurability() != item.getData().getData() || SFitem.getData().getData() != item.getDurability())) {
                         return false;
+                    }
 
                 } else if (data.equals(DataType.ALWAYS) && item.getDurability() != SFitem.getDurability()) {
                     return false;

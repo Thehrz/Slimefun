@@ -29,6 +29,7 @@ public class JetBootsTask
     }
 
 
+    @Override
     public void run() {
         if (Bukkit.getPlayer(this.uuid) == null) {
             Bukkit.getScheduler().cancelTask(this.id);

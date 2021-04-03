@@ -69,12 +69,13 @@ public class AncientAltarListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent e) {
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK)
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
+        }
         Block b = e.getClickedBlock();
         SlimefunItem item = BlockStorage.check(b);
         if (item != null) {
-            if (item.getID().equals("ANCIENT_PEDESTAL")) {
+            if ("ANCIENT_PEDESTAL".equals(item.getID())) {
                 if (Variables.altarinuse.contains(b.getLocation())) {
                     e.setCancelled(true);
                     return;
@@ -82,8 +83,9 @@ public class AncientAltarListener implements Listener {
                 e.setCancelled(true);
                 Item stack = findItem(b);
                 if (stack == null) {
-                    if (e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR))
+                    if (e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         return;
+                    }
                     if (b.getRelative(0, 1, 0).getType() != Material.AIR) {
                         Messages.local.sendTranslation(e.getPlayer(), "machines.ANCIENT_PEDESTAL.obstructed", true);
                         return;
@@ -101,7 +103,7 @@ public class AncientAltarListener implements Listener {
                     PlayerInventory.update(e.getPlayer());
                 }
 
-            } else if (item.getID().equals("ANCIENT_ALTAR")) {
+            } else if ("ANCIENT_ALTAR".equals(item.getID())) {
                 if (Variables.altarinuse.contains(b.getLocation())) {
                     e.setCancelled(true);
                     return;
@@ -118,11 +120,13 @@ public class AncientAltarListener implements Listener {
                         pedestals.forEach(pblock -> Variables.altarinuse.add(pblock.getLocation()));
 
 
-                        if (customItem != null && !customItem.getType().equals(Material.AIR)) {
+                        if (!customItem.getType().equals(Material.AIR)) {
                             List<ItemStack> input = new ArrayList<>();
                             for (Block pedestal : pedestals) {
                                 Item stack = findItem(pedestal);
-                                if (stack != null) input.add(fixItemStack(stack.getItemStack(), stack.getCustomName()));
+                                if (stack != null) {
+                                    input.add(fixItemStack(stack.getItemStack(), stack.getCustomName()));
+                                }
 
                             }
                             ItemStack result = Pedestals.getRecipeOutput(customItem, input);
@@ -178,9 +182,10 @@ public class AncientAltarListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent e) {
         Block b = e.getBlockPlaced().getRelative(0, -1, 0);
         SlimefunItem item = BlockStorage.check(b);
-        if (item == null)
+        if (item == null) {
             return;
-        if (item.getID().equalsIgnoreCase("ANCIENT_PEDESTAL")) {
+        }
+        if ("ANCIENT_PEDESTAL".equalsIgnoreCase(item.getID())) {
             Messages.local.sendTranslation(e.getPlayer(), "messages.cannot-place", true);
             e.setCancelled(true);
         }

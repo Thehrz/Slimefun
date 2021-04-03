@@ -20,6 +20,7 @@ public class WESlimefunManager {
     @Subscribe
     public void wrapForLogging(final EditSessionEvent event) {
         event.setExtent(new AbstractLoggingExtent(event.getExtent()) {
+            @Override
             protected void onBlockChange(Vector pos, BaseBlock b) {
                 super.onBlockChange(pos, b);
 

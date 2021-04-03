@@ -7,6 +7,7 @@ public abstract class BowShootHandler
         extends ItemHandler {
     public abstract boolean onHit(EntityDamageByEntityEvent paramEntityDamageByEntityEvent, LivingEntity paramLivingEntity);
 
+    @Override
     public String toCodename() {
         return "BowShootHandler";
     }

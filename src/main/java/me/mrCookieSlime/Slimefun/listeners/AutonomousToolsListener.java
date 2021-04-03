@@ -43,14 +43,16 @@ public class AutonomousToolsListener implements Listener {
 
             if (machine != null) {
                 for (ItemHandler handler : SlimefunItem.getHandlers("AutonomousMachineHandler")) {
-                    if (((AutonomousMachineHandler) handler).onBlockDispense(e, dispenser, d, block, chest, machine))
+                    if (((AutonomousMachineHandler) handler).onBlockDispense(e, dispenser, d, block, chest, machine)) {
                         break;
+                    }
                 }
             } else {
                 for (int i = 0; i < (d.getInventory().getContents()).length; i++) {
                     for (ItemHandler handler : SlimefunItem.getHandlers("AutonomousToolHandler")) {
-                        if (((AutonomousToolHandler) handler).onBlockDispense(e, dispenser, d, block, chest, i))
+                        if (((AutonomousToolHandler) handler).onBlockDispense(e, dispenser, d, block, chest, i)) {
                             break;
+                        }
                     }
                 }
             }

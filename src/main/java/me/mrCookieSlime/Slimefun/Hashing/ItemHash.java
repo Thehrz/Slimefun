@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ItemHash {
     public static MessageDigest digest;
     public static int LENGTH;

@@ -16,16 +16,19 @@ public class AdvancedRainbowTicker
     }
 
 
+    @Override
     public void tick(Block b, SlimefunItem item, Config cfg) {
         b.setData((byte) this.data[this.index], false);
     }
 
 
+    @Override
     public void uniqueTick() {
         this.index = (this.index == this.data.length - 1) ? 0 : (this.index + 1);
     }
 
 
+    @Override
     public boolean isSynchronized() {
         return true;
     }

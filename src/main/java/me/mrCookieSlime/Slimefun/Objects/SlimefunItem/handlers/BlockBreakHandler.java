@@ -10,6 +10,7 @@ public abstract class BlockBreakHandler
         extends ItemHandler {
     public abstract boolean onBlockBreak(BlockBreakEvent paramBlockBreakEvent, ItemStack paramItemStack, int paramInt, List<ItemStack> paramList);
 
+    @Override
     public String toCodename() {
         return "BlockBreakHandler";
     }

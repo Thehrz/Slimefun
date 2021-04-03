@@ -11,9 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-
 public class CSCoreLibLoader {
-    final Plugin plugin;
+    Plugin plugin;
     URL url;
     URL download;
     File file;
@@ -28,12 +27,14 @@ public class CSCoreLibLoader {
 
 
     public boolean load() {
-        if (this.plugin.getServer().getPluginManager().isPluginEnabled("CS-CoreLib")) return true;
+        if (plugin.getServer().getPluginManager().isPluginEnabled("CS-CoreLib")) {
+            return true;
+        }
 
         System.err.println(" ");
         System.err.println("#################### - INFO - ####################");
         System.err.println(" ");
-        System.err.println(this.plugin.getName() + " could not be loaded.");
+        System.err.println(plugin.getName() + " could not be loaded.");
         System.err.println("It appears that you have not installed CS-CoreLib");
         System.err.println("Your Server will now try to download and install");
         System.err.println("CS-CoreLib for you.");
@@ -43,22 +44,22 @@ public class CSCoreLibLoader {
         System.err.println(" ");
         System.err.println("#################### - INFO - ####################");
         System.err.println(" ");
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> install(), 10L);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> install(), 10L);
         return false;
     }
 
 
     private boolean connect() {
         try {
-            URLConnection connection = this.url.openConnection();
+            URLConnection connection = url.openConnection();
             connection.setConnectTimeout(5000);
             connection.addRequestProperty("User-Agent", "CS-CoreLib Loader (by mrCookieSlime)");
             connection.setDoOutput(true);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             JSONArray array = (JSONArray) JSONValue.parse(reader.readLine());
-            this.download = traceURL(((String) ((JSONObject) array.get(array.size() - 1)).get("downloadUrl")).replace("https:", "http:"));
-            this.file = new File("plugins/" + ((JSONObject) array.get(array.size() - 1)).get("name") + ".jar");
+            download = traceURL(((String) ((JSONObject) array.get(array.size() - 1)).get("downloadUrl")).replace("https:", "http:"));
+            file = new File("plugins/" + ((JSONObject) array.get(array.size() - 1)).get("name") + ".jar");
 
             return true;
         } catch (IOException e) {
@@ -92,6 +93,8 @@ public class CSCoreLibLoader {
                     loc = connection.getHeaderField("Location");
                     location = (new URL(new URL(location), loc)).toExternalForm();
                     continue;
+                default:
+                    break;
             }
 
             break;
@@ -123,8 +126,12 @@ public class CSCoreLibLoader {
             System.err.println(" ");
         } finally {
             try {
-                if (input != null) input.close();
-                if (output != null) output.close();
+                if (input != null) {
+                    input.close();
+                }
+                if (output != null) {
+                    output.close();
+                }
                 System.err.println(" ");
                 System.err.println("#################### - INFO - ####################");
                 System.err.println(" ");
