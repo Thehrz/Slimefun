@@ -138,40 +138,31 @@ public abstract class AReactor extends SlimefunItem {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-
         for (int i : border_1) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), " "), (arg0, arg1, arg2, arg3) -> false);
         }
-
 
         for (int i : border_3) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 13), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-
         preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
 
-
         preset.addItem(1, new CustomItem(SlimefunItems.URANIUM, "&7燃料槽", getMessage()), (arg0, arg1, arg2, arg3) -> false);
-
 
         for (int i : border_2) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
-
         if (needsCooling()) {
             preset.addItem(7, new CustomItem(getCoolant(), "&b冷却槽", "", "&r这个槽位用于放置反应器冷却单元", "&4如果反应器不配置冷却槽", "&4反应器将会因为过热导致爆炸"));
         } else {
-
             preset.addItem(7, new CustomItem(new MaterialData(Material.BARRIER), "&b冷却槽", "", "&r这个槽位用于放置反应器冷却单元"));
-
             for (int i : border_4) {
                 preset.addItem(i, new CustomItem(new ItemStack(Material.BARRIER), "&c无需冷却单元"), (player, i1, itemStack, clickAction) -> false);
             }
         }
     }
-
 
     public boolean needsCooling() {
         return (getCoolant() != null);
@@ -186,10 +177,7 @@ public abstract class AReactor extends SlimefunItem {
     }
 
     public int[] getCoolantSlots() {
-        (new int[3])[0] = 25;
-        (new int[3])[1] = 34;
-        (new int[3])[2] = 43;
-        return needsCooling() ? new int[3] : new int[0];
+        return needsCooling() ? new int[]{25, 34, 43} : new int[0];
     }
 
     public int[] getOutputSlots() {
@@ -208,12 +196,10 @@ public abstract class AReactor extends SlimefunItem {
         this.recipes.add(fuel);
     }
 
-
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new EnergyTicker() {
-            final Set<Location> explode = new HashSet<>();
-
+            Set<Location> explode = new HashSet<>();
 
             @Override
             public double generateEnergy(final Location l, SlimefunItem sf, Config data) {
@@ -275,11 +261,10 @@ public abstract class AReactor extends SlimefunItem {
                                         }
                                     }
                                     if (explosion) {
-                                        this.explode.add(l);
+                                        explode.add(l);
                                         return 0.0D;
                                     }
                                 } else {
-
                                     ReactorHologram.update(l, "&b❄ &7" + MachineHelper.getPercentage(timeleft, AReactor.processing.get(l).getTicks()) + "%");
                                 }
                             }
@@ -344,16 +329,15 @@ public abstract class AReactor extends SlimefunItem {
                 return 0.0D;
             }
 
-
             @Override
             public boolean explode(final Location l) {
-                boolean explosion = this.explode.contains(l);
+                boolean explosion = explode.contains(l);
                 if (explosion) {
                     BlockStorage.getInventory(l).close();
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> ReactorHologram.remove(l), 0L);
 
-                    this.explode.remove(l);
+                    explode.remove(l);
                     AReactor.processing.remove(l);
                     AReactor.progress.remove(l);
                 }
@@ -414,7 +398,6 @@ public abstract class AReactor extends SlimefunItem {
 
         return null;
     }
-
 
     public Set<MachineFuel> getFuelTypes() {
         return this.recipes;

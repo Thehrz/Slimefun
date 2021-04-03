@@ -168,11 +168,9 @@ public class EnergyNet extends Network {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(SlimefunStartup.instance, () -> {
                         Network.handleAllNetworkLocationUpdate(source);
                         item.getEnergyTicker().explode(source);
-
                     });
 
                 } else {
-
                     supply += energy;
                 }
                 TickerTask.block_timings.put(source, System.currentTimeMillis() - timestamp);

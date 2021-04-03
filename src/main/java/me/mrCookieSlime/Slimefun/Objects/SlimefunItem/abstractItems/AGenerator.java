@@ -33,7 +33,6 @@ import org.bukkit.material.MaterialData;
 
 import java.util.*;
 
-
 public abstract class AGenerator extends SlimefunItem {
     public static final Map<Location, MachineFuel> processing = new HashMap<>();
     public static final Map<Location, Integer> progress = new HashMap<>();
@@ -217,7 +216,6 @@ public abstract class AGenerator extends SlimefunItem {
     @Override
     public void register(boolean slimefun) {
         addItemHandler(new EnergyTicker() {
-
             @Override
             public double generateEnergy(Location l, SlimefunItem sf, Config data) {
                 if (isProcessing(l)) {
@@ -246,7 +244,7 @@ public abstract class AGenerator extends SlimefunItem {
                         }
 
                         AGenerator.progress.put(l, timeleft - 1);
-                        getEnergyProduction();
+                        return getEnergyProduction();
                     }
 
 
@@ -289,7 +287,6 @@ public abstract class AGenerator extends SlimefunItem {
                 return 0.0D;
             }
 
-
             @Override
             public boolean explode(Location l) {
                 return false;
@@ -319,8 +316,9 @@ public abstract class AGenerator extends SlimefunItem {
         Inventory inv = inject(l);
         inv.addItem(items);
 
-        for (int slot : getOutputSlots())
+        for (int slot : getOutputSlots()) {
             BlockStorage.getInventory(l).replaceExistingItem(slot, inv.getItem(slot));
+        }
     }
 
     public abstract String getInventoryTitle();

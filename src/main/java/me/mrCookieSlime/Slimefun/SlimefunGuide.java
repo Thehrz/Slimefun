@@ -3,7 +3,6 @@ package me.mrCookieSlime.Slimefun;
 import io.izzel.taboolib.util.item.ItemBuilder;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.SkullItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Math.DoubleHandler;
 import me.mrCookieSlime.CSCoreLibPlugin.general.String.StringUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.World.CustomSkull;
@@ -142,67 +141,67 @@ public class SlimefunGuide {
 
 
     public static void openCredits(Player p, final ItemStack guide) {
-        final ChestMenu menu = new ChestMenu("§4贡献者鸣谢");
-
-        menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler((player) -> player.playSound(p.getLocation(), Sound.BLOCK_NOTE_HARP, 0.7F, 0.7F));
-
-        for (int i = 0; i < 9; i++) {
-            if (i != 4) {
-                menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-                menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
-            } else {
-                menu.addItem(4, new CustomItem(new MaterialData(Material.EMERALD), "&7\u21E6 返回设置"));
-                menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> {
-                    openSettings(p, guide);
-                    return false;
-                });
-            }
-        }
-
-        int index = 9;
-
-        double total = 0;
-
-        for (Contributor contributor : contributors) {
-            total += contributor.getCommits();
-        }
-
-        for (final Contributor contributor : contributors) {
-            ItemStack skull = new SkullItem("&a" + contributor.getName(), contributor.getName());
-
-            ItemMeta meta = skull.getItemMeta();
-
-            if (contributor.getCommits() > 0) {
-                double percentage = DoubleHandler.fixDouble((contributor.getCommits() * 100.0) / total, 2);
-
-                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob()), ChatColor.translateAlternateColorCodes('&', "&7Contributions: &r" + contributor.getCommits() + " commits &7(&r" + percentage + "%&7)"), "", ChatColor.translateAlternateColorCodes('&', "&7\u21E8 Click to view my GitHub profile")));
-            } else {
-                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob())));
-            }
-
-            skull.setItemMeta(meta);
-
-            menu.addItem(index, skull);
-            menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
-                if (contributor.getCommits() > 0) {
-                    p.closeInventory();
-                    p.sendMessage("");
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&o" + contributor.getProfile()));
-                    p.sendMessage("");
-                }
-                return false;
-            });
-
-            index++;
-        }
-
-        for (int i = 0; i < 9; i++) {
-            menu.addItem(36 + i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
-            menu.addMenuClickHandler(36 + i, (player, slot, itemStack, clickAction) -> false);
-        }
-
-        menu.open(p);
+//        final ChestMenu menu = new ChestMenu("§4贡献者鸣谢");
+//
+//        menu.setEmptySlotsClickable(false);
+//        menu.addMenuOpeningHandler((player) -> player.playSound(p.getLocation(), Sound.BLOCK_NOTE_HARP, 0.7F, 0.7F));
+//
+//        for (int i = 0; i < 9; i++) {
+//            if (i != 4) {
+//                menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
+//                menu.addMenuClickHandler(i, (player, slot, itemStack, clickAction) -> false);
+//            } else {
+//                menu.addItem(4, new CustomItem(new MaterialData(Material.EMERALD), "&7\u21E6 返回设置"));
+//                menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> {
+//                    openSettings(p, guide);
+//                    return false;
+//                });
+//            }
+//        }
+//
+//        int index = 9;
+//
+//        double total = 0;
+//
+//        for (Contributor contributor : contributors) {
+//            total += contributor.getCommits();
+//        }
+//
+//        for (final Contributor contributor : contributors) {
+//            ItemStack skull = new SkullItem("&a" + contributor.getName(), contributor.getName());
+//
+//            ItemMeta meta = skull.getItemMeta();
+//
+//            if (contributor.getCommits() > 0) {
+//                double percentage = DoubleHandler.fixDouble((contributor.getCommits() * 100.0) / total, 2);
+//
+//                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob()), ChatColor.translateAlternateColorCodes('&', "&7Contributions: &r" + contributor.getCommits() + " commits &7(&r" + percentage + "%&7)"), "", ChatColor.translateAlternateColorCodes('&', "&7\u21E8 Click to view my GitHub profile")));
+//            } else {
+//                meta.setLore(Arrays.asList("", ChatColor.translateAlternateColorCodes('&', "&7Role: &r" + contributor.getJob())));
+//            }
+//
+//            skull.setItemMeta(meta);
+//
+//            menu.addItem(index, skull);
+//            menu.addMenuClickHandler(index, (player, slot, itemStack, clickAction) -> {
+//                if (contributor.getCommits() > 0) {
+//                    p.closeInventory();
+//                    p.sendMessage("");
+//                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&o" + contributor.getProfile()));
+//                    p.sendMessage("");
+//                }
+//                return false;
+//            });
+//
+//            index++;
+//        }
+//
+//        for (int i = 0; i < 9; i++) {
+//            menu.addItem(36 + i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
+//            menu.addMenuClickHandler(36 + i, (player, slot, itemStack, clickAction) -> false);
+//        }
+//
+//        menu.open(p);
     }
 
 

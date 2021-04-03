@@ -24,8 +24,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
- 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ElectricSmeltery extends AContainer {
     public static final Map<Block, MachineRecipe> PROCESSING = new HashMap<>();
@@ -60,22 +63,24 @@ public abstract class ElectricSmeltery extends AContainer {
             
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow.equals(ItemTransportFlow.WITHDRAW)) return ElectricSmeltery.this.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.WITHDRAW)) {
+                    return getOutputSlots();
+                }
 
                 List<Integer> slots = new ArrayList<>();
 
-                for (int slot : ElectricSmeltery.this.getInputSlots()) {
+                for (int slot : getInputSlots()) {
                     if (SlimefunManager.isItemSimiliar(menu.getItemInSlot(slot), item, true)) {
                         slots.add(slot);
                     }
                 }
 
                 if (slots.isEmpty()) {
-                    return ElectricSmeltery.this.getInputSlots();
+                    return getInputSlots();
                 }
 
-                Collections.sort(slots, new RecipeSorter(menu));
-                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[slots.size()]));
+                slots.sort(new RecipeSorter(menu));
+                return ArrayUtils.toPrimitive(slots.<Integer>toArray(new Integer[0]));
             }
         };
 
@@ -150,24 +155,20 @@ public abstract class ElectricSmeltery extends AContainer {
         return "&c电力冶炼机";
     }
 
-
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
-
 
     @Override
     public int[] getInputSlots() {
         return new int[]{10, 11, 19, 20, 28, 29};
     }
 
-
     @Override
     public int[] getOutputSlots() {
         return new int[]{24, 25};
     }
-
 
     @Override
     public String getMachineIdentifier() {

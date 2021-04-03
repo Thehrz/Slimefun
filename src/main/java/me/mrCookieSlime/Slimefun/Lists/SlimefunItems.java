@@ -962,7 +962,7 @@ public class SlimefunItems {
         SlimefunItems.REACTOR_COOLANT_CELL = null;
         SlimefunItems.NUCLEAR_REACTOR = null;
         SlimefunItems.NETHERSTAR_REACTOR = null;
-        SlimefunItems.REACTOR_ACCESS_PORT = new CustomItem(new MaterialData(Material.STAINED_CLAY, (byte) 9), "&2反应堆交互接口", "", "&r允许你直接或使用运输系统", "&r与反应堆进行交互", "&r具有缓存功能", "", "&8⇨ &e反应堆上 &a必须放置 &e3个方块a");
+        SlimefunItems.REACTOR_ACCESS_PORT = new CustomItem(new MaterialData(Material.STAINED_CLAY, (byte) 9), "&2反应堆交互接口", "", "&r允许你直接或使用运输系统", "&r与反应堆进行交互", "&r具有缓存功能", "", "&8⇨ &e反应堆上 &a必须放置 &e3个方块");
         SlimefunItems.FREEZER = null;
         SlimefunItems.FREEZER_2 = null;
         SlimefunItems.ELECTRIC_GOLD_PAN = new CustomItem(new MaterialData(Material.STAINED_CLAY, (byte) 12), "&6电力淘洗机", "", "&e基础机器", "&8⇨ &7速度: 1x", "&8⇨ &e⚡ &72 J/s");
