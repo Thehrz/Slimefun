@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Refinery
-        extends AContainer {
+public abstract class Refinery extends AContainer {
     public Refinery(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }

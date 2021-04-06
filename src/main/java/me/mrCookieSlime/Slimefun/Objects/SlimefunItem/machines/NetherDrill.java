@@ -9,8 +9,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.ADrill;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class NetherDrill
-        extends ADrill {
+public abstract class NetherDrill extends ADrill {
     public NetherDrill(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }

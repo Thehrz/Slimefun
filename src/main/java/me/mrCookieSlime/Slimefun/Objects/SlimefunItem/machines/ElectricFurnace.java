@@ -11,8 +11,7 @@ import org.bukkit.inventory.Recipe;
 import java.util.Iterator;
 
 
-public abstract class ElectricFurnace
-        extends AContainer {
+public abstract class ElectricFurnace extends AContainer {
     public ElectricFurnace(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }

@@ -9,8 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public abstract class CarbonPress
-        extends AContainer {
+public abstract class CarbonPress extends AContainer {
     public CarbonPress(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }

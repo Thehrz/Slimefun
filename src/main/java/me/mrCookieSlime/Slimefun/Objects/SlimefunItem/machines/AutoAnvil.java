@@ -115,8 +115,9 @@ public abstract class AutoAnvil
             }
 
             if (r != null) {
-                if (!fits(b, r.getOutput()))
+                if (!fits(b, r.getOutput())) {
                     return;
+                }
                 for (int slot : getInputSlots()) {
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                 }

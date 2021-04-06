@@ -6,8 +6,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class ElectrifiedCrucible
-        extends AContainer {
+public abstract class ElectrifiedCrucible extends AContainer {
     public ElectrifiedCrucible(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }

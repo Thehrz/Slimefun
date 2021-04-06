@@ -85,7 +85,7 @@ public class WitherAssembler extends SlimefunItem {
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
-                    getInputSlots();
+                    return getInputSlots();
                 }
                 return new int[0];
             }

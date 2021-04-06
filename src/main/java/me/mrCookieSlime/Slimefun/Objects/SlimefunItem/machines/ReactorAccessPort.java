@@ -51,9 +51,12 @@ public class ReactorAccessPort extends SlimefunItem {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                getInputSlots();
-                return ReactorAccessPort.getOutputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
+                return getOutputSlots();
             }
+
 
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {

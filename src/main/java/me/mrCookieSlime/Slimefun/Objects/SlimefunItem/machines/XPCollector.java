@@ -46,7 +46,9 @@ public class XPCollector extends SlimefunItem {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                getOutputSlots();
+                if (flow.equals(ItemTransportFlow.WITHDRAW)) {
+                    return getOutputSlots();
+                }
                 return new int[0];
             }
         };

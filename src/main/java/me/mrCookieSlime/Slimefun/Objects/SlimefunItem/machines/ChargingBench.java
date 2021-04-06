@@ -15,8 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ChargingBench
-        extends AContainer {
+public class ChargingBench extends AContainer {
     public ChargingBench(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
@@ -26,17 +25,14 @@ public class ChargingBench
                 constructMenu(this);
             }
 
-
             @Override
             public void newInstance(BlockMenu menu, Block b) {
             }
-
 
             @Override
             public boolean canOpen(Block b, Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
-
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {

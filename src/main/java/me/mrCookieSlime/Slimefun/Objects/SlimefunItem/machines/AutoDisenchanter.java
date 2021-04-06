@@ -24,35 +24,29 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AutoDisenchanter
-        extends AContainer {
+public class AutoDisenchanter extends AContainer {
     public AutoDisenchanter(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }
-
 
     @Override
     public String getInventoryTitle() {
         return "&5自动卸魔机";
     }
 
-
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_CHESTPLATE);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
     }
-
 
     @Override
     public int getEnergyConsumption() {
         return 9;
     }
-
 
     @Override
     protected void tick(Block b) {
@@ -73,8 +67,9 @@ public class AutoDisenchanter
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
                 if (ChargableBlock.isChargable(b)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     progress.put(b, timeleft - 1);
                 } else {
@@ -144,12 +139,10 @@ public class AutoDisenchanter
         }
     }
 
-
     @Override
     public int getSpeed() {
         return 1;
     }
-
 
     @Override
     public String getMachineIdentifier() {
