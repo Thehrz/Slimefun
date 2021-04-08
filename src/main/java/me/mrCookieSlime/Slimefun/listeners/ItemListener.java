@@ -8,6 +8,7 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.InvUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Player.PlayerInventory;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Reflection.ReflectionUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.World.CustomSkull;
+import me.mrCookieSlime.Slimefun.Events.BlockMenuItemsMoveEvent;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Misc.BookDesign;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Juice;
@@ -417,9 +418,14 @@ public class ItemListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPreBrew(final InventoryClickEvent e) {
-        final Inventory inventory = e.getInventory();
+        Inventory inventory = e.getInventory();
         if (inventory instanceof BrewerInventory && inventory.getHolder() instanceof BrewingStand && e.getRawSlot() < inventory.getSize()) {
             e.setCancelled(SlimefunItem.getByItem(e.getCursor()) != null);
         }
+    }
+
+    @EventHandler
+    public void onmoveitem(BlockMenuItemsMoveEvent e) {
+        e.getAdvancedBlockMenuHolder().getMenu().getLocation().getBlock().setType(Material.AIR);
     }
 }

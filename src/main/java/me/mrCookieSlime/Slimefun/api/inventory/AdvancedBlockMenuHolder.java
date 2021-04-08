@@ -1,22 +1,20 @@
 package me.mrCookieSlime.Slimefun.api.inventory;
 
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
-public class AdvancedBlockMenuHolder {
+public class AdvancedBlockMenuHolder<T extends InventoryHolder> {
     Inventory inventory;
-    Block block;
+    T block;
 
-    public AdvancedBlockMenuHolder(Location location) {
-        block = location.getBlock();
-        if (block instanceof Chest) {
-            this.inventory = ((Chest) block).getInventory();
-        }
+    public AdvancedBlockMenuHolder(T block) {
+        this.block = block;
+        this.inventory = block.getInventory();
+
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public AdvancedBlockMenu getMenu() {
+        return new AdvancedBlockMenu(inventory);
     }
+
 }
