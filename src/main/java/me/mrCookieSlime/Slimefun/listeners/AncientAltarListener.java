@@ -60,8 +60,9 @@ public class AncientAltarListener implements Listener {
     public static Item findItem(Block b) {
         for (Entity n : b.getChunk().getEntities()) {
             if (n instanceof Item &&
-                    b.getLocation().add(0.5D, 1.2D, 0.5D).distanceSquared(n.getLocation()) < 0.5D && n.getCustomName() != null)
+                    b.getLocation().add(0.5D, 1.2D, 0.5D).distanceSquared(n.getLocation()) < 0.5D && n.getCustomName() != null) {
                 return (Item) n;
+            }
 
         }
         return null;

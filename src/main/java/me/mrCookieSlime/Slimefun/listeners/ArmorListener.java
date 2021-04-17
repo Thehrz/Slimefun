@@ -51,7 +51,9 @@ public class ArmorListener implements Listener {
                                     if (p.getWorld().getPVP()) {
                                         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, n, EntityDamageEvent.DamageCause.ENTITY_ATTACK, e.getDamage() / 2.0D);
                                         Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) ((LivingEntity) n).damage(e.getDamage() / 2.0D);
+                                        if (!event.isCancelled()) {
+                                            ((LivingEntity) n).damage(e.getDamage() / 2.0D);
+                                        }
                                     }
                                 }
                             }

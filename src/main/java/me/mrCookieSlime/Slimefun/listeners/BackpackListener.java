@@ -48,7 +48,9 @@ public class BackpackListener implements Listener {
         if (Variables.backpack.containsKey(e.getPlayer().getUniqueId())) {
             ItemStack item = e.getItemDrop().getItemStack();
             SlimefunItem sfItem = SlimefunItem.getByItem(item);
-            if (sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunBackpack) e.setCancelled(true);
+            if (sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunBackpack) {
+                e.setCancelled(true);
+            }
         }
     }
 
@@ -69,8 +71,9 @@ public class BackpackListener implements Listener {
                 SlimefunItem sfItem = SlimefunItem.getByItem(e.getCurrentItem());
                 if (SlimefunManager.isItemSimiliar(item, SlimefunItem.getItem("COOLER"), false)) {
                     if (e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR) &&
-                            !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Juice))
+                            !(sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Juice)) {
                         e.setCancelled(true);
+                    }
                 } else if (e.getCurrentItem() != null && e.getCurrentItem().getType().toString().contains("SHULKER_BOX")) {
                     e.setCancelled(true);
                 } else if (sfItem instanceof me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunBackpack) {

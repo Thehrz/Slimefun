@@ -139,10 +139,12 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
         }
         for (final int i : this.getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return false;
                 }
 
+                @Override
                 public boolean onClick(final InventoryClickEvent e, final Player p, final int slot, final ItemStack cursor, final ClickAction action) {
                     return cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR;
                 }

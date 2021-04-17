@@ -34,6 +34,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.Skull;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
@@ -376,7 +377,7 @@ public class ItemListener implements Listener {
         for (final ItemStack item : e.getInventory().getContents()) {
             if (SlimefunItem.getByItem(item) != null && !SlimefunItem.getByItem(item).isReplacing()) {
                 e.setCancelled(true);
-                Messages.local.sendTranslation(e.getWhoClicked(), "workbench.not-enhanced", true);
+                Messages.local.sendTranslation((CommandSender) e.getWhoClicked(), "workbench.not-enhanced", true);
                 break;
             }
         }
@@ -399,18 +400,19 @@ public class ItemListener implements Listener {
                     e.setCancelled(true);
                 }
             }
+
         }
     }
 
     @EventHandler
-    public void onAnvil(final InventoryClickEvent e) {
+    public void onAnvil(InventoryClickEvent e) {
         if (e.getRawSlot() == 2 && e.getWhoClicked() instanceof Player && e.getInventory().getType() == InventoryType.ANVIL) {
             if (SlimefunManager.isItemSimiliar(e.getInventory().getContents()[0], SlimefunItems.ELYTRA, true)) {
                 return;
             }
             if (SlimefunItem.getByItem(e.getInventory().getContents()[0]) != null && SlimefunItem.isDisabled(e.getInventory().getContents()[0])) {
                 e.setCancelled(true);
-                Messages.local.sendTranslation(e.getWhoClicked(), "anvil.not-working", true);
+                Messages.local.sendTranslation((CommandSender) e.getWhoClicked(), "anvil.not-working", true);
             }
         }
     }

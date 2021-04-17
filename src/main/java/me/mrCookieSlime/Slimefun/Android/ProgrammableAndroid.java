@@ -121,22 +121,20 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
             @Override
             public void newInstance(BlockMenu menu, final Block b) {
                 try {
-                    menu.replaceExistingItem(15, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTAxYzdiNTcyNjE3ODk3NGIzYjNhMDFiNDJhNTkwZTU0MzY2MDI2ZmQ0MzgwOGYyYTc4NzY0ODg0M2E3ZjVhIn19fQ=="), "&aStart/Continue"));
+                    menu.replaceExistingItem(15, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTAxYzdiNTcyNjE3ODk3NGIzYjNhMDFiNDJhNTkwZTU0MzY2MDI2ZmQ0MzgwOGYyYTc4NzY0ODg0M2E3ZjVhIn19fQ=="), "&a开始/继续"));
                     menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
                         Messages.local.sendTranslation(p, "robot.started", true);
                         BlockStorage.addBlockInfo(b, "paused", "false");
                         p.closeInventory();
                         return false;
                     });
-
-                    menu.replaceExistingItem(17, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&4Pause"));
+                    menu.replaceExistingItem(17, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&4暂停"));
                     menu.addMenuClickHandler(17, (p, arg1, arg2, arg3) -> {
                         BlockStorage.addBlockInfo(b, "paused", "true");
                         Messages.local.sendTranslation(p, "robot.stopped", true);
                         return false;
                     });
-
-                    menu.replaceExistingItem(16, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDc4ZjJiN2U1ZTc1NjM5ZWE3ZmI3OTZjMzVkMzY0YzRkZjI4YjQyNDNlNjZiNzYyNzdhYWRjZDYyNjEzMzcifX19"), "&bMemory Core", "", "&8\u21E8 &7Click to open the Script Editor"));
+                    menu.replaceExistingItem(16, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDc4ZjJiN2U1ZTc1NjM5ZWE3ZmI3OTZjMzVkMzY0YzRkZjI4YjQyNDNlNjZiNzYyNzdhYWRjZDYyNjEzMzcifX19"), "&b记忆核心", "", "&8⇨ &7点击打开脚本编辑器"));
                     menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
                         try {
                             BlockStorage.addBlockInfo(b, "paused", "true");
@@ -201,7 +199,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
     }
 
     public String getInventoryTitle() {
-        return "Programmable Android";
+        return "可编程机器人";
     }
 
     public int[] getOutputSlots() {
@@ -224,7 +222,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
             return;
         }
 
-        if ("false".equals(BlockStorage.getBlockInfo(b, "paused"))) {
+        if ("false".equals(BlockStorage.getBlockInfo(b, "paused")) && Bukkit.getOfflinePlayer(UUID.fromString(BlockStorage.getBlockInfo(b, "owner"))).isOnline()) {
             float fuel = Float.parseFloat(BlockStorage.getBlockInfo(b, "fuel"));
             if (fuel == 0) {
                 ItemStack item = BlockStorage.getInventory(b).getItemInSlot(43);
@@ -936,57 +934,46 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
                 }
             });
         }
-
-        if (getTier() == 1) {
-            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8\u21E9 &cFuel Input &8\u21E9", "", "&rThis Android runs on solid Fuel", "&re.g. Coal, Wood, etc..."),
-                    (p, slot, stack, action) -> false);
-        } else if (getTier() == 2) {
-            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8\u21E9 &cFuel Input &8\u21E9", "", "&rThis Android runs on liquid Fuel", "&re.g. Lava, Oil, Fuel, etc..."),
-                    (p, slot, stack, action) -> false);
+        if (this.getTier() == 1) {
+            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8⇩ &c燃料输入槽 &8⇩", "", "&r需要固体燃料", "&r例如: 煤炭, 木炭等..."), (p, slot, stack, action) -> false);
+        } else if (this.getTier() == 2) {
+            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8⇩ &c燃料输入槽 &8⇩", "", "&r需要液体燃料\", \"&r例如: 岩浆, 石油等..."), (p, slot, stack, action) -> false);
         } else {
-            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8\u21E9 &cFuel Input &8\u21E9", "", "&rThis Android runs on radioactive Fuel", "&re.g. Uranium, Neptunium or Boosted Uranium"),
-                    (p, slot, stack, action) -> false);
+            preset.addItem(34, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&8⇩ &c燃料输入槽 &8⇩", "", "&r需要放射性燃料", "&r例如: 铀, 镎, 活性铀"), (p, slot, stack, action) -> false);
         }
     }
 
     public void openScriptEditor(Player p, final Block b) throws Exception {
-        ChestMenu menu = new ChestMenu("&eScript Editor");
-
-        menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDliZjZkYjRhZWRhOWQ4ODIyYjlmNzM2NTM4ZThjMThiOWE0ODQ0Zjg0ZWI0NTUwNGFkZmJmZWU4N2ViIn19fQ=="), "&2> Edit Script", "", "&aEdits your current Script"),
-                (p1, slot, stack, action) -> {
-                    try {
-                        openScript(p1, b, BlockStorage.getBlockInfo(b, "script"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                });
-
-        menu.addItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTcxZDg5NzljMTg3OGEwNTk4N2E3ZmFmMjFiNTZkMWI3NDRmOWQwNjhjNzRjZmZjZGUxZWExZWRhZDU4NTIifX19"), "&4> Create new Script", "", "&cDeletes your current Script", "&cand creates a blank one"),
-                (p13, slot, stack, action) -> {
-                    try {
-                        openScript(p13, b, "START-TURN_LEFT-REPEAT");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                });
-
-        menu.addItem(6, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAxNTg2ZTM5ZjZmZmE2M2I0ZmIzMDFiNjVjYTdkYThhOTJmNzM1M2FhYWI4OWQzODg2NTc5MTI1ZGZiYWY5In19fQ=="), "&6> Download a Script", "", "&eDownload a Script from the Server", "&eYou can edit or simply use it"),
-                (p12, slot, stack, action) -> {
-                    try {
-                        openScriptDownloader(p12, b, 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                });
-
+        ChestMenu menu = new ChestMenu("&e脚本编辑器");
+        menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDliZjZkYjRhZWRhOWQ4ODIyYjlmNzM2NTM4ZThjMThiOWE0ODQ0Zjg0ZWI0NTUwNGFkZmJmZWU4N2ViIn19fQ=="), "&2> 编辑脚本", "", "&a编辑当前脚本"), (p13, slot, stack, action) -> {
+            try {
+                ProgrammableAndroid.this.openScript(p13, b, BlockStorage.getLocationInfo(b.getLocation(), "script"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
+        menu.addItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTcxZDg5NzljMTg3OGEwNTk4N2E3ZmFmMjFiNTZkMWI3NDRmOWQwNjhjNzRjZmZjZGUxZWExZWRhZDU4NTIifX19"), "&4> 创建新脚本", "", "&c删除当前脚本", "&c并创建一个空白脚本"), (p12, slot, stack, action) -> {
+            try {
+                ProgrammableAndroid.this.openScript(p12, b, "START-TURN_LEFT-REPEAT");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
+        menu.addItem(6, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAxNTg2ZTM5ZjZmZmE2M2I0ZmIzMDFiNjVjYTdkYThhOTJmNzM1M2FhYWI4OWQzODg2NTc5MTI1ZGZiYWY5In19fQ=="), "&6> 下载脚本", "", "&e从云端下载一个脚本", "&e你可以对下载的脚本进行编辑或直接使用"), (p1, slot, stack, action) -> {
+            try {
+                ProgrammableAndroid.this.openScriptDownloader(p1, b, 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
         menu.open(p);
     }
 
     public void openScript(final Player p, final Block b, final String script) throws Exception {
-        ChestMenu menu = new ChestMenu("&eScript Editor");
+        ChestMenu menu = new ChestMenu("&e脚本编辑器");
         final String[] commands = script.split("-");
 
         menu.addItem(0, ScriptPart.START.toItemStack());
@@ -998,7 +985,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
                 int additional = commands.length == 54 ? 0 : 1;
 
                 if (additional == 1) {
-                    menu.addItem(i, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTcxZDg5NzljMTg3OGEwNTk4N2E3ZmFmMjFiNTZkMWI3NDRmOWQwNjhjNzRjZmZjZGUxZWExZWRhZDU4NTIifX19"), "&7> Add new Command"));
+                    menu.addItem(i, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTcxZDg5NzljMTg3OGEwNTk4N2E3ZmFmMjFiNTZkMWI3NDRmOWQwNjhjNzRjZmZjZGUxZWExZWRhZDU4NTIifX19"), "&7> 添加新命令"));
                     menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> {
                         try {
                             openScriptComponentEditor(p, b, script, index);
@@ -1011,62 +998,60 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
 
                 menu.addItem(i + additional, ScriptPart.REPEAT.toItemStack());
                 menu.addMenuClickHandler(i + additional, (arg0, arg1, arg2, arg3) -> false);
-            } else {
-                ItemStack stack = ScriptPart.valueOf(commands[i]).toItemStack();
-                menu.addItem(i, new CustomItem(stack, stack.getItemMeta().getDisplayName(), "", "&7\u21E8 &eLeft Click &7to edit", "&7\u21E8 &eRight Click &7to delete", "&7\u21E8 &eShift + Right Click &7to duplicate"));
-                menu.addMenuClickHandler(i, (arg0, arg1, arg2, action) -> {
-                    if (action.isRightClicked() && action.isShiftClicked()) {
-                        if (commands.length == 54) {
-                            return false;
-                        }
-
-                        int i1 = 0;
-                        StringBuilder builder = new StringBuilder("START-");
-                        for (String command : commands) {
-                            if (i1 > 0) {
-                                if (i1 == index) {
-                                    builder.append(commands[i1]).append("-");
-                                    builder.append(commands[i1]).append("-");
-                                } else if (i1 < commands.length - 1) {
-                                    builder.append(command).append("-");
-                                }
-                            }
-                            i1++;
-                        }
-                        builder.append("REPEAT");
-                        BlockStorage.addBlockInfo(b, "script", builder.toString());
-
-                        try {
-                            openScript(p, b, builder.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (action.isRightClicked()) {
-                        int i1 = 0;
-                        StringBuilder builder = new StringBuilder("START-");
-                        for (String command : commands) {
-                            if (i1 != index && i1 > 0 && i1 < commands.length - 1) {
-                                builder.append(command).append("-");
-                            }
-                            i1++;
-                        }
-                        builder.append("REPEAT");
-                        BlockStorage.addBlockInfo(b, "script", builder.toString());
-                        try {
-                            openScript(p, b, builder.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            openScriptComponentEditor(p, b, script, index);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return false;
-                });
+                continue;
             }
+            ItemStack stack = ScriptPart.valueOf(commands[i]).toItemStack();
+            menu.addItem(i, new CustomItem(stack, stack.getItemMeta().getDisplayName(), "", "&7⇨ &e左键点击 &e进行编辑", "&7⇨ &e右键点击 &7进行删除", "&7⇨ &eShift + 右键点击 &7复制"));
+            menu.addMenuClickHandler(i, (arg0, arg1, arg2, action) -> {
+                if (action.isRightClicked() && action.isShiftClicked()) {
+                    if (commands.length == 54) {
+                        return false;
+                    }
+                    int i1 = 0;
+                    StringBuilder builder = new StringBuilder("START-");
+                    for (String command : commands) {
+                        if (i1 > 0) {
+                            if (i1 == index) {
+                                builder.append(commands[i1] + "-");
+                                builder.append(commands[i1] + "-");
+                            } else if (i1 < commands.length - 1) {
+                                builder.append(command + "-");
+                            }
+                        }
+                        ++i1;
+                    }
+                    builder.append("REPEAT");
+                    BlockStorage.addBlockInfo(b, "script", builder.toString());
+                    try {
+                        ProgrammableAndroid.this.openScript(p, b, builder.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (action.isRightClicked()) {
+                    int i1 = 0;
+                    StringBuilder builder = new StringBuilder("START-");
+                    for (String command : commands) {
+                        if (i1 != index && i1 > 0 && i1 < commands.length - 1) {
+                            builder.append(command + "-");
+                        }
+                        ++i1;
+                    }
+                    builder.append("REPEAT");
+                    BlockStorage.addBlockInfo(b, "script", builder.toString());
+                    try {
+                        ProgrammableAndroid.this.openScript(p, b, builder.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        ProgrammableAndroid.this.openScriptComponentEditor(p, b, script, index);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            });
         }
 
         menu.open(p);
@@ -1074,7 +1059,8 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
 
     @SuppressWarnings("deprecation")
     private void openScriptDownloader(final Player p, final Block b, final int page) throws Exception {
-        final ChestMenu menu = new ChestMenu("Slimefun Guide");
+        int target;
+        ChestMenu menu = new ChestMenu("脚本下载器");
 
         menu.addMenuOpeningHandler(p12 -> p12.playSound(p12.getLocation(), Sound.BLOCK_NOTE_HAT, 0.7F, 0.7F));
 
@@ -1087,8 +1073,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
             menu.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "));
             menu.addMenuClickHandler(i, (arg0, arg1, arg2, arg3) -> false);
         }
-
-        menu.addItem(46, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r\u21E6 Previous Page", "", "&7(" + page + " / " + pages + ")"));
+        menu.addItem(46, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r⇦上一页", "", "&7(" + page + " / " + pages + ")"));
         menu.addMenuClickHandler(46, (arg0, arg1, arg2, arg3) -> {
             int next = page - 1;
             if (next < 1) {
@@ -1103,28 +1088,27 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
             }
             return false;
         });
-
-        menu.addItem(49, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTA1YTJjYWI4YjY4ZWE1N2UzYWY5OTJhMzZlNDdjOGZmOWFhODdjYzg3NzYyODE5NjZmOGMzY2YzMWEzOCJ9fX0="), "&eUpload a Script", "", "&6Click &7to upload your Android's Script", "&7to the Database"));
-        menu.addMenuClickHandler(49, (p1, arg1, arg2, arg3) -> {
-            final String code = BlockStorage.getBlockInfo(b, "script");
+        menu.addItem(49, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTA1YTJjYWI4YjY4ZWE1N2UzYWY5OTJhMzZlNDdjOGZmOWFhODdjYzg3NzYyODE5NjZmOGMzY2YzMWEzOCJ9fX0="), "&e上传脚本", "", "&6点击 &7上传你机器人的脚本至云端", "&7分享给他人使用"));
+        menu.addMenuClickHandler(49, (player, arg1, arg2, arg3) -> {
+            final String code = BlockStorage.getLocationInfo(b.getLocation(), "script");
             int num = 1;
 
             for (Config script : getUploadedScripts()) {
-                if (script.getString("author").equals(p1.getUniqueId().toString())) {
+                if (script.getString("author").equals(player.getUniqueId().toString())) {
                     num++;
                 }
                 if (script.getString("code").equals(code)) {
-                    Messages.local.sendTranslation(p1, "android.scripts.already-uploaded", true);
+                    Messages.local.sendTranslation(player, "android.scripts.already-uploaded", true);
                     return false;
                 }
             }
 
             final int id = num;
 
-            p1.closeInventory();
-            Messages.local.sendTranslation(p1, "android.scripts.enter-name", true);
+            player.closeInventory();
+            Messages.local.sendTranslation(player, "android.scripts.enter-name", true);
 
-            MenuHelper.awaitChatInput(p1, (p11, message) -> {
+            MenuHelper.awaitChatInput(player, (p11, message) -> {
                 Config script = new Config("plugins/Slimefun/scripts/" + getAndroidType().toString() + "/" + p11.getName() + " " + id + ".sfs");
 
                 script.setValue("author", p11.getUniqueId().toString());
@@ -1148,8 +1132,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
             });
             return false;
         });
-
-        menu.addItem(52, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&rNext Page \u21E8", "", "&7(" + page + " / " + pages + ")"));
+        menu.addItem(52, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), "&r下一页⇨", "", "&7(" + page + " / " + pages + ")"));
         menu.addMenuClickHandler(52, (arg0, arg1, arg2, arg3) -> {
             int next = page + 1;
             if (next > pages) {
@@ -1166,77 +1149,61 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
         });
 
         int category_index = 45 * (page - 1);
-        for (int i = 0; i < 45; i++) {
-            int target = category_index + i;
-            if (target >= scripts.size()) {
-                break;
+        for (int i = 0; i < 45 && (target = category_index + i) < scripts.size(); ++i) {
+            String author;
+            final Config script = scripts.get(target);
+            OfflinePlayer op = Bukkit.getOfflinePlayer(script.getUUID("author"));
+            String string = author = op != null && op.getName() != null ? op.getName() : script.getString("author_name");
+            if (script.getString("author").equals(p.getUniqueId().toString())) {
+                menu.addItem(index, new CustomItem(this.getItem(), "&b" + script.getString("name"), "&7by &r" + author, "", "&7Downloads: &r" + script.getInt("downloads"), "&7Rating: " + this.getScriptRatingPercentage(script), "&a" + this.getScriptRating(script, true) + " ☺ &7- &4☹ " + this.getScriptRating(script, false), "", "&e左键点击 &r下载这个脚本", "&4(这将覆盖你当前的脚本)"));
             } else {
-                final Config script = scripts.get(target);
-
-                OfflinePlayer op = Bukkit.getOfflinePlayer(script.getUUID("author"));
-                String author = (op != null && op.getName() != null) ? op.getName() : script.getString("author_name");
-
-                if (script.getString("author").equals(p.getUniqueId().toString())) {
-                    menu.addItem(index, new CustomItem(this.getItem(), "&b" + script.getString("name"), "&7by &r" + author, "", "&7Downloads: &r" + script.getInt("downloads"), "&7Rating: " + getScriptRatingPercentage(script), "&a" + getScriptRating(script, true) + " \u263A &7- &4\u2639 " + getScriptRating(script, false), "", "&eLeft Click &rto download this Script", "&4(This will override your current Script)"));
-                } else {
-                    menu.addItem(index, new CustomItem(this.getItem(), "&b" + script.getString("name"), "&7by &r" + author, "", "&7Downloads: &r" + script.getInt("downloads"), "&7Rating: " + getScriptRatingPercentage(script), "&a" + getScriptRating(script, true) + " \u263A &7- &4\u2639 " + getScriptRating(script, false), "", "&eLeft Click &rto download this Script", "&4(This will override your current Script)", "&eShift + Left Click &rto leave a positive Rating", "&eShift + Right Click &rto leave a negative Rating"));
-                }
-
-                menu.addMenuClickHandler(index, (p13, slot, stack, action) -> {
-                    Config script2 = new Config(script.getFile());
-
-                    if (action.isShiftClicked()) {
-                        if (script2.getString("author").equals(p13.getUniqueId().toString())) {
-                            Messages.local.sendTranslation(p13, "android.scripts.rating.own", true);
-                        } else if (action.isRightClicked()) {
-                            if (!script2.getStringList("rating.negative").contains(p13.getUniqueId().toString()) && !script2.getStringList("rating.positive").contains(p13.getUniqueId().toString())) {
-                                List<String> list = script2.getStringList("rating.negative");
-                                list.add(p13.getUniqueId().toString());
-
-                                script2.setValue("rating.negative", list);
-                                script2.save();
-
-                                try {
-                                    openScriptDownloader(p13, b, page);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Messages.local.sendTranslation(p13, "android.scripts.rating.already", true);
+                menu.addItem(index, new CustomItem(this.getItem(), "&b" + script.getString("name"), "&7by &r" + author, "", "&7Downloads: &r" + script.getInt("downloads"), "&7Rating: " + this.getScriptRatingPercentage(script), "&a" + this.getScriptRating(script, true) + " ☺ &7- &4☹ " + this.getScriptRating(script, false), "", "&e左键点击 &r下载这个脚本", "&4(这将覆盖你当前的脚本)", "&eShift + 左键点击 &r给脚本点赞", "&eShift + 右键点击 &r差评这个脚本"));
+            }
+            menu.addMenuClickHandler(index, (p1, slot, stack, action) -> {
+                Config script2 = new Config(script.getFile());
+                if (action.isShiftClicked()) {
+                    if (script2.getString("author").equals(p1.getUniqueId().toString())) {
+                        Messages.local.sendTranslation(p1, "android.scripts.rating.own", true);
+                    } else if (action.isRightClicked()) {
+                        if (!script2.getStringList("rating.negative").contains(p1.getUniqueId().toString()) && !script2.getStringList("rating.positive").contains(p1.getUniqueId().toString())) {
+                            List<String> list = script2.getStringList("rating.negative");
+                            list.add(p1.getUniqueId().toString());
+                            script2.setValue("rating.negative", list);
+                            script2.save();
+                            try {
+                                ProgrammableAndroid.this.openScriptDownloader(p1, b, page);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         } else {
-                            if (!script2.getStringList("rating.negative").contains(p13.getUniqueId().toString()) && !script2.getStringList("rating.positive").contains(p13.getUniqueId().toString())) {
-                                List<String> list = script2.getStringList("rating.positive");
-                                list.add(p13.getUniqueId().toString());
-
-                                script2.setValue("rating.positive", list);
-                                script2.save();
-
-                                try {
-                                    openScriptDownloader(p13, b, page);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Messages.local.sendTranslation(p13, "android.scripts.rating.already", true);
-                            }
+                            Messages.local.sendTranslation(p1, "android.scripts.rating.already", true);
                         }
-                    } else if (!action.isRightClicked()) {
+                    } else if (!script2.getStringList("rating.negative").contains(p1.getUniqueId().toString()) && !script2.getStringList("rating.positive").contains(p1.getUniqueId().toString())) {
+                        List<String> list = script2.getStringList("rating.positive");
+                        list.add(p1.getUniqueId().toString());
+                        script2.setValue("rating.positive", list);
+                        script2.save();
                         try {
-                            script2.setValue("downloads", script2.getInt("downloads") + 1);
-                            script2.save();
-
-                            BlockStorage.addBlockInfo(b, "script", script2.getString("code"));
-                            openScriptEditor(p13, b);
+                            openScriptDownloader(p1, b, page);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        Messages.local.sendTranslation(p1, "android.scripts.rating.already", true);
                     }
-                    return false;
-                });
-
-                index++;
-            }
+                } else if (!action.isRightClicked()) {
+                    try {
+                        script2.setValue("downloads", script2.getInt("downloads") + 1);
+                        script2.save();
+                        BlockStorage.addBlockInfo(b, "script", script2.getString("code"));
+                        openScriptEditor(p1, b);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            });
+            ++index;
         }
 
         menu.open(p);
@@ -1275,7 +1242,7 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
 
     @SuppressWarnings("deprecation")
     protected void openScriptComponentEditor(Player p, final Block b, final String script, final int index) throws Exception {
-        ChestMenu menu = new ChestMenu("&eScript Editor");
+        ChestMenu menu = new ChestMenu("&e脚本编辑器");
 
         final String[] commands = script.split("-");
 
@@ -1306,25 +1273,24 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
         menu.addItem(8, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "),
                 (arg0, arg1, arg2, arg3) -> false);
 
-        menu.addItem(9, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&rDo nothing"),
-                (p1, arg1, arg2, arg3) -> {
-                    int i = 0;
-                    StringBuilder builder = new StringBuilder("START-");
-                    for (String command : commands) {
-                        if (i != index && i > 0 && i < commands.length - 1) {
-                            builder.append(command).append("-");
-                        }
-                        i++;
-                    }
-                    builder.append("REPEAT");
-                    BlockStorage.addBlockInfo(b, "script", builder.toString());
-                    try {
-                        openScript(p1, b, builder.toString());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                });
+        menu.addItem(9, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTYxMzlmZDFjNTY1NGU1NmU5ZTRlMmM4YmU3ZWIyYmQ1YjQ5OWQ2MzM2MTY2NjNmZWVlOTliNzQzNTJhZDY0In19fQ=="), "&r待命"), (p12, arg1, arg2, arg3) -> {
+            int i = 0;
+            StringBuilder builder = new StringBuilder("START-");
+            for (String command : commands) {
+                if (i != index && i > 0 && i < commands.length - 1) {
+                    builder.append(command + "-");
+                }
+                ++i;
+            }
+            builder.append("REPEAT");
+            BlockStorage.addBlockInfo(b, "script", builder.toString());
+            try {
+                ProgrammableAndroid.this.openScript(p12, b, builder.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
 
         int i = 10;
         for (final ScriptPart part : getAccessibleScriptParts()) {
