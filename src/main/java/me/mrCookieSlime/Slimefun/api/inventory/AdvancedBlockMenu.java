@@ -1,6 +1,5 @@
 package me.mrCookieSlime.Slimefun.api.inventory;
 
-
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

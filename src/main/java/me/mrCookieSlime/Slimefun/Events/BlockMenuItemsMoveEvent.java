@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.InventoryHolder;
 
 public class BlockMenuItemsMoveEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
@@ -35,7 +34,7 @@ public class BlockMenuItemsMoveEvent extends Event {
 class AdvancedBlockMenuItemsMoveEventListener implements Listener {
     @EventHandler
     public void onInventoryMoveItem(InventoryClickEvent e) {
-        System.out.println(e.getInventory().getLocation().getBlock() instanceof InventoryHolder);
+//        System.out.println(e.getInventory().getLocation().getBlock() instanceof InventoryHolder);
 //        Bukkit.getServer().getPluginManager().callEvent(new BlockMenuItemsMoveEvent(new AdvancedBlockMenuHolder<>((Chest) e.getInventory().getLocation().getBlock())));
     }
 }

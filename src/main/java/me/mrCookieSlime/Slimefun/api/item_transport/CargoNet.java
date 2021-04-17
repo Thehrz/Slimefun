@@ -204,7 +204,7 @@ public class CargoNet extends Network {
                 self.display();
             }
             for (Location input : inputNodes) {
-                final int frequency = getFrequency(input);
+                int frequency = getFrequency(input);
                 if (frequency >= 0) {
                     if (frequency > 15) {
                         continue;
@@ -221,7 +221,7 @@ public class CargoNet extends Network {
                         }
                     }
                     if (stack != null && output.containsKey(frequency)) {
-                        final List<Location> outputlist = new ArrayList<>(output.get(frequency));
+                        List<Location> outputlist = new ArrayList<>(output.get(frequency));
                         if (roundrobin) {
                             if (!CargoNet.round_robin.containsKey(input)) {
                                 CargoNet.round_robin.put(input, 0);

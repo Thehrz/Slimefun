@@ -31,7 +31,7 @@ public class CargoManager {
             }
             return null;
         }
-        BlockState blockState = PaperLib.getBlockState(target, false).getState();
+        BlockState blockState = PaperLib.getBlockState(target, true).getState();
         if (blockState instanceof InventoryHolder) {
             Inventory inv = ((InventoryHolder) blockState).getInventory();
             for (int slot = 0; slot < (inv.getContents()).length; slot++) {
@@ -76,7 +76,7 @@ public class CargoManager {
             }
             return stack;
         }
-        BlockState blockState = PaperLib.getBlockState(target, false).getState();
+        BlockState blockState = PaperLib.getBlockState(target, true).getState();
         if (blockState instanceof InventoryHolder) {
             Inventory inv = ((InventoryHolder) blockState).getInventory();
             for (int slot = 0; slot < (inv.getContents()).length; slot++) {
