@@ -34,8 +34,8 @@ import java.util.*;
 
 @TListener
 public class AncientAltarListener implements Listener {
-    final List<Block> altars;
-    final Set<UUID> removed_items;
+    List<Block> altars;
+    Set<UUID> removed_items;
 
     public AncientAltarListener() {
         this.altars = new ArrayList<>();

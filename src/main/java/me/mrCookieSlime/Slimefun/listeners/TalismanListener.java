@@ -1,6 +1,5 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
-import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.Talisman;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@TListener
 public class TalismanListener implements Listener {
     public TalismanListener(JavaPlugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);

@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-
 public class WESlimefunManager {
     public WESlimefunManager() {
         WorldEdit.getInstance().getEventBus().register(this);
@@ -29,7 +28,9 @@ public class WESlimefunManager {
 
                     if (world != null) {
                         Location l = new Location(world, pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
-                        if (BlockStorage.hasBlockInfo(l)) BlockStorage.clearBlockInfo(l);
+                        if (BlockStorage.hasBlockInfo(l)) {
+                            BlockStorage.clearBlockInfo(l);
+                        }
                     }
                 }
             }

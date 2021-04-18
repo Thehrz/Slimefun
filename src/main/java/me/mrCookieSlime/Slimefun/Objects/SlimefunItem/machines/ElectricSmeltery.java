@@ -23,7 +23,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,8 +106,8 @@ public abstract class ElectricSmeltery extends AContainer {
                         }
                     }
                 }
-                ElectricSmeltery.PROGRESS.remove(b.getLocation());
-                ElectricSmeltery.PROCESSING.remove(b.getLocation());
+                PROGRESS.remove(b);
+                PROCESSING.remove(b);
                 return true;
             }
         });
@@ -119,19 +118,19 @@ public abstract class ElectricSmeltery extends AContainer {
     @Override
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
         for (int i : BORDER_IN) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 9), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
         for (int i : BORDER_OUT) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1), " "), (arg0, arg1, arg2, arg3) -> false);
         }
 
 
-        preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(22, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (arg0, arg1, arg2, arg3) -> false);
 
 
         for (int i : getOutputSlots()) {

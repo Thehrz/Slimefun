@@ -66,7 +66,6 @@ public abstract class ProgrammableAndroid extends SlimefunItem {
     public ProgrammableAndroid(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
 
-
         if (getTier() == 1) {
             registerFuel(new MachineFuel(80, new ItemStack(Material.COAL, 1, (short) 0)));
             registerFuel(new MachineFuel(80, new ItemStack(Material.COAL, 1, (short) 1)));

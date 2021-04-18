@@ -1,6 +1,5 @@
 package me.mrCookieSlime.Slimefun.listeners;
 
-import io.izzel.taboolib.module.inject.TListener;
 import me.mrCookieSlime.Slimefun.Lists.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Setup.Messages;
@@ -27,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
-@TListener
 public class BackpackListener implements Listener {
     public BackpackListener(JavaPlugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);

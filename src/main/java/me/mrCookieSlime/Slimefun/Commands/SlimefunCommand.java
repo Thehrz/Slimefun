@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@TListener
 public class SlimefunCommand implements CommandExecutor, Listener {
     public static List<String> arguments = new ArrayList<>();
     public static List<String> descriptions = new ArrayList<>();
@@ -368,14 +367,15 @@ public class SlimefunCommand implements CommandExecutor, Listener {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3" + arguments.get(i) + " &b") + descriptions.get(i));
         }
     }
+}
 
+@TListener
+class onPlayerCommandPreprocess implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
         if ("/help slimefun".equalsIgnoreCase(e.getMessage())) {
-            CommandHelp.sendCommandHelp(e.getPlayer(), SlimefunStartup.instance, arguments, descriptions);
+            CommandHelp.sendCommandHelp(e.getPlayer(), SlimefunStartup.instance, SlimefunCommand.arguments, SlimefunCommand.descriptions);
             e.setCancelled(true);
         }
     }
 }
-
-
