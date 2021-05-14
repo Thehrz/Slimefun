@@ -83,7 +83,6 @@ public abstract class ElectricSmeltery extends AContainer {
             }
         };
 
-
         registerBlockHandler(name, new SlimefunBlockHandler() {
             @Override
             public void onPlace(Player p, Block b, SlimefunItem item) {
@@ -129,9 +128,7 @@ public abstract class ElectricSmeltery extends AContainer {
             preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-
         preset.addItem(22, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (player, slot, itemStack, clickAction) -> false);
-
 
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
@@ -147,7 +144,6 @@ public abstract class ElectricSmeltery extends AContainer {
             });
         }
     }
-
 
     @Override
     public String getInventoryTitle() {

@@ -12,7 +12,6 @@ public abstract class Freezer extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
         registerRecipe(2, new ItemStack[]{new ItemStack(Material.WATER_BUCKET)}, new ItemStack[]{new ItemStack(Material.BUCKET), new ItemStack(Material.ICE)});
@@ -20,7 +19,6 @@ public abstract class Freezer extends AContainer {
         registerRecipe(4, new ItemStack[]{new ItemStack(Material.ICE)}, new ItemStack[]{new ItemStack(Material.PACKED_ICE)});
         registerRecipe(6, new ItemStack[]{new ItemStack(Material.PACKED_ICE)}, new ItemStack[]{SlimefunItems.REACTOR_COOLANT_CELL});
     }
-
 
     @Override
     public String getMachineIdentifier() {

@@ -11,7 +11,6 @@ public abstract class ElectrifiedCrucible extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
         registerRecipe(10, new ItemStack[]{new ItemStack(Material.BUCKET), new ItemStack(Material.COBBLESTONE, 16)}, new ItemStack[]{new ItemStack(Material.LAVA_BUCKET)});
@@ -19,18 +18,15 @@ public abstract class ElectrifiedCrucible extends AContainer {
         registerRecipe(10, new ItemStack[]{new ItemStack(Material.BUCKET), new ItemStack(Material.LEAVES, 16)}, new ItemStack[]{new ItemStack(Material.WATER_BUCKET)});
     }
 
-
     @Override
     public String getMachineIdentifier() {
         return "ELECTRIFIED_CRUCIBLE";
     }
 
-
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
-
 
     @Override
     public String getInventoryTitle() {

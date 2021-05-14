@@ -122,7 +122,6 @@ public class CargoInputNode extends SlimefunItem {
                         menu.replaceExistingItem(42, new CustomItem(SlimefunItems.CHEST_TERMINAL, "&b频段 ID: &3" + (channel + 1)));
                         menu.addMenuClickHandler(42, (p, arg1, arg2, arg3) -> false);
                     } else {
-
                         menu.replaceExistingItem(42, new CustomItem(new MaterialData(Material.WOOL, (byte) channel), "&b频段 ID: &3" + (channel + 1)));
                         menu.addMenuClickHandler(42, (p, arg1, arg2, arg3) -> false);
                     }
@@ -192,7 +191,6 @@ public class CargoInputNode extends SlimefunItem {
         });
     }
 
-
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
@@ -201,7 +199,6 @@ public class CargoInputNode extends SlimefunItem {
 
         preset.addItem(2, new CustomItem(new MaterialData(Material.PAPER), "&3物品", "", "&b将你想要的所有物品放入", "&b黑名单/白名单"), (player, slot, itemStack, clickAction) -> false);
     }
-
 
     public int[] getInputSlots() {
         return new int[]{19, 20, 21, 28, 29, 30, 37, 38, 39};

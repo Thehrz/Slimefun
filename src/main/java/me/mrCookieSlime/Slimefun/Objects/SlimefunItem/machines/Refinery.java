@@ -26,29 +26,24 @@ public abstract class Refinery extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public String getInventoryTitle() {
         return "&c石油精炼器";
     }
-
 
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.FLINT_AND_STEEL);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
     }
-
 
     @Override
     public String getMachineIdentifier() {
         return "REFINERY";
     }
-
 
     @Override
     protected void tick(Block b) {
@@ -69,8 +64,9 @@ public abstract class Refinery extends AContainer {
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
                 if (ChargableBlock.isChargable(b)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     progress.put(b, timeleft - 1);
                 } else {
@@ -84,7 +80,6 @@ public abstract class Refinery extends AContainer {
                 processing.remove(b);
             }
         } else {
-
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), SlimefunItems.BUCKET_OF_OIL, true)) {
                     MachineRecipe r = new MachineRecipe(40, new ItemStack[0], new ItemStack[]{SlimefunItems.BUCKET_OF_FUEL});
@@ -99,5 +94,3 @@ public abstract class Refinery extends AContainer {
         }
     }
 }
-
-

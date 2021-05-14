@@ -69,8 +69,9 @@ public class ChargingBench extends AContainer {
 
     @Override
     protected void tick(Block b) {
-        if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+        if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
             return;
+        }
         for (int slot : getInputSlots()) {
             ItemStack stack = BlockStorage.getInventory(b).getItemInSlot(slot);
             if (ItemEnergy.getMaxEnergy(stack) > 0.0F) {

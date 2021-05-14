@@ -21,8 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class CargoOutputNode
-        extends SlimefunItem {
+public class CargoOutputNode extends SlimefunItem {
     private static final int[] border = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
     public CargoOutputNode(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
@@ -41,12 +40,13 @@ public class CargoOutputNode
                     menu.replaceExistingItem(12, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI1OTliZDk4NjY1OWI4Y2UyYzQ5ODg1MjVjOTRlMTlkZGQzOWZhZDA4YTM4Mjg0YTE5N2YxYjcwNjc1YWNjIn19fQ=="), "&b频段", "", "&e> 点击 -1 频段号"));
                     menu.addMenuClickHandler(12, (p, arg1, arg2, arg3) -> {
                         int channel = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) - 1;
-                        if (channel < 0)
+                        if (channel < 0) {
                             if (CargoNet.EXTRA_CHANNELS) {
                                 channel = 16;
                             } else {
                                 channel = 15;
                             }
+                        }
 
                         BlockStorage.addBlockInfo(b, "frequency", String.valueOf(channel));
                         newInstance(menu, b);
@@ -59,7 +59,6 @@ public class CargoOutputNode
                         menu.replaceExistingItem(13, new CustomItem(SlimefunItems.CHEST_TERMINAL, "&b频段 ID: &3" + (channel + 1)));
                         menu.addMenuClickHandler(13, (p, arg1, arg2, arg3) -> false);
                     } else {
-
                         menu.replaceExistingItem(13, new CustomItem(new MaterialData(Material.WOOL, (byte) channel), "&b频段 ID: &3" + (channel + 1)));
                         menu.addMenuClickHandler(13, (p, arg1, arg2, arg3) -> false);
                     }
@@ -69,7 +68,9 @@ public class CargoOutputNode
                         int channel1 = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) + 1;
 
                         if (CargoNet.EXTRA_CHANNELS) {
-                            if (channel1 > 16) channel1 = 0;
+                            if (channel1 > 16) {
+                                channel1 = 0;
+                            }
                         } else if (channel1 > 15) {
                             channel1 = 0;
                         }
@@ -84,7 +85,6 @@ public class CargoOutputNode
                 }
             }
 
-
             @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
@@ -93,7 +93,6 @@ public class CargoOutputNode
                 }
                 return open;
             }
-
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
@@ -115,7 +114,6 @@ public class CargoOutputNode
             }
         });
     }
-
 
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : border) {

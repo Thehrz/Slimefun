@@ -27,23 +27,19 @@ public abstract class ElectricGoldPan extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public String getInventoryTitle() {
         return "&6电力淘洗机";
     }
-
 
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_SPADE);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
     }
-
 
     @Override
     public abstract int getSpeed();
@@ -67,16 +63,18 @@ public abstract class ElectricGoldPan extends AContainer {
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
                 if (ChargableBlock.isChargable(b)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     progress.put(b, timeleft - 1);
                 } else {
                     progress.put(b, timeleft - 1);
                 }
             } else if (ChargableBlock.isChargable(b)) {
-                if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                     return;
+                }
                 ChargableBlock.addCharge(b, -getEnergyConsumption());
 
                 BlockStorage.getInventory(b).replaceExistingItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "));
@@ -90,8 +88,12 @@ public abstract class ElectricGoldPan extends AContainer {
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.GRAVEL), true)) {
                     ItemStack output = SlimefunItems.SIFTED_ORE;
-                    if (CSCoreLib.randomizer().nextInt(100) < 16) output = new ItemStack(Material.FLINT);
-                    if (CSCoreLib.randomizer().nextInt(100) < 16) output = new ItemStack(Material.CLAY_BALL);
+                    if (CSCoreLib.randomizer().nextInt(100) < 16) {
+                        output = new ItemStack(Material.FLINT);
+                    }
+                    if (CSCoreLib.randomizer().nextInt(100) < 16) {
+                        output = new ItemStack(Material.CLAY_BALL);
+                    }
 
                     MachineRecipe r = new MachineRecipe(3 / getSpeed(), new ItemStack[0], new ItemStack[]{output});
                     if (!fits(b, r.getOutput()))
@@ -104,7 +106,6 @@ public abstract class ElectricGoldPan extends AContainer {
             }
         }
     }
-
 
     @Override
     public String getMachineIdentifier() {

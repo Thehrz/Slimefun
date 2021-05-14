@@ -13,7 +13,6 @@ public abstract class ElectricIngotFactory extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
         registerRecipe(new MachineRecipe(8, new ItemStack[]{SlimefunItems.ALUMINUM_DUST}, new ItemStack[]{SlimefunItems.ALUMINUM_INGOT}));
@@ -26,7 +25,6 @@ public abstract class ElectricIngotFactory extends AContainer {
         registerRecipe(new MachineRecipe(8, new ItemStack[]{SlimefunItems.TIN_DUST}, new ItemStack[]{SlimefunItems.TIN_INGOT}));
         registerRecipe(new MachineRecipe(8, new ItemStack[]{SlimefunItems.ZINC_DUST}, new ItemStack[]{SlimefunItems.ZINC_INGOT}));
     }
-
 
     @Override
     public String getMachineIdentifier() {

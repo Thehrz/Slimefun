@@ -128,13 +128,13 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
     }
 
     protected void constructMenu(final BlockMenuPreset preset) {
-        for (final int i : AutomatedCraftingChamber.border) {
+        for (final int i : border) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.border_in) {
+        for (final int i : border_in) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " "), (player, slot, itemStack, clickAction) -> false);
         }
-        for (final int i : AutomatedCraftingChamber.border_out) {
+        for (final int i : border_out) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (player, slot, itemStack, clickAction) -> false);
         }
         for (final int i : this.getOutputSlots()) {
@@ -229,8 +229,8 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
             ++i;
         }
         final String input = builder.toString();
-        if (AutomatedCraftingChamber.recipes.containsKey(input)) {
-            final ItemStack output = AutomatedCraftingChamber.recipes.get(input).clone();
+        if (recipes.containsKey(input)) {
+            final ItemStack output = recipes.get(input).clone();
             if (this.fits(b, new ItemStack[]{output})) {
                 this.pushItems(b, new ItemStack[]{output});
                 ChargableBlock.addCharge(b, -this.getEnergyConsumption());

@@ -79,7 +79,6 @@ public abstract class HeatedPressureChamber extends AContainer {
             }
         };
 
-
         registerDefaultRecipes();
     }
 
@@ -134,7 +133,6 @@ public abstract class HeatedPressureChamber extends AContainer {
 
         super.register(slimefun);
     }
-
 
     @Override
     protected void tick(Block b) {

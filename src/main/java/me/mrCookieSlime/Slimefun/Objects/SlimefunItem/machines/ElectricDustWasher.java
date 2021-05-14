@@ -95,14 +95,14 @@ public abstract class ElectricDustWasher extends AContainer {
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), SlimefunItems.SIFTED_ORE, true)) {
                     if (!legacy_dust_washer) {
-                        boolean empty_slot = false;
-                        for (int output_slot : getOutputSlots()) {
-                            if (BlockStorage.getInventory(b).getItemInSlot(output_slot) == null) {
-                                empty_slot = true;
+                        boolean emptySlot = false;
+                        for (int outputSlot : getOutputSlots()) {
+                            if (BlockStorage.getInventory(b).getItemInSlot(outputSlot) == null) {
+                                emptySlot = true;
                                 break;
                             }
                         }
-                        if (!empty_slot) {
+                        if (!emptySlot) {
                             return;
                         }
                     }
@@ -173,7 +173,6 @@ public abstract class ElectricDustWasher extends AContainer {
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
-
 
                 @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {

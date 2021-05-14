@@ -50,7 +50,9 @@ public class AnimalGrowthAccelerator extends SlimefunItem {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                getInputSlots();
+                if (flow.equals(ItemTransportFlow.INSERT)) {
+                    return getInputSlots();
+                }
                 return new int[0];
             }
         };
@@ -77,13 +79,11 @@ public class AnimalGrowthAccelerator extends SlimefunItem {
         });
     }
 
-
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : border) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
     }
-
 
     public int getEnergyConsumption() {
         return 14;
@@ -92,7 +92,6 @@ public class AnimalGrowthAccelerator extends SlimefunItem {
     public int[] getInputSlots() {
         return new int[]{10, 11, 12, 13, 14, 15, 16};
     }
-
 
     @Override
     public void register(boolean slimefun) {

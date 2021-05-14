@@ -12,7 +12,6 @@ public abstract class FoodFabricator extends AContainer {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
         registerRecipe(12, new ItemStack[]{SlimefunItems.CAN, new ItemStack(Material.WHEAT)}, new ItemStack[]{SlimefunItems.ORGANIC_FOOD2});
@@ -23,7 +22,6 @@ public abstract class FoodFabricator extends AContainer {
         registerRecipe(12, new ItemStack[]{SlimefunItems.CAN, new ItemStack(Material.MELON)}, new ItemStack[]{SlimefunItems.ORGANIC_FOOD7});
         registerRecipe(12, new ItemStack[]{SlimefunItems.CAN, new ItemStack(Material.APPLE)}, new ItemStack[]{SlimefunItems.ORGANIC_FOOD8});
     }
-
 
     @Override
     public String getMachineIdentifier() {

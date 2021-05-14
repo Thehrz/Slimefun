@@ -57,7 +57,6 @@ public class ReactorAccessPort extends SlimefunItem {
                 return getOutputSlots();
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
@@ -141,30 +140,23 @@ public class ReactorAccessPort extends SlimefunItem {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-
         for (int i : BORDER_1) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), " "), (player, slot, itemStack, clickAction) -> false);
         }
-
 
         for (int i : BORDER_2) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-
         for (int i : BORDER_3) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 13), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-
         preset.addItem(1, new CustomItem(SlimefunItems.URANIUM, "&7燃料槽", "", "&r这个燃料槽可以放置放射性燃料:", "&2铀 &r或 &a镎"), (player, slot, itemStack, clickAction) -> false);
-
 
         preset.addItem(22, new CustomItem(SlimefunItems.PLUTONIUM, "&7副产品槽", "", "&r这个槽位将收集放射性副产品", "&r例如 &a镎 &r或 &7钚"), (player, slot, itemStack, clickAction) -> false);
 
-
         preset.addItem(7, new CustomItem(SlimefunItems.REACTOR_COOLANT_CELL, "&b冷却槽", "", "&r这个槽位用于放置冷却单元", "&4如果你任性地不放冷却单元", "&4那么你的反应堆就会BOOOOOM"), (player, slot, itemStack, clickAction) -> false);
-
 
         preset.addItem(7, new CustomItem(SlimefunItems.REACTOR_COOLANT_CELL, "&b冷却槽", "", "&r这个槽位用于放置冷却单元", "&4如果你任性地不放冷却单元", "&4那么你的反应堆就会BOOOOOM"), (player, slot, itemStack, clickAction) -> false);
     }

@@ -14,41 +14,33 @@ public abstract class NetherDrill extends ADrill {
         super(category, item, name, recipeType, recipe);
     }
 
-
     @Override
     public OreGenResource getOreGenResource() {
         return OreGenSystem.getResource("下界玄冰");
     }
-
 
     @Override
     public ItemStack[] getOutputItems() {
         return new ItemStack[]{SlimefunItems.NETHER_ICE};
     }
 
-
     @Override
     public int getProcessingTime() {
         return 24;
     }
-
 
     @Override
     public String getInventoryTitle() {
         return "&4下界矿钻";
     }
 
-
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.DIAMOND_PICKAXE);
     }
-
 
     @Override
     public String getMachineIdentifier() {
         return "NETHER_DRILL";
     }
 }
-
-

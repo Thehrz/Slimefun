@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public class AdvancedCargoOutputNode extends SlimefunItem {
-    private static final int[] border = new int[]{0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 22, 23, 24, 26, 27, 31, 32, 33, 34, 35, 36, 40, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+    private static final int[] BORDER = new int[]{0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 22, 23, 24, 26, 27, 31, 32, 33, 34, 35, 36, 40, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
 
     public AdvancedCargoOutputNode(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
         super(category, item, name, recipeType, recipe, recipeOutput);
@@ -91,12 +91,13 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                     menu.replaceExistingItem(41, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI1OTliZDk4NjY1OWI4Y2UyYzQ5ODg1MjVjOTRlMTlkZGQzOWZhZDA4YTM4Mjg0YTE5N2YxYjcwNjc1YWNjIn19fQ=="), "&b频段号", "", "&e> 点击 -1 频段号"));
                     menu.addMenuClickHandler(41, (p, arg1, arg2, arg3) -> {
                         int channel = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) - 1;
-                        if (channel < 0)
+                        if (channel < 0) {
                             if (CargoNet.EXTRA_CHANNELS) {
                                 channel = 16;
                             } else {
                                 channel = 15;
                             }
+                        }
 
                         BlockStorage.addBlockInfo(b, "frequency", String.valueOf(channel));
                         newInstance(menu, b);
@@ -119,11 +120,12 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                         int channel1 = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) + 1;
 
                         if (CargoNet.EXTRA_CHANNELS) {
-                            if (channel1 > 16) channel1 = 0;
+                            if (channel1 > 16) {
+                                channel1 = 0;
+                            }
                         } else if (channel1 > 15) {
                             channel1 = 0;
                         }
-
 
                         BlockStorage.addBlockInfo(b, "frequency", String.valueOf(channel1));
                         newInstance(menu, b);
@@ -134,7 +136,6 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                 }
             }
 
-
             @Override
             public boolean canOpen(Block b, Player p) {
                 boolean open = (CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b) || p.hasPermission("slimefun.cargo.bypass"));
@@ -143,7 +144,6 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                 }
                 return open;
             }
-
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
@@ -162,7 +162,6 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                 BlockStorage.addBlockInfo(b, "filter-durability", "false");
             }
 
-
             @Override
             public boolean onBreak(Player p, Block b, SlimefunItem item, UnregisterReason reason) {
                 BlockMenu inv = BlockStorage.getInventory(b);
@@ -179,16 +178,14 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
         });
     }
 
-
     protected void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
+        for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
 
         preset.addItem(2, new CustomItem(new MaterialData(Material.PAPER), "&3物品", "", "&b将你想要的所有物品放入", "&b黑名单/白名单"), (player, slot, itemStack, clickAction) -> false);
     }
-
 
     public int[] getInputSlots() {
         return new int[]{19, 20, 21, 28, 29, 30, 37, 38, 39};

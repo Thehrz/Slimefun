@@ -110,7 +110,6 @@ public abstract class CropGrowthAccelerator extends SlimefunItem {
                 }
             }
 
-
             @Override
             public void uniqueTick() {
             }

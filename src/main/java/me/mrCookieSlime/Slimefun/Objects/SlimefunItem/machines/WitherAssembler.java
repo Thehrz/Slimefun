@@ -28,9 +28,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public class WitherAssembler extends SlimefunItem {
-    private static final int[] border = new int[]{0, 2, 3, 4, 5, 6, 8, 12, 14, 21, 23, 30, 32, 39, 40, 41};
-    private static final int[] border_1 = new int[]{9, 10, 11, 18, 20, 27, 29, 36, 37, 38};
-    private static final int[] border_2 = new int[]{15, 16, 17, 24, 26, 33, 35, 42, 43, 44};
+    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 12, 14, 21, 23, 30, 32, 39, 40, 41};
+    private static final int[] BORDER_1 = new int[]{9, 10, 11, 18, 20, 27, 29, 36, 37, 38};
+    private static final int[] BORDER_2 = new int[]{15, 16, 17, 24, 26, 33, 35, 42, 43, 44};
     private static int lifetime = 0;
 
     public WitherAssembler(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
@@ -53,7 +53,6 @@ public class WitherAssembler extends SlimefunItem {
                             return false;
                         });
                     } else {
-
                         menu.replaceExistingItem(22, new CustomItem(new MaterialData(Material.REDSTONE), "&7激活状态: &2✔", "", "&e> 点击停止这个机器"));
                         menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
                             BlockStorage.addBlockInfo(b, "enabled", "false");
@@ -81,7 +80,6 @@ public class WitherAssembler extends SlimefunItem {
                 return (p.hasPermission("slimefun.inventory.bypass") || CSCoreLib.getLib().getProtectionManager().canAccessChest(p.getUniqueId(), b, true));
             }
 
-
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow.equals(ItemTransportFlow.INSERT)) {
@@ -89,7 +87,6 @@ public class WitherAssembler extends SlimefunItem {
                 }
                 return new int[0];
             }
-
 
             @Override
             public int[] getSlotsAccessedByItemTransport(BlockMenu menu, ItemTransportFlow flow, ItemStack item) {
@@ -137,15 +134,15 @@ public class WitherAssembler extends SlimefunItem {
 
 
     private void constructMenu(BlockMenuPreset preset) {
-        for (int i : border) {
+        for (int i : BORDER) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-        for (int i : border_1) {
+        for (int i : BORDER_1) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-        for (int i : border_2) {
+        for (int i : BORDER_2) {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 12), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
@@ -155,7 +152,6 @@ public class WitherAssembler extends SlimefunItem {
 
         preset.addItem(13, new CustomItem(new MaterialData(Material.WATCH), "&7冷却: &b30 秒", "", "&r这个机器需要半分钟的时间来作运转准备", "&r请耐心等待!"), (player, slot, itemStack, clickAction) -> false);
     }
-
 
     public String getInventoryTitle() {
         return "&5凋零组装机";
@@ -232,7 +228,6 @@ public class WitherAssembler extends SlimefunItem {
                                 BlockStorage.getInventory(b).replaceExistingItem(slot, null);
                             }
                         }
-
 
                         ChargableBlock.addCharge(b, -getEnergyConsumption());
 

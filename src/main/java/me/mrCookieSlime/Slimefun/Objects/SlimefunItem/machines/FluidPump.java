@@ -67,8 +67,6 @@ public class FluidPump extends SlimefunItem {
                 }
                 return getOutputSlots();
             }
-
-
         };
     }
 
@@ -86,14 +84,14 @@ public class FluidPump extends SlimefunItem {
             preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-
         for (int i : getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
+                @Override
                 public boolean onClick(Player p, int slot, ItemStack cursor, ClickAction action) {
                     return false;
                 }
 
-
+                @Override
                 public boolean onClick(InventoryClickEvent e, Player p, int slot, ItemStack cursor, ClickAction action) {
                     return (cursor == null || cursor.getType() == null || cursor.getType() == Material.AIR);
                 }
@@ -118,12 +116,14 @@ public class FluidPump extends SlimefunItem {
         if (fluid.getType().equals(Material.STATIONARY_LAVA)) {
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.BUCKET), true)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ItemStack output = new ItemStack(Material.LAVA_BUCKET);
 
-                    if (fits(b, new ItemStack[]{output}))
+                    if (fits(b, new ItemStack[]{output})) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                     pushItems(b, new ItemStack[]{output});
@@ -140,12 +140,14 @@ public class FluidPump extends SlimefunItem {
         } else if (fluid.getType().equals(Material.STATIONARY_WATER)) {
             for (int slot : getInputSlots()) {
                 if (SlimefunManager.isItemSimiliar(BlockStorage.getInventory(b).getItemInSlot(slot), new ItemStack(Material.BUCKET), true)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ItemStack output = new ItemStack(Material.WATER_BUCKET);
 
-                    if (fits(b, new ItemStack[]{output}))
+                    if (fits(b, new ItemStack[]{output})) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     BlockStorage.getInventory(b).replaceExistingItem(slot, InvUtils.decreaseItem(BlockStorage.getInventory(b).getItemInSlot(slot), 1));
                     pushItems(b, new ItemStack[]{output});
@@ -204,8 +206,9 @@ public class FluidPump extends SlimefunItem {
         Inventory inv = inject(b);
         inv.addItem(items);
 
-        for (int slot : getOutputSlots())
+        for (int slot : getOutputSlots()) {
             BlockStorage.getInventory(b).replaceExistingItem(slot, inv.getItem(slot));
+        }
     }
 }
 

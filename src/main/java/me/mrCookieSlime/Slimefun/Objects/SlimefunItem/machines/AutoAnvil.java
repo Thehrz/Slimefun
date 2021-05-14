@@ -21,44 +21,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class AutoAnvil
-        extends AContainer {
+public abstract class AutoAnvil extends AContainer {
     public AutoAnvil(Category category, ItemStack item, String name, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, name, recipeType, recipe);
     }
-
 
     @Override
     public String getInventoryTitle() {
         return "自动铁砧";
     }
 
-
     @Override
     public ItemStack getProgressBar() {
         return new ItemStack(Material.IRON_PICKAXE);
     }
 
-
     @Override
     public void registerDefaultRecipes() {
     }
-
 
     @Override
     public int getSpeed() {
         return 1;
     }
 
-
     @Override
     public String getMachineIdentifier() {
         return "AUTO_ANVIL";
     }
 
-
     public abstract int getRepairFactor();
-
 
     @Override
     protected void tick(Block b) {
@@ -79,8 +71,9 @@ public abstract class AutoAnvil
                 BlockStorage.getInventory(b).replaceExistingItem(22, item);
 
                 if (ChargableBlock.isChargable(b)) {
-                    if (ChargableBlock.getCharge(b) < getEnergyConsumption())
+                    if (ChargableBlock.getCharge(b) < getEnergyConsumption()) {
                         return;
+                    }
                     ChargableBlock.addCharge(b, -getEnergyConsumption());
                     progress.put(b, timeleft - 1);
                 } else {
@@ -105,7 +98,9 @@ public abstract class AutoAnvil
                     if (SlimefunManager.isItemSimiliar(target, SlimefunItems.DUCT_TAPE, true)) {
                         ItemStack newItem = item.clone();
                         short durability = (short) (newItem.getDurability() - item.getType().getMaxDurability() / getRepairFactor());
-                        if (durability < 0) durability = 0;
+                        if (durability < 0) {
+                            durability = 0;
+                        }
                         newItem.setDurability(durability);
                         r = new MachineRecipe(30, new ItemStack[]{target, item}, new ItemStack[]{newItem});
                     }
