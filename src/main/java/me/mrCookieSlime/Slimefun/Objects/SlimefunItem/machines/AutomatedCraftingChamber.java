@@ -59,14 +59,14 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
             public void newInstance(final BlockMenu menu, final Block b) {
                 if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
                     menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.SULPHUR), "&7启动状态: &4✘", "", "&e> 点击激活这个机器"));
-                    menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
+                    menu.addMenuClickHandler(6, (player, slot, itemStack, clickAction) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "true");
                         newInstance(menu, b);
                         return false;
                     });
                 } else {
                     menu.replaceExistingItem(6, new CustomItem(new MaterialData(Material.REDSTONE), "&7启动状态: &2✔", "", "&e> 点击停止这个机器"));
-                    menu.addMenuClickHandler(6, (p, arg1, arg2, arg3) -> {
+                    menu.addMenuClickHandler(6, (player, slot, itemStack, clickAction) -> {
                         BlockStorage.addBlockInfo(b, "enabled", "false");
                         newInstance(menu, b);
                         return false;

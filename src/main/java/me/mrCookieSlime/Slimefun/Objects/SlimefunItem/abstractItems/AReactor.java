@@ -63,7 +63,7 @@ public abstract class AReactor extends SlimefunItem {
                     }
                     if (!BlockStorage.hasBlockInfo(b) || "generator".equals(BlockStorage.getLocationInfo(b.getLocation(), "reactor-mode"))) {
                         menu.replaceExistingItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM0M2NlNThkYTU0Yzc5OTI0YTJjOTMzMWNmYzQxN2ZlOGNjYmJlYTliZTQ1YTdhYzg1ODYwYTZjNzMwIn19fQ=="), "&7优先: &e发电", "", "&6你的反应器将专注于发电", "&6如果你的能量网络无需能源", "&6它将不会生产任何东西", "", "&7> 点击修改为优先 &e生产"));
-                        menu.addMenuClickHandler(4, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "reactor-mode", "production");
                             newInstance(menu, b);
                             return false;
@@ -71,7 +71,7 @@ public abstract class AReactor extends SlimefunItem {
                     } else {
 
                         menu.replaceExistingItem(4, new CustomItem(SlimefunItems.PLUTONIUM, "&7优先: &e生产", "", "&6你的反应器会优先生产产品", "&6如果你的能量网络不需要能源", "&6它将继续运行", "&6并且不会生产任何能源", "", "&7> 点击修改为优先 &e发电"));
-                        menu.addMenuClickHandler(4, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "reactor-mode", "generator");
                             newInstance(menu, b);
                             return false;

@@ -47,14 +47,14 @@ public class WitherAssembler extends SlimefunItem {
                 try {
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals("false")) {
                         menu.replaceExistingItem(22, new CustomItem(new MaterialData(Material.SULPHUR), "&7激活状态: &4✘", "", "&e> 点击激活这个机器"));
-                        menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(22, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "enabled", "true");
                             newInstance(menu, b);
                             return false;
                         });
                     } else {
                         menu.replaceExistingItem(22, new CustomItem(new MaterialData(Material.REDSTONE), "&7激活状态: &2✔", "", "&e> 点击停止这个机器"));
-                        menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(22, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "enabled", "false");
                             newInstance(menu, b);
                             return false;
@@ -64,8 +64,8 @@ public class WitherAssembler extends SlimefunItem {
                     double offset = (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "offset") == null) ? 3.0D : Double.parseDouble(BlockStorage.getLocationInfo(b.getLocation(), "offset"));
 
                     menu.replaceExistingItem(31, new CustomItem(new MaterialData(Material.PISTON_BASE), "&7偏移: &3" + offset + " 方块", "", "&r左键点击: &7+0.1", "&r右键点击: &7-0.1"));
-                    menu.addMenuClickHandler(31, (p, arg1, arg2, arg3) -> {
-                        double offset1 = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "offset")) + (arg3.isRightClicked() ? -0.1F : 0.1F));
+                    menu.addMenuClickHandler(31, (player, slot, itemStack, clickAction) -> {
+                        double offset1 = DoubleHandler.fixDouble(Double.valueOf(BlockStorage.getLocationInfo(b.getLocation(), "offset")) + (clickAction.isRightClicked() ? -0.1F : 0.1F));
                         BlockStorage.addBlockInfo(b, "offset", String.valueOf(offset1));
                         newInstance(menu, b);
                         return false;

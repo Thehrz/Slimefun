@@ -80,7 +80,7 @@ public abstract class CreatorMachine extends SlimefunItem {
                         if (!BlockStorage.hasBlockInfo(b) || setCode[loc] == '0') {
                             menu.replaceExistingItem(slot, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMGViZTdlNTIxNTE2OWE2OTlhY2M2Y2VmYTdiNzNmZGIxMDhkYjg3YmI2ZGFlMjg0OWZiZTI0NzE0YjI3In19fQ=="), "&7编码: &a0", "", "&7正确的§e编码组合§7才能产出指定的物质", "§7每当你设置的编码较上一次§e更接近§7正确编码", "§7机器都会发出比较§e悦耳的声音", "&7另外有技巧地设置编码将有效地§e减少生产成本", "§7不过一旦被观测到正确的常数", "§7常数就会被§c重置", "§7这究竟是神的玩笑还是恶魔的诅咒呢", "", "§c> §7使用§d元物质§7进行制作", "§c> §7调整下方的物品修改你想制作的物品", "§6> §b点击此处将编码修改为§e1"));
 
-                            menu.addMenuClickHandler(slot, (p, arg1, arg2, arg3) -> {
+                            menu.addMenuClickHandler(slot, (player, i, itemStack, clickAction) -> {
                                 BlockStorage.addBlockInfo(b, "last-code", String.valueOf(setCode));
                                 setCode[loc] = '1';
                                 BlockStorage.addBlockInfo(b, "set-code", String.valueOf(setCode));
@@ -90,7 +90,7 @@ public abstract class CreatorMachine extends SlimefunItem {
                         } else {
                             menu.replaceExistingItem(slot, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzFiYzJiY2ZiMmJkMzc1OWU2YjFlODZmYzdhNzk1ODVlMTEyN2RkMzU3ZmMyMDI4OTNmOWRlMjQxYmM5ZTUzMCJ9fX0="), "&7编码: &e1", "", "&7正确的§e编码组合§7才能产出指定的物质", "§7每当你设置的编码较上一次§e更接近§7正确编码", "§7机器都会发出比较§e悦耳的声音", "&7另外有技巧地设置编码将有效地§e减少生产成本", "§7不过一旦被观测到正确的常数", "§7常数就会被§c重置", "§7这究竟是神的玩笑还是恶魔的诅咒呢", "", "§c> §7使用§d元物质§7进行制作", "§c> §7调整下方的物品修改你想制作的物品", "§6> §b点击此处将编码修改为§a0"));
 
-                            menu.addMenuClickHandler(slot, (p, arg1, arg2, arg3) -> {
+                            menu.addMenuClickHandler(slot, (player, i, itemStack, clickAction) -> {
                                 BlockStorage.addBlockInfo(b, "last-code", String.valueOf(setCode));
                                 setCode[loc] = '0';
                                 BlockStorage.addBlockInfo(b, "set-code", String.valueOf(setCode));
@@ -105,7 +105,7 @@ public abstract class CreatorMachine extends SlimefunItem {
 
                 ItemStack resultItem = recipes.get(Integer.parseInt(BlockStorage.getBlockInfo(b, "output-item"))).getOutput()[0];
                 menu.replaceExistingItem(22, new CustomItem(resultItem, "§7制作: " + resultItem.getItemMeta().getDisplayName()));
-                menu.addMenuClickHandler(22, (p, arg1, arg2, arg3) -> {
+                menu.addMenuClickHandler(22, (player, slot, itemStack, clickAction) -> {
                     SecureRandom random = new SecureRandom();
                     BlockStorage.addBlockInfo(b, "random-code", String.valueOf(random.nextInt(127)));
                     int outItem = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "output-item"));

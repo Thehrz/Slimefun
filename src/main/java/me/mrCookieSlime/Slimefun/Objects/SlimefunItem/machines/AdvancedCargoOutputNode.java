@@ -39,7 +39,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                 try {
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-type") == null || "whitelist".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-type"))) {
                         menu.replaceExistingItem(15, new CustomItem(new MaterialData(Material.WOOL), "&7类型: &r白名单", "", "&e> 点击修改为黑名单"));
-                        menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(15, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-type", "blacklist");
                             newInstance(menu, b);
                             return false;
@@ -47,7 +47,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                     } else {
 
                         menu.replaceExistingItem(15, new CustomItem(new MaterialData(Material.WOOL, (byte) 15), "&7类型: &8黑名单", "", "&e> 点击修改为白名单"));
-                        menu.addMenuClickHandler(15, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(15, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-type", "whitelist");
                             newInstance(menu, b);
                             return false;
@@ -56,7 +56,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
 
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-durability") == null || "false".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-durability"))) {
                         menu.replaceExistingItem(16, new CustomItem(new MaterialData(Material.STONE_SWORD, (byte) 20), "&7需要匹配的 子ID/耐久值: &4✘", "", "&e> 点击修改需要匹配的耐久值"));
-                        menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(16, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-durability", "true");
                             newInstance(menu, b);
                             return false;
@@ -64,7 +64,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                     } else {
 
                         menu.replaceExistingItem(16, new CustomItem(new MaterialData(Material.GOLD_SWORD, (byte) 20), "&7需要匹配的 子ID/耐久值: &2✔", "", "&e> 点击修改需要匹配的耐久值"));
-                        menu.addMenuClickHandler(16, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(16, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-durability", "false");
                             newInstance(menu, b);
                             return false;
@@ -73,7 +73,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
 
                     if (!BlockStorage.hasBlockInfo(b) || BlockStorage.getLocationInfo(b.getLocation(), "filter-lore") == null || "true".equals(BlockStorage.getLocationInfo(b.getLocation(), "filter-lore"))) {
                         menu.replaceExistingItem(25, new CustomItem(new MaterialData(Material.EMPTY_MAP), "&7需要匹配的 说明(Lore): &2✔", "", "&e> 点击修改需要匹配的Lore"));
-                        menu.addMenuClickHandler(25, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(25, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-lore", "false");
                             newInstance(menu, b);
                             return false;
@@ -81,7 +81,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                     } else {
 
                         menu.replaceExistingItem(25, new CustomItem(new MaterialData(Material.EMPTY_MAP), "&7需要匹配的 说明(Lore): &4✘", "", "&e> 点击修改需要匹配的Lore"));
-                        menu.addMenuClickHandler(25, (p, arg1, arg2, arg3) -> {
+                        menu.addMenuClickHandler(25, (player, slot, itemStack, clickAction) -> {
                             BlockStorage.addBlockInfo(b, "filter-lore", "true");
                             newInstance(menu, b);
                             return false;
@@ -89,7 +89,7 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
                     }
 
                     menu.replaceExistingItem(41, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI1OTliZDk4NjY1OWI4Y2UyYzQ5ODg1MjVjOTRlMTlkZGQzOWZhZDA4YTM4Mjg0YTE5N2YxYjcwNjc1YWNjIn19fQ=="), "&b频段号", "", "&e> 点击 -1 频段号"));
-                    menu.addMenuClickHandler(41, (p, arg1, arg2, arg3) -> {
+                    menu.addMenuClickHandler(41, (player, slot, itemStack, clickAction) -> {
                         int channel = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) - 1;
                         if (channel < 0) {
                             if (CargoNet.EXTRA_CHANNELS) {
@@ -108,15 +108,15 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
 
                     if (channel == 16) {
                         menu.replaceExistingItem(42, new CustomItem(SlimefunItems.CHEST_TERMINAL, "&b频段 ID: &3" + (channel + 1)));
-                        menu.addMenuClickHandler(42, (p, arg1, arg2, arg3) -> false);
+                        menu.addMenuClickHandler(42, (player, slot, itemStack, clickAction) -> false);
                     } else {
 
                         menu.replaceExistingItem(42, new CustomItem(new MaterialData(Material.WOOL, (byte) channel), "&b频段 ID: &3" + (channel + 1)));
-                        menu.addMenuClickHandler(42, (p, arg1, arg2, arg3) -> false);
+                        menu.addMenuClickHandler(42, (player, slot, itemStack, clickAction) -> false);
                     }
 
                     menu.replaceExistingItem(43, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzJmOTEwYzQ3ZGEwNDJlNGFhMjhhZjZjYzgxY2Y0OGFjNmNhZjM3ZGFiMzVmODhkYjk5M2FjY2I5ZGZlNTE2In19fQ=="), "&b频段号", "", "&e> 点击 +1 频段号"));
-                    menu.addMenuClickHandler(43, (p, arg1, arg2, arg3) -> {
+                    menu.addMenuClickHandler(43, (player, slot, itemStack, clickAction) -> {
                         int channel1 = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "frequency")) + 1;
 
                         if (CargoNet.EXTRA_CHANNELS) {
