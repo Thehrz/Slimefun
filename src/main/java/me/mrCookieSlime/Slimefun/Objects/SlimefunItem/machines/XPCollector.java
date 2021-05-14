@@ -108,7 +108,7 @@ public class XPCollector extends SlimefunItem {
 
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 10), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 10), " "), (player, slot, itemStack, clickAction) -> false);
         }
     }
 

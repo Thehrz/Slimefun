@@ -43,8 +43,9 @@ public class GPSNetwork {
     }
 
     public static void openTeleporterGUI(Player p, UUID uuid, Block b, final int complexity) throws Exception {
-        if (TeleportationSequence.players.contains(p.getUniqueId()))
+        if (TeleportationSequence.players.contains(p.getUniqueId())) {
             return;
+        }
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
         TeleportationSequence.players.add(p.getUniqueId());
 
@@ -53,18 +54,19 @@ public class GPSNetwork {
         menu.addMenuCloseHandler(p12 -> TeleportationSequence.players.remove(p12.getUniqueId()));
 
         for (int slot : teleporter_border) {
-            menu.addItem(slot, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(slot, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "), (player, i, itemStack, clickAction) -> false);
         }
 
 
         menu.addItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzljODg4MWU0MjkxNWE5ZDI5YmI2MWExNmZiMjZkMDU5OTEzMjA0ZDI2NWRmNWI0MzliM2Q3OTJhY2Q1NiJ9fX0="), "&7路径点概览 &e(选择一个目标)"));
-        menu.addMenuClickHandler(4, (arg0, arg1, arg2, arg3) -> false);
+        menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> false);
 
         final Location source = new Location(b.getWorld(), b.getX() + 0.5D, b.getY() + 2.0D, b.getZ() + 0.5D);
         int index = 0;
         for (Map.Entry<String, Location> entry : Slimefun.getGPSNetwork().getWaypoints(uuid).entrySet()) {
-            if (index >= teleporter_inventory.length)
+            if (index >= teleporter_inventory.length) {
                 break;
+            }
             int slot = teleporter_inventory[index];
 
             final Location l = entry.getValue();
@@ -85,7 +87,9 @@ public class GPSNetwork {
 
     public void updateTransmitter(Block b, UUID uuid, NetworkStatus status) {
         Set<Location> set = new HashSet<>();
-        if (this.transmitters.containsKey(uuid)) set = this.transmitters.get(uuid);
+        if (this.transmitters.containsKey(uuid)) {
+            set = this.transmitters.get(uuid);
+        }
         if (status.equals(NetworkStatus.ONLINE)) {
             if (!set.contains(b.getLocation())) {
                 set.add(b.getLocation());
@@ -99,7 +103,9 @@ public class GPSNetwork {
     }
 
     public int getNetworkComplexity(UUID uuid) {
-        if (!this.transmitters.containsKey(uuid)) return 0;
+        if (!this.transmitters.containsKey(uuid)) {
+            return 0;
+        }
         int level = 0;
         for (Location l : this.transmitters.get(uuid)) {
             level += l.getBlockY();
@@ -108,7 +114,9 @@ public class GPSNetwork {
     }
 
     public int countTransmitters(UUID uuid) {
-        if (!this.transmitters.containsKey(uuid)) return 0;
+        if (!this.transmitters.containsKey(uuid)) {
+            return 0;
+        }
         return this.transmitters.get(uuid).size();
     }
 
@@ -116,20 +124,19 @@ public class GPSNetwork {
         ChestMenu menu = new ChestMenu("&9控制面板");
 
         for (int slot : this.border) {
-            menu.addItem(slot, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(slot, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, i, itemStack, clickAction) -> false);
         }
 
-
         menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjOWMxYTAyMmY0MGI3M2YxNGI0Y2JhMzdjNzE4YzZhNTMzZjNhMjg2NGI2NTM2ZDVmNDU2OTM0Y2MxZiJ9fX0="), "&7发射器概览 &e(已选择)"));
-        menu.addMenuClickHandler(2, (arg0, arg1, arg2, arg3) -> false);
+        menu.addMenuClickHandler(2, (player, slot, itemStack, clickAction) -> false);
 
         menu.addItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGRjZmJhNThmYWYxZjY0ODQ3ODg0MTExODIyYjY0YWZhMjFkN2ZjNjJkNDQ4MWYxNGYzZjNiY2I2MzMwIn19fQ=="), "&7网络信息", "", "&8⇨ &7状态: " + ((getNetworkComplexity(p.getUniqueId()) > 0) ? "&2&l在线" : "&4&l离线"), "&8⇨ &7复杂度: &r" + getNetworkComplexity(p.getUniqueId())));
-        menu.addMenuClickHandler(4, (arg0, arg1, arg2, arg3) -> false);
+        menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> false);
 
         menu.addItem(6, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzljODg4MWU0MjkxNWE5ZDI5YmI2MWExNmZiMjZkMDU5OTEzMjA0ZDI2NWRmNWI0MzliM2Q3OTJhY2Q1NiJ9fX0="), "&7&7路径点概览 &r(选择)"));
-        menu.addMenuClickHandler(6, (arg0, arg1, arg2, arg3) -> {
+        menu.addMenuClickHandler(6, (player, slot, itemStack, clickAction) -> {
             try {
-                openWaypointControlPanel(arg0);
+                openWaypointControlPanel(player);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -138,12 +145,13 @@ public class GPSNetwork {
 
         int index = 0;
         for (Location l : getTransmitters(p.getUniqueId())) {
-            if (index >= this.inventory.length)
+            if (index >= this.inventory.length) {
                 break;
+            }
             int slot = this.inventory[index];
 
             menu.addItem(slot, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjOWMxYTAyMmY0MGI3M2YxNGI0Y2JhMzdjNzE4YzZhNTMzZjNhMjg2NGI2NTM2ZDVmNDU2OTM0Y2MxZiJ9fX0="), "&bGPS 信号发射器", "&8⇨ &7世界: &r" + l.getWorld().getName(), "&8⇨ &7X: &r" + l.getX(), "&8⇨ &7Y: &r" + l.getY(), "&8⇨ &7Z: &r" + l.getZ(), "", "&8⇨ &7信号强度: &r" + l.getBlockY(), "&8⇨ &7延迟: &r" + DoubleHandler.fixDouble(1000.0D / l.getY()) + "ms"));
-            menu.addMenuClickHandler(slot, (arg0, arg1, arg2, arg3) -> false);
+            menu.addMenuClickHandler(slot, (player, i, itemStack, clickAction) -> false);
 
             index++;
         }
@@ -155,14 +163,14 @@ public class GPSNetwork {
         ChestMenu menu = new ChestMenu("&9控制面板");
 
         for (int slot : this.border) {
-            menu.addItem(slot, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(slot, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7), " "), (player, i, itemStack, clickAction) -> false);
         }
 
 
         menu.addItem(2, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjOWMxYTAyMmY0MGI3M2YxNGI0Y2JhMzdjNzE4YzZhNTMzZjNhMjg2NGI2NTM2ZDVmNDU2OTM0Y2MxZiJ9fX0="), "&7信号发射器概览 &r(选择)"));
-        menu.addMenuClickHandler(2, (arg0, arg1, arg2, arg3) -> {
+        menu.addMenuClickHandler(2, (player, slot, itemStack, clickAction) -> {
             try {
-                openTransmitterControlPanel(arg0);
+                openTransmitterControlPanel(player);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -170,29 +178,30 @@ public class GPSNetwork {
         });
 
         menu.addItem(4, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGRjZmJhNThmYWYxZjY0ODQ3ODg0MTExODIyYjY0YWZhMjFkN2ZjNjJkNDQ4MWYxNGYzZjNiY2I2MzMwIn19fQ=="), "&7网络信息", "", "&8⇨ &7状态: " + ((getNetworkComplexity(p.getUniqueId()) > 0) ? "&2&l在线" : "&4&l离线"), "&8⇨ &7复杂度: &r" + getNetworkComplexity(p.getUniqueId())));
-        menu.addMenuClickHandler(4, (arg0, arg1, arg2, arg3) -> false);
+        menu.addMenuClickHandler(4, (player, slot, itemStack, clickAction) -> false);
 
         menu.addItem(6, new CustomItem(CustomSkull.getItem("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzljODg4MWU0MjkxNWE5ZDI5YmI2MWExNmZiMjZkMDU5OTEzMjA0ZDI2NWRmNWI0MzliM2Q3OTJhY2Q1NiJ9fX0="), "&7路径点概览 &e(已选择)"));
-        menu.addMenuClickHandler(6, (arg0, arg1, arg2, arg3) -> false);
+        menu.addMenuClickHandler(6, (player, slot, itemStack, clickAction) -> false);
 
         int index = 0;
         for (Map.Entry<String, Location> entry : getWaypoints(p.getUniqueId()).entrySet()) {
-            if (index >= this.inventory.length)
+            if (index >= this.inventory.length) {
                 break;
+            }
             int slot = this.inventory[index];
 
             Location l = entry.getValue();
             ItemStack globe = getPlanet(entry);
 
             menu.addItem(slot, new CustomItem(globe, entry.getKey(), "&8⇨ &7世界: &r" + l.getWorld().getName(), "&8⇨ &7X: &r" + l.getX(), "&8⇨ &7Y: &r" + l.getY(), "&8⇨ &7Z: &r" + l.getZ(), "", "&8⇨ &c点击删除"));
-            menu.addMenuClickHandler(slot, (arg0, arg1, arg2, arg3) -> {
+            menu.addMenuClickHandler(slot, (player, i, itemStack, clickAction) -> {
                 String id = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', entry.getKey())).toUpperCase().replace(" ", "_");
-                Config cfg = new Config("data-storage/Slimefun/waypoints/" + arg0.getUniqueId().toString() + ".yml");
+                Config cfg = new Config("data-storage/Slimefun/waypoints/" + player.getUniqueId().toString() + ".yml");
                 cfg.setValue(id, null);
                 cfg.save();
-                arg0.playSound(arg0.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
                 try {
-                    openWaypointControlPanel(arg0);
+                    openWaypointControlPanel(player);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -259,7 +268,7 @@ public class GPSNetwork {
         for (OreGenResource resource : OreGenSystem.listResources()) {
             int supply = OreGenSystem.getSupplies(resource, chunk, true);
 
-            menu.addItem(index, new CustomItem(resource.getIcon(), "&7资源: &e" + resource.getName(), "", "&7已扫描区块:", "&8⇨ &7X: " + chunk.getX() + " Z: " + chunk.getZ(), "", "&7结果: &e" + supply + " " + resource.getMeasurementUnit()), (arg0, arg1, arg2, arg3) -> false);
+            menu.addItem(index, new CustomItem(resource.getIcon(), "&7资源: &e" + resource.getName(), "", "&7已扫描区块:", "&8⇨ &7X: " + chunk.getX() + " Z: " + chunk.getZ(), "", "&7结果: &e" + supply + " " + resource.getMeasurementUnit()), (player, slot, itemStack, clickAction) -> false);
             index++;
         }
 

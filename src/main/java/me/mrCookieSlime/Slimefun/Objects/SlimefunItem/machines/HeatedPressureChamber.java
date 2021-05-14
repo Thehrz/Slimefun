@@ -71,7 +71,7 @@ public abstract class HeatedPressureChamber extends AContainer {
                 }
 
                 if (slots.isEmpty()) {
-                    getInputSlots();
+                    return getInputSlots();
                 }
 
                 slots.sort(new RecipeSorter(menu));
@@ -113,7 +113,6 @@ public abstract class HeatedPressureChamber extends AContainer {
     public int[] getOutputSlots() {
         return new int[]{24, 25};
     }
-
 
     @Override
     public void register(boolean slimefun) {
@@ -205,7 +204,6 @@ public abstract class HeatedPressureChamber extends AContainer {
             }
         }
     }
-
 
     @Override
     public String getMachineIdentifier() {

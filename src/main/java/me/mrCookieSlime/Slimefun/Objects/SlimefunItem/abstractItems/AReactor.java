@@ -135,23 +135,23 @@ public abstract class AReactor extends SlimefunItem {
 
     private void constructMenu(BlockMenuPreset preset) {
         for (int i : border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : border_1) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 5), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : border_3) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 13), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 13), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-        preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (player, slot, itemStack, clickAction) -> false);
 
-        preset.addItem(1, new CustomItem(SlimefunItems.URANIUM, "&7燃料槽", getMessage()), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(1, new CustomItem(SlimefunItems.URANIUM, "&7燃料槽", getMessage()), (player, slot, itemStack, clickAction) -> false);
 
         for (int i : border_2) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         if (needsCooling()) {

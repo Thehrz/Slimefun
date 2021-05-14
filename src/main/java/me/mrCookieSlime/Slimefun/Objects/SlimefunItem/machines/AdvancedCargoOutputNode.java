@@ -182,11 +182,11 @@ public class AdvancedCargoOutputNode extends SlimefunItem {
 
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
 
-        preset.addItem(2, new CustomItem(new MaterialData(Material.PAPER), "&3物品", "", "&b将你想要的所有物品放入", "&b黑名单/白名单"), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(2, new CustomItem(new MaterialData(Material.PAPER), "&3物品", "", "&b将你想要的所有物品放入", "&b黑名单/白名单"), (player, slot, itemStack, clickAction) -> false);
     }
 
 

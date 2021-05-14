@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import me.mrCookieSlime.Slimefun.SlimefunGuide;
 import org.jetbrains.annotations.NotNull;
 
-
 public class GitHubSetup {
     public static void setup() {
         new GitHubConnector() {
@@ -32,7 +31,6 @@ public class GitHubSetup {
                 SlimefunGuide.contributors.add(new Contributor("AquaLazuryt", "&6Lead Head Artist", 0));
             }
 
-
             @Override
             public void onFailure() {
                 SlimefunGuide.contributors.clear();
@@ -41,20 +39,17 @@ public class GitHubSetup {
                 SlimefunGuide.contributors.add(new Contributor("AquaLazuryt", "&6Lead Head Artist", 0));
             }
 
-
             @NotNull
             @Override
             public String getRepository() {
                 return "Slimefun/Slimefun4";
             }
 
-
             @NotNull
             @Override
             public String getFileName() {
                 return "contributors";
             }
-
 
             @NotNull
             @Override
@@ -73,11 +68,9 @@ public class GitHubSetup {
                 SlimefunGuide.last_update = IntegerFormat.parseGitHubDate(object.get("pushed_at").getAsString());
             }
 
-
             @Override
             public void onFailure() {
             }
-
 
             @NotNull
             @Override
@@ -85,13 +78,11 @@ public class GitHubSetup {
                 return "Slimefun/Slimefun4";
             }
 
-
             @NotNull
             @Override
             public String getFileName() {
                 return "repo";
             }
-
 
             @NotNull
             @Override
@@ -107,11 +98,9 @@ public class GitHubSetup {
                 SlimefunGuide.code_bytes = object.get("Java").getAsInt();
             }
 
-
             @Override
             public void onFailure() {
             }
-
 
             @NotNull
             @Override
@@ -119,13 +108,11 @@ public class GitHubSetup {
                 return "Slimefun/Slimefun4";
             }
 
-
             @NotNull
             @Override
             public String getFileName() {
                 return "languages";
             }
-
 
             @NotNull
             @Override

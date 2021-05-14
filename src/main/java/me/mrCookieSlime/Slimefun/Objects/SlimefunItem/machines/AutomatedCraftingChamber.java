@@ -129,13 +129,13 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
 
     protected void constructMenu(final BlockMenuPreset preset) {
         for (final int i : AutomatedCraftingChamber.border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
         for (final int i : AutomatedCraftingChamber.border_in) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 11), " "), (player, slot, itemStack, clickAction) -> false);
         }
         for (final int i : AutomatedCraftingChamber.border_out) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (player, slot, itemStack, clickAction) -> false);
         }
         for (final int i : this.getOutputSlots()) {
             preset.addMenuClickHandler(i, new ChestMenu.AdvancedMenuClickHandler() {
@@ -150,7 +150,7 @@ public abstract class AutomatedCraftingChamber extends SlimefunItem {
                 }
             });
         }
-        preset.addItem(2, new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", "", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(2, new CustomItem(new MaterialData(Material.WORKBENCH), "&e合成蓝本", "", "&b放入合成方式示例(按合成方式摆放)", "&4只能是强化合成台所属的合成公式"), (player, slot, itemStack, clickAction) -> false);
     }
 
     public abstract int getEnergyConsumption();

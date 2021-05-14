@@ -161,22 +161,21 @@ public abstract class AContainer extends SlimefunItem {
         registerDefaultRecipes();
     }
 
-
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : BORDER_IN) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : BORDER_OUT) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 1), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
 
-        preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(22, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (player, slot, itemStack, clickAction) -> false);
 
 
         for (int i : getOutputSlots()) {
@@ -193,7 +192,6 @@ public abstract class AContainer extends SlimefunItem {
             });
         }
     }
-
 
     public abstract String getInventoryTitle();
 

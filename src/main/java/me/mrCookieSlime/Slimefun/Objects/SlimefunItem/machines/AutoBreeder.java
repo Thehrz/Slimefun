@@ -80,7 +80,7 @@ public class AutoBreeder extends SlimefunItem {
 
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 9), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 9), " "), (player, slot, itemStack, clickAction) -> false);
         }
     }
 

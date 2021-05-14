@@ -157,14 +157,14 @@ public abstract class ElectricDustWasher extends AContainer {
     @Override
     protected void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER_1) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : BORDER_2) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-        preset.addItem(22, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(22, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), " "), (player, slot, itemStack, clickAction) -> false);
 
 
         for (int i : getOutputSlots()) {

@@ -2,6 +2,7 @@ package me.mrCookieSlime.Slimefun;
 
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import io.izzel.taboolib.loader.Plugin;
+import io.izzel.taboolib.metrics.BMetrics;
 import io.izzel.taboolib.module.dependency.Dependency;
 import io.izzel.taboolib.module.dependency.TDependencyInjector;
 import io.papermc.lib.PaperLib;
@@ -149,7 +150,7 @@ public class SlimefunStartup extends Plugin {
                     System.err.println("###");
                     System.err.println("### 你正在使用Minecraft " + ReflectionUtils.getVersion());
                     System.err.println("### 但Slimefun v" + this.getPlugin().getDescription().getVersion() + " 只能运行在");
-                    System.err.println("### Minecraft " + versions.toString());
+                    System.err.println("### Minecraft " + versions);
                     System.err.println("###");
                     System.err.println("### 请尝试使用旧版并关闭自动更新");
                     System.err.println("### 或者更新你的服务器.");
@@ -231,7 +232,7 @@ public class SlimefunStartup extends Plugin {
             OreGenSystem.registerResource(new OilResource());
             OreGenSystem.registerResource(new NetherIceResource());
             GitHubSetup.setup();
-
+            new BMetrics(getPlugin(), 11136);
             if (config.getBoolean("items.talismans")) {
                 new TalismanListener(getPlugin());
             }

@@ -138,22 +138,22 @@ public class WitherAssembler extends SlimefunItem {
 
     private void constructMenu(BlockMenuPreset preset) {
         for (int i : border) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 7), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : border_1) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 15), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
         for (int i : border_2) {
-            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 12), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new MaterialData(Material.STAINED_GLASS_PANE, (byte) 12), " "), (player, slot, itemStack, clickAction) -> false);
         }
 
-        preset.addItem(1, new CustomItem(new MaterialData(Material.SKULL_ITEM, (byte) 1), "&7凋零头颅槽", "", "&r这个槽位用于放置凋零头颅"), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(1, new CustomItem(new MaterialData(Material.SKULL_ITEM, (byte) 1), "&7凋零头颅槽", "", "&r这个槽位用于放置凋零头颅"), (player, slot, itemStack, clickAction) -> false);
 
-        preset.addItem(7, new CustomItem(new MaterialData(Material.SOUL_SAND), "&7灵魂沙槽", "", "&r这个槽位用于放置灵魂沙"), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(7, new CustomItem(new MaterialData(Material.SOUL_SAND), "&7灵魂沙槽", "", "&r这个槽位用于放置灵魂沙"), (player, slot, itemStack, clickAction) -> false);
 
-        preset.addItem(13, new CustomItem(new MaterialData(Material.WATCH), "&7冷却: &b30 秒", "", "&r这个机器需要半分钟的时间来作运转准备", "&r请耐心等待!"), (arg0, arg1, arg2, arg3) -> false);
+        preset.addItem(13, new CustomItem(new MaterialData(Material.WATCH), "&7冷却: &b30 秒", "", "&r这个机器需要半分钟的时间来作运转准备", "&r请耐心等待!"), (player, slot, itemStack, clickAction) -> false);
     }
 
 

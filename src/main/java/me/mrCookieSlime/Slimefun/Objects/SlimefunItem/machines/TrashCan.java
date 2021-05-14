@@ -48,7 +48,7 @@ public class TrashCan extends SlimefunItem {
 
     private void constructMenu(BlockMenuPreset preset) {
         for (int i : BORDER) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14), " "), (arg0, arg1, arg2, arg3) -> false);
+            preset.addItem(i, new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14), " "), (player, slot, itemStack, clickAction) -> false);
         }
     }
 
