@@ -4,7 +4,6 @@ import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import io.izzel.taboolib.loader.Plugin;
 import io.izzel.taboolib.metrics.BMetrics;
 import io.izzel.taboolib.module.dependency.Dependency;
-import io.izzel.taboolib.module.dependency.TDependencyInjector;
 import io.papermc.lib.PaperLib;
 import me.mrCookieSlime.CSCoreLibPlugin.CSCoreLib;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -108,11 +107,6 @@ public class SlimefunStartup extends Plugin {
             return false;
         }
         return CSCoreLib.randomizer().nextInt(max) <= percentage;
-    }
-
-    @Override
-    public void onLoad() {
-        TDependencyInjector.inject(this.getPlugin(), this.getPlugin().getClass());
     }
 
     @Override

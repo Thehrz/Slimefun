@@ -64,7 +64,6 @@ public class CargoManager {
                         is.setAmount(is.getType().getMaxStackSize());
                         stack.setAmount(amount - is.getType().getMaxStackSize());
                     } else {
-
                         is.setAmount(amount);
                         stack = null;
                     }

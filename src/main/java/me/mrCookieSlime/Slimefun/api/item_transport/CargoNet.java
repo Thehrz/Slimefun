@@ -214,10 +214,10 @@ public class CargoNet extends Network {
                     int previousSlot = -1;
                     final boolean roundrobin = "true".equals(BlockStorage.getLocationInfo(input, "round-robin"));
                     if (inputTarget != null) {
-                        final ItemSlot slot3 = CargoManager.withdraw(input.getBlock(), storage, inputTarget, Integer.parseInt(BlockStorage.getLocationInfo(input, "index")));
-                        if (slot3 != null) {
-                            stack = slot3.getItem();
-                            previousSlot = slot3.getSlot();
+                        final ItemSlot slot = CargoManager.withdraw(input.getBlock(), storage, inputTarget, Integer.parseInt(BlockStorage.getLocationInfo(input, "index")));
+                        if (slot != null) {
+                            stack = slot.getItem();
+                            previousSlot = slot.getSlot();
                         }
                     }
                     if (stack != null && output.containsKey(frequency)) {
